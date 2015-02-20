@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="release" />
+	<File name="..\..\..\addons\ofxHTTP\libs\ofxHTTP\src\WebSocketRouteSettings.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4094" topLine="98" />
+		</Cursor>
+	</File>
+	<File name="src\ofApp.cpp" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="22317" topLine="828" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxJSONRPC\libs\ofxJSONRPC\src\JSONRPCUtils.cpp" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1353" topLine="18" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxHTTP\libs\ofxHTTP\src\IPVideoRouteSettings.cpp" open="1" top="0" tabpos="22" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1847" topLine="102" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxHTTP\libs\ofxHTTP\src\BasicPostServer.cpp" open="1" top="0" tabpos="17" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1524" topLine="23" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxJSONRPC\libs\ofxJSONRPC\src\Request.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1228" topLine="78" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxHTTP\libs\ofxHTTP\src\PostRoute.cpp" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1509" topLine="23" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxHTTP\libs\ofxHTTP\src\BasicWebSocketServer.cpp" open="1" top="0" tabpos="18" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1773" topLine="23" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxHTTP\libs\ofxHTTP\src\PostRouteHandler.cpp" open="1" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2709" topLine="74" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxHTTP\libs\ofxHTTP\include\ofx\HTTP\PostRouteSettings.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1329" topLine="68" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxMediaType\libs\ofxMediaType\src\MediaTypeMap.cpp" open="1" top="0" tabpos="21" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2767" topLine="57" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxMediaType\libs\ofxMediaType\include\ofx\AbstractMediaTypeProvider.h" open="1" top="0" tabpos="19" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1946" topLine="36" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxJSONRPC\libs\ofxHTTP\src\BasicJSONRPCServer.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4710" topLine="133" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxHTTP\libs\ofxHTTP\src\WebSocketRoute.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1981" topLine="143" />
+		</Cursor>
+	</File>
+	<File name="src\main.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\ofApp.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1537" topLine="18" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxHTTP\libs\ofxHTTP\src\BasicServer.cpp" open="1" top="0" tabpos="16" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxHTTP\libs\ofxHTTP\src\PostRouteFileHandler.cpp" open="1" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6989" topLine="18" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxHTTP\libs\ofxHTTP\src\PostRouteSettings.cpp" open="1" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3340" topLine="89" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxMediaType\libs\ofxMediaType\include\ofx\MediaTypeMap.h" open="1" top="0" tabpos="20" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1157" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxMediaType\src\ofxMediaType.h" open="1" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1150" topLine="2" />
+		</Cursor>
+	</File>
+	<File name="..\..\..\addons\ofxJSONRPC\libs\ofxHTTP\include\ofx\HTTP\BasicJSONRPCServer.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1737" topLine="51" />
+		</Cursor>
+	</File>
+</CodeBlocks_layout_file>
