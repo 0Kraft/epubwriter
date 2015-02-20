@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<!-- Force latest IE rendering engine or ChromeFrame if installed -->
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+<meta charset="utf-8">
+<title>VfH</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="img/favicon.ico">
+<!-- Bootstrap styles -->
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	
+       <a id="aU" href="" onclick="javascript:show('content','aU'); return false">ePub Writer</a>
+	   <div id="content" style="display:none">
+               
+        <!-- Controls -->
+		<span style="font-weight: bold;" >&#8201;/&#8201;</span>
+			
+		<!-- Upload -->
+		<a id="a1" href="" onclick="javascript:show('content2','a1'); return false">Upload</a>
+	    <div id="content2" style="display:none">
+		
+		<span style="font-weight: bold;" >&#8201;/&#8201;</span>
+		
+		<label class="custom-file-upload">
+		Choose ePub
+		<form id="iupload" action="/post" method="post" enctype="multipart/form-data">
+		<input class="sub" type="file" onchange="this.form.submit()" name="uploadFile" id="uploadFile"/>
+		</form>
+		</label>
+									
+		
+		<!-- Upload -->
+		
+		
+		<div id="wrapper">
+		<div id="container-dropdown">
+					<!-- Upload -->
+		
+											
+								
+												
+			
+					   <!-- drop-down-->
+					
+						<label for="test-dropdown">Select File</label><br>
+						<select id="test-dropdown">
+							<option>1-One item</option>
+							<option>2-Another item</option>
+							<option>3-Another one again!</option>
+						</select><br>
+						<!-- select button -->
+						<button id="test-dropdown-button" class="btn btn-default">OK</button>
+						
+					
+							
+						
+						
+						
+					</div>
+					
+					  <!-- EDITOR-->
+					<div id="container-editor">
+					
+										
+					
+					<textarea id="textarea" placeholder="Enter text ..."></textarea>
+														
+									
+					<br>
+					</div>
+					
+					<div id="container-editor2">
+					
+									
+					
+					
+					<textarea id="textarea2" placeholder="Enter text ..."></textarea>
+														
+									
+					<br>
+					</div>
+					
+					 <div class="container-command"><button type="button" id="textarea-button">Senden</button></div>
+			
+			
+			</div>
+			</div>
+		</div>
+		
+		
+		
+		
+		
+		
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+			<br>
+			  <div class="container">
+			
+				<div class="panel panel-default">
+			
+			<div style="border: 3px solid black; width:100%;" ></div>
+			
+			<br>
+			<br>
+			
+		
+           		
+            <div class="panel-footer">
+                <!-- checkbox -->
+                <label for="test-checkbox">Check me!</label>
+                <input id="test-checkbox" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" value="autoGain"/><br>
+                
+                <!-- slider-->
+                <label for="test-slider">Slide me!</label>
+                <input id="test-slider" type="range" min="0" max="1" value="0.5" step="0.01" oninput="updateTestSliderValue(this.value)"/>
+                <span id="test-slider-text">0.5</span><br>
+                
+                <!-- select button -->
+                <label for="test-button">Push </label>
+                <button id="test-button" type="button" class="btn btn-default">me!</button><br>
+                
+             
+            </div>
+        </div>
+		
+		<br>
+        
+        <!-- Upload -->
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="pull-left">
+                    <strong>Upload File</strong>
+                </div>
+            </div>
+            
+
+        </div>
+		
+		<br>
+
+        <!-- Live View -->
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="pull-left">
+					<strong>Live View</strong>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <!-- start/stop video buttons -->
+                <button id="start-video-button" class="btn btn-default" onClick="load_liveView()">Start</button>
+                <button id="stop-video-button" class="btn btn-default" onClick="stop_liveView()">Stop</button>
+                
+				<!-- the html page for the live view -->
+                <div id ="contentLiveView"> </div>
+            </div>
+			  <div id="toolbar" style="display: none;">
+    <a data-wysihtml5-command="bold" title="CTRL+B">bold</a> |
+    <a data-wysihtml5-command="italic" title="CTRL+I">italic</a>
+    <a id="htmlchange" data-wysihtml5-action="change_view">switch to html view</a>
+  </div>
+        </div>
+    </div>
+	</body> 
+    
+    <script>
+        function updateTestSliderValue(newValue) {
+            document.getElementById("test-slider-text").innerHTML=newValue;
+        }
+		
+		
+		// Load the html page that displays the Live view from OF.
+		// Size of the page is bigger than video to display the full video stream
+		function load_liveView(){
+            // Here do not use localhost as IP address: need to use the computer IP on the LAN. i.e 192.168.xxx.xxx
+            document.getElementById("contentLiveView").innerHTML='<object type="text/html" width="661" height="540" data="http://127.0.0.1:7890" ></object>';
+            //document.getElementById("contentLiveView").innerHTML='<object type="text/html" width="661" height="540" data="http://192.168.10.101:7890" ></object>';
+		}
+		function stop_liveView(){
+            document.getElementById("contentLiveView").innerHTML="";
+		}
+    </script>
+
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/jquery.jsonrpcclient.js"></script>
+    <script src="./js/jquery.json.js"></script>
+    <script src="./js/prism.js"></script>
+    <script src="./js/ofxUtils.js"></script>
+    <script src="./js/main.js"></script>
+	<script src="./js/simple.js"></script>
+	<script src="./js/wysihtml5x-toolbar.min.js"></script>
+<script>
+
+	var editor = new wysihtml5.Editor("textarea", {
+   		   toolbar: "toolbar",
+	parser: function(html) {
+        return html;
+    }
+	
+	 });
+	 
+	var editor2 = new wysihtml5.Editor("textarea2", {
+   
+	parserRules:  wysihtml5ParserRules   
+		
+	 });
+	 
+	 
+	
+	
+ 
+	 	
+  
+  var log = document.getElementById("log");
+  
+  editor
+    .on("load", function() {
+     editor.fire("change_view", "textarea");
+    })
+    .on("focus", function() {
+    
+    })
+    .on("blur", function() {
+    
+    })
+    .on("change", function() {
+     editor2.setValue($('#textarea').val());
+    })
+    .on("paste", function() {
+    
+    })
+    .on("newword:composer", function() {
+    
+    })
+    .on("undo:composer", function() {
+    
+    })
+    .on("interaction", function() {
+    
+    });
+
+
+</script>
+
+<script>
+
+			function show(id,aid) 
+			{ 
+				if(document.getElementById) 
+				{ 
+					var mydiv = document.getElementById(id); 
+					mydiv.style.display = (mydiv.style.display=='inline'?'none':'inline'); 
+					
+					var mya = document.getElementById(aid); 
+					if(mydiv.style.display=='inline') 
+					{
+						if(aid=='aU') { mya.innerHTML = 'ePub W__________riter';  }
+						if(aid=='a1') { mya.innerHTML = 'U__________pload';  }
+					}
+					
+					if(mydiv.style.display=='none') 
+					{
+						if(aid=='aU') { mya.innerHTML = 'ePub Writer';  }
+						if(aid=="a1")  {  mya.innerHTML = 'Upload'; }
+					}
+				} 
+			} 
+
+</script>
+
+
+
+</html>
