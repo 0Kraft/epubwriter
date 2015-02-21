@@ -78,7 +78,7 @@
 # incorporated directly into the final executable application binary.
 # TODO: should this be a default setting?
 # PROJECT_LDFLAGS=-Wl,-rpath=./libs
--l libPocoZip.a
+
 
 ################################################################################
 # PROJECT DEFINES

@@ -185,7 +185,7 @@ void ofApp::update()
 
     if(zipped)        ziptimer++;
 
-    if(ziptimer>100) {
+    if(ziptimer>30) {
      ePubList();
      ziptimer=0; zipped=false;}
 
@@ -538,6 +538,20 @@ void ofApp::setTextareaWeb(string fn)
 
 }
 
+void ofApp::getEpubName(ofx::JSONRPC::MethodArgs& args)
+{
+   ofScopedLock lock(mutex);
+
+   ofLogVerbose("ofApp::getEpubName") << args.params.asString();
+
+   currentEpubname = args.params.asString();
+
+
+
+
+}
+
+
 void ofApp::getTextArea2(ofx::JSONRPC::MethodArgs& args)
 {
      ofScopedLock lock(mutex);
@@ -769,6 +783,11 @@ void ofApp::initServerJSONRPC(int port)
                                this,
                                &ofApp::getTextArea2);
 
+    serverJSON->registerMethod("set-epubname",
+                               "Set the epubname",
+                               this,
+                               &ofApp::getEpubName);
+
    //  serverJSON->registerMethod("setDropbox",
    //                            "Set selected File!",
    //                            this,
@@ -816,6 +835,9 @@ void ofApp::sendJSONMessage(Json::Value json)
 }
 
 void ofApp::ePubUnzip(string i_file){
+
+ofFile tmpfile(currentEpubname);
+currentEpubname = tmpfile.getBaseName();
 
 std::ifstream inp(i_file.c_str(), std::ios::binary);
 poco_assert (inp);
@@ -965,7 +987,9 @@ void ofApp::ePubList(){
     json = toJSONMethod("Server", "textarea", params2);
     sendJSONMessage(json);
 
-    Json::Value json5 = toJSONMethod("Server", "reset", 0);
+    Json::Value params3;
+    params3["value"] = currentEpubname;
+    Json::Value json5 = toJSONMethod("Server", "reset", params3);
     sendJSONMessage(json5);
 
 }

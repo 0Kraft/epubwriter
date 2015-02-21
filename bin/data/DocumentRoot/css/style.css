@@ -36,14 +36,32 @@ body {
 
      // Non standard for webkit
      word-break: break-word;
+	 
+	max-width: 100%;
+    overflow-x: hidden;
 }
 
-#uploadFile, #iupload{
+html {
+max-width: 100%;
+    overflow-x: hidden;
+}
+
+#uploadFile{
 font-size: 1.0em;
  font-family: "Times New Roman", Georgia, Serif;
   cursor:text;
   background-color: white;
   font-style: italic;
+ 
+}
+
+ #iupload{
+font-size: 1.0em;
+ font-family: "Times New Roman", Georgia, Serif;
+  cursor:text;
+  background-color: white;
+  font-style: italic;
+  display:inline;
 }
 
 #isubmit,.sub{
@@ -280,25 +298,31 @@ font-weight: normal;
   
   #toolbar,#toolbar2,
   textarea {
-    width: 380px;
-    padding: 5px;
+    width: 100%;
+   
   }
   
   textarea {
-    height: 380px;
-    border: 1px solid black;
-    box-sizing: boder-box;
-    -webkit-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    -moz-box-sizing: border-box;
+    height: 90%;
+	color: black;
+     
     font-family: Verdana;
     font-size: 11px;
+	resize: none;
 	
+	
+	
+		
   }
   
-  textarea:focus {
-    color: black;
-    border: 2px solid black;
+    
+  #textarea {
+    border-right:  2px solid black;
+ 
+  }
+  #textarea2 {
+    border-left:  2px solid black;
+    padding-left: 2px;
   }
   
   .wysihtml5-command-active {
@@ -308,8 +332,9 @@ font-weight: normal;
  #container-dropdown {
  
  float:left;
-
+ width: 4%;
  height:100%;
+  
  }
  
  #container-editor {
@@ -317,6 +342,11 @@ font-weight: normal;
 
  float:left;
  height:100%;
+ width: 50%;
+
+ 
+  
+ 
  
  }
  
@@ -325,21 +355,37 @@ font-weight: normal;
 
  float:left;
  height:100%;
+ width: 50%;
+
+
+ 
  
  }
  
  #container-command {
- 
+ width: 5%;
  float:right;
  height:100%;
+ 
  }
  
 #wrapper{
-height: auto;
+height:500px;
+width:100%;
+display: none;
+margin-top: 5px;
 
-height:400px;
+ 
+}
 
+#blackline {
 
+width:5%;
+
+background-color: black;
+ margin: 0 auto;
+      position: relative;
+	  
 }
 
 input[type="file"] {
@@ -348,8 +394,46 @@ input[type="file"] {
  
 .custom-file-upload {
 	display: inline;
-    cursor: text;
+    cursor: grab;
 	font-style: italic;
+}
+
+#dropdown-label {
+display: none;
+}
+
+.buttons {
+	display: inline;
+    cursor: grab;
+	font-style: italic;
+}
+
+#textarea-button {
+	display: inline;
+}
+
+#content,#content2 {
+
+
+}
+
+
+#epubtitle {
+font-style:normal;
+cursor: default;
+}
+
+#test-dropdown {
+
+ cursor:grab;
+ font-size: 1.0em;
+ font-style: italic;
+ font-family: "Times New Roman", Georgia, Serif;
+  -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
+	
+
 }
 
 /* -- media queries -- */

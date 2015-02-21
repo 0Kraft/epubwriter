@@ -65,6 +65,7 @@ public:
     void getButton(void);
     void getTextArea2(ofx::JSONRPC::MethodArgs& args);
     void getDropdown(ofx::JSONRPC::MethodArgs& args);
+    void getEpubName(ofx::JSONRPC::MethodArgs& args);
     void startVideoServer(void);
     void stopVideoServer(void);
 
@@ -93,6 +94,8 @@ public:
 
 
     void setTextareaWeb(string fn);
+
+
 
     void onHTTPPostEvent(ofx::HTTP::PostEventArgs& evt);
     void onHTTPFormEvent(ofx::HTTP::PostFormEventArgs& evt);
@@ -129,6 +132,7 @@ public:
         vector<ofFile> files; // Current Files of Directory
         int currentFile;   // Chosen File
         string currentFilename;
+        string currentEpubname;
         ofBuffer currentFileBuffer; //Content of ChosenFile
 
         void ePubZip();

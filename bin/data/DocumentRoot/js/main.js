@@ -38,6 +38,8 @@ $(document).ready(function() {
     initializeButtons();
 	
 	
+	
+	
     // Dummy call to open the websocket
     JSONRPCClient.call('client',
                         'open-websocket',
@@ -86,9 +88,46 @@ function onWebSocketError() {
 
 function initializeButtons() {
 
+	
+	
+	$(document).on('keypress','#textarea', function() {
+	
+	var $this = $(this);
+	editor2.setValue($('#textarea').val(),true);
+	
+	});
+	
+	$(window).on('resize', function(){
+      var win = $(this); 
+	  
+		document.getElementById("wrapper").style.height = (window.innerHeight * 0.9) + "px";
+	  
+	});
+	
+	
 
  		
-  
+	$(document).on('change','#uploadFile', function() {
+		var $this = $(this);
+        JSONRPCClient.call('set-epubname',
+            $('#uploadFile').val(),
+            function(result) {},
+            function(error) {
+                addError(error);
+            });
+	
+	});
+	
+	$(document).on('change','#test-dropdown', function() {
+		var $this = $(this);
+        JSONRPCClient.call('test-dropdown',
+            $('#test-dropdown').val(),
+            function(result) {},
+            function(error) {
+                addError(error);
+            });
+	
+	});
 
 		
 	
@@ -123,12 +162,20 @@ function initializeButtons() {
             function(error) {
                 addError(error);
             });
+	 });
 			
-		
-			
-			//editor.fire("change_view", "composer");
-			
-			//toolbar.fire("showSource");
+	$('#zip-epub').on('click', function() {
+	
+	  var $this = $(this);
+        JSONRPCClient.call('textarea',
+            $('#textarea').val(),
+            function(result) {},
+            function(error) {
+                addError(error);
+            });
+      
+	
+		JSONRPCClient.notify('zip-epub');
 		
     });
 
@@ -158,7 +205,8 @@ function initializeButtons() {
             function(error) {
                 addError(error);
             });
-    });
+			
+	});
 
 	// Button - start video
     $('#start-video-button').on('click', function() {
@@ -191,6 +239,7 @@ function handleServerEvent(evt) {
 	else if (evt.method == "textarea")
     {
 		editor.setValue(evt.params["value"],true);
+		editor2.setValue(evt.params["value"],true);
 		//$('#textarea').val(evt.params["value"]);
 	}
 	// Dropdown - populate it
@@ -212,7 +261,18 @@ function handleServerEvent(evt) {
 	else if (evt.method == "reset")
    	{
 		show('content2','a1');
-		show('content','aU')
+		show('content' ,'aU');
+		
+		
+
+		document.getElementById("epubtitle").innerHTML = " &#9679; current epub: " + evt.params["value"];
+
+		editor2.setValue(document.getElementById("textarea").value,true); // not sure?
+		
+		document.getElementById("dropdown-label").style.display = 'inline';
+		document.getElementById("wrapper").style.display = 'block';
+		document.getElementById("wrapper").style.height = (window.innerHeight * 0.9) + "px";
+		
 	}
 	else if (evt.method == "set-dropdown")
    	{

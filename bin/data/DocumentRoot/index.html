@@ -13,173 +13,128 @@
 </head>
 <body>
 	
-       <a id="aU" href="" onclick="javascript:show('content','aU'); return false">ePub Writer</a>
+       <a id="aU" href="" onclick="javascript:show('content','aU'); return false">epub writer</a>
 	   <div id="content" style="display:none">
                
         <!-- Controls -->
 		<span style="font-weight: bold;" >&#8201;/&#8201;</span>
 			
 		<!-- Upload -->
-		<a id="a1" href="" onclick="javascript:show('content2','a1'); return false">Upload</a>
+		<a id="a1" href="" onclick="javascript:show('content2','a1'); return false">upload</a>
 	    <div id="content2" style="display:none">
 		
-		<span style="font-weight: bold;" >&#8201;/&#8201;</span>
-		
-		<label class="custom-file-upload">
-		Choose ePub
-		<form id="iupload" action="/post" method="post" enctype="multipart/form-data">
-		<input class="sub" type="file" onchange="this.form.submit()" name="uploadFile" id="uploadFile"/>
-		</form>
-		</label>
-									
-		
-		<!-- Upload -->
-		
-		
-		<div id="wrapper">
-		<div id="container-dropdown">
-					<!-- Upload -->
-		
-											
-								
-												
-			
-					   <!-- drop-down-->
-					
-						<label for="test-dropdown">Select File</label><br>
+			<span style="font-weight: bold;" >&#8201;/&#8201;</span>
+			<!-- Upload -->
+			<label class="custom-file-upload">
+			choose epub
+			<span id="epubtitle" ></span>
+			<form id="iupload" action="/post" method="post" enctype="multipart/form-data">
+			<input type="file" onchange="this.form.submit()" size= " " name="uploadFile" id="uploadFile" />
+			</form>
+			</label>
+				
+			<label id="dropdown-label">
+			&#9679; current file: 
 						<select id="test-dropdown">
 							<option>1-One item</option>
 							<option>2-Another item</option>
 							<option>3-Another one again!</option>
-						</select><br>
+						</select>
 						<!-- select button -->
-						<button id="test-dropdown-button" class="btn btn-default">OK</button>
-						
-					
-							
-						
-						
-						
-					</div>
-					
-					  <!-- EDITOR-->
-					<div id="container-editor">
+			
+			</label>
+				
+			<!-- Upload -->
+				
+			<div id="wrapper">
 					
 										
-					
-					<textarea id="textarea" placeholder="Enter text ..."></textarea>
-														
-									
-					<br>
+			<!-- EDITOR-->
+			<div id="container-editor">
+				
+						<textarea id="textarea" placeholder="Enter text ..."></textarea>
+						
 					</div>
 					
+										
 					<div id="container-editor2">
-					
-									
-					
-					
-					<textarea id="textarea2" placeholder="Enter text ..."></textarea>
-														
-									
-					<br>
+										
+						<textarea id="textarea2" placeholder="Waiting for text ..."></textarea>
+						<label class="buttons" id="textarea-button">save file</label> / <label class="buttons" id="zip-epub">get epub</label>
 					</div>
 					
-					 <div class="container-command"><button type="button" id="textarea-button">Senden</button></div>
+					
 			
+				</div> <!-- Wrapper -->
+				
 			
-			</div>
-			</div>
-		</div>
-		
-		
-		
-		
-		
-		
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-			<br>
-			  <div class="container">
+				
+			</div><!-- Content2 -->
+			
+		</div><!-- Content1 -->
+		<br><br>
+		<div style="display:none" class="container">
 			
 				<div class="panel panel-default">
 			
-			<div style="border: 3px solid black; width:100%;" ></div>
+					<div style="border: 3px solid black; width:100%;" ></div>
 			
-			<br>
-			<br>
+					<br>
+					<br>
 			
 		
            		
-            <div class="panel-footer">
-                <!-- checkbox -->
-                <label for="test-checkbox">Check me!</label>
-                <input id="test-checkbox" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" value="autoGain"/><br>
-                
-                <!-- slider-->
-                <label for="test-slider">Slide me!</label>
-                <input id="test-slider" type="range" min="0" max="1" value="0.5" step="0.01" oninput="updateTestSliderValue(this.value)"/>
-                <span id="test-slider-text">0.5</span><br>
-                
-                <!-- select button -->
-                <label for="test-button">Push </label>
-                <button id="test-button" type="button" class="btn btn-default">me!</button><br>
-                
-             
-            </div>
-        </div>
+					<div class="panel-footer">
+						<!-- checkbox -->
+						<label for="test-checkbox">Check me!</label>
+						<input id="test-checkbox" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" value="autoGain"/><br>
+						
+						<!-- slider-->
+						<label for="test-slider">Slide me!</label>
+						<input id="test-slider" type="range" min="0" max="1" value="0.5" step="0.01" oninput="updateTestSliderValue(this.value)"/>
+						<span id="test-slider-text">0.5</span><br>
+						
+						<!-- select button -->
+						<label for="test-button">Push </label>
+						<button id="test-button" type="button" class="btn btn-default">me!</button><br>
+								 
+					</div>
+				</div>
 		
-		<br>
-        
-        <!-- Upload -->
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="pull-left">
-                    <strong>Upload File</strong>
-                </div>
-            </div>
-            
-
-        </div>
+				<br>
+				
+				<!-- Upload -->
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="pull-left">
+							<strong>Upload File</strong>
+						</div>
+					</div>
+				</div>
 		
-		<br>
+				<br>
 
         <!-- Live View -->
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="pull-left">
-					<strong>Live View</strong>
-                </div>
-            </div>
-            <div class="panel-footer">
-                <!-- start/stop video buttons -->
-                <button id="start-video-button" class="btn btn-default" onClick="load_liveView()">Start</button>
-                <button id="stop-video-button" class="btn btn-default" onClick="stop_liveView()">Stop</button>
-                
-				<!-- the html page for the live view -->
-                <div id ="contentLiveView"> </div>
-            </div>
-			  <div id="toolbar" style="display: none;">
-    <a data-wysihtml5-command="bold" title="CTRL+B">bold</a> |
-    <a data-wysihtml5-command="italic" title="CTRL+I">italic</a>
-    <a id="htmlchange" data-wysihtml5-action="change_view">switch to html view</a>
-  </div>
-        </div>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="pull-left">
+							<strong>Live View</strong>
+						</div>
+					</div>
+					<div class="panel-footer">
+						<!-- start/stop video buttons -->
+						<button id="start-video-button" class="btn btn-default" onClick="load_liveView()">Start</button>
+						<button id="stop-video-button" class="btn btn-default" onClick="stop_liveView()">Stop</button>
+						
+						<!-- the html page for the live view -->
+						<div id ="contentLiveView"> </div>
+					</div>
+					  <div id="toolbar" style="display: none;">
+						<a data-wysihtml5-command="bold" title="CTRL+B">bold</a> |
+						<a data-wysihtml5-command="italic" title="CTRL+I">italic</a>
+						<a id="htmlchange" data-wysihtml5-action="change_view">switch to html view</a>
+					  </div>
+				</div>
     </div>
 	</body> 
     
@@ -213,8 +168,8 @@
 <script>
 
 	var editor = new wysihtml5.Editor("textarea", {
-   		   toolbar: "toolbar",
-	parser: function(html) {
+   		toolbar: "toolbar",
+		parser: function(html) {
         return html;
     }
 	
@@ -227,12 +182,7 @@
 	 });
 	 
 	 
-	
-	
- 
-	 	
-  
-  var log = document.getElementById("log");
+var log = document.getElementById("log");
   
   editor
     .on("load", function() {
@@ -245,7 +195,7 @@
     
     })
     .on("change", function() {
-     editor2.setValue($('#textarea').val());
+     
     })
     .on("paste", function() {
     
@@ -275,14 +225,17 @@
 					var mya = document.getElementById(aid); 
 					if(mydiv.style.display=='inline') 
 					{
-						if(aid=='aU') { mya.innerHTML = 'ePub W__________riter';  }
-						if(aid=='a1') { mya.innerHTML = 'U__________pload';  }
+						if(aid=='aU') { mya.innerHTML = 'epub w__________riter';  }
+						if(aid=='a1') { mya.innerHTML = 'u__________pload';  }
+						
+						
 					}
 					
 					if(mydiv.style.display=='none') 
 					{
-						if(aid=='aU') { mya.innerHTML = 'ePub Writer';  }
-						if(aid=="a1")  {  mya.innerHTML = 'Upload'; }
+						if(aid=='aU') { mya.innerHTML = 'epub writer';  }
+						if(aid=="a1")  {  mya.innerHTML = 'upload'; }
+					
 					}
 				} 
 			} 
