@@ -78,6 +78,10 @@ void ofApp::exit()
         else
         {
 
+                ofLogVerbose(dir_del(files[i].getAbsolutePath()));
+
+               /*
+
                 ofDirectory tmpDir;
                 string fn;
                 fn = files[i].getAbsolutePath();
@@ -115,10 +119,12 @@ void ofApp::exit()
                 }
 
                 tmpDir.remove(false);
-
+                */
 
 
         }
+
+         ofLogVerbose(dir_del("DocumentRoot/images"));
 
 
 
@@ -379,11 +385,9 @@ void ofApp::keyPressed(int key)
       textarea="woooot";
     }
 
-      if(key=='z'){
+     if(key=='z'){
 
-
-
-
+     ofLogVerbose(dir_del("DocumentRoot/images"));
 
     }
 
@@ -788,6 +792,14 @@ void ofApp::initServerJSONRPC(int port)
                                this,
                                &ofApp::getEpubName);
 
+     serverJSON->registerMethod("zip-epub",
+                               "zip epub",
+                               this,
+                               &ofApp::ePubZip);
+
+
+
+
    //  serverJSON->registerMethod("setDropbox",
    //                            "Set selected File!",
    //                            this,
@@ -862,8 +874,8 @@ zipped=true;
 
 void ofApp::ePubZip(){
 
-
-std::ofstream out("test.epub", std::ios::binary);
+string zn =  "data/DocumentRoot/"+ currentEpubname ;
+std::ofstream out( zn.c_str() , std::ios::binary);
 Poco::Zip::Compress c(out, true);
 // Poco::Path theFile("data/temp/temp/mimetype");/// works
 Poco::Path theFile("data/DocumentRoot/temp/mimetype");
@@ -875,6 +887,8 @@ data.makeDirectory();
 c.addRecursive(data, Poco::Zip::ZipCommon::CL_NORMAL , true);
 c.close(); // MUST be done to finalize the Zip file
 
+Json::Value json = toJSONMethod("Server", "zipready", 0);
+sendJSONMessage(json);
 
 }
 
@@ -993,4 +1007,54 @@ void ofApp::ePubList(){
     sendJSONMessage(json5);
 
 }
+
+string ofApp::dir_del(string dir){
+
+        ofDirectory tmpDir;
+
+        tmpDir.listDir(dir);
+
+        vector<ofFile> tmpfiles = tmpDir.getFiles();
+
+        for(int i = 0; i < (int)tmpfiles.size(); i++){
+
+                        string fn;
+                        fn = tmpfiles[i].getAbsolutePath();
+
+                        /// Escape String
+                        std::stringstream ss;
+                        for (int i = 0; i < fn.length(); ++i) {
+                            if (fn[i] == '\\') {
+                                ss << "\\\\";
+                            }
+                            else
+                            {
+                                ss << fn[i];
+                            }
+                        }
+                        /// Escape String
+
+                        tmpfiles[i].close();
+
+                        int ti = std::remove( ss.str().c_str() );
+
+                        if( ti != 0 )
+                            perror("\tError deleting file");
+                        else
+                            ofLogVerbose("File successfully deleted: " ) << ofToString(i);
+
+                }
+
+                string tp;
+                tp = tmpDir.getAbsolutePath();
+
+                if(tmpDir.remove(false)){
+                    return "Path: " + tp + " succesfully deleted";
+                }else{
+                    return "Error deleting: " + tp;
+                }
+
+
+}
+
 

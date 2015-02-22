@@ -166,16 +166,8 @@ function initializeButtons() {
 			
 	$('#zip-epub').on('click', function() {
 	
-	  var $this = $(this);
-        JSONRPCClient.call('textarea',
-            $('#textarea').val(),
-            function(result) {},
-            function(error) {
-                addError(error);
-            });
-      
-	
 		JSONRPCClient.notify('zip-epub');
+	
 		
     });
 
@@ -282,6 +274,10 @@ function handleServerEvent(evt) {
 	
 		
 			
+	}
+	else if (evt.method == "zipready")
+   	{
+	document.getElementById("downloader").click();
 	}
 
     console.log(evt);

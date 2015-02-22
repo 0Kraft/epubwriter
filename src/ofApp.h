@@ -112,12 +112,19 @@ public:
 
     void ePubList();
 
-    // ZIP SHIT
+    // ZIP
 
     void ePubUnzip(string i_file);
-		void onDecompressError(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>& info);
-        void onOk(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const Poco::Path>& info);
-		bool zipped;
+    void ePubZip();
+	void onDecompressError(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>& info);
+    void onOk(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const Poco::Path>& info);
+	bool zipped;
+
+	// Delete
+
+	string dir_del(string dir);
+
+
 
 		string test;
 			string test2;
@@ -135,7 +142,7 @@ public:
         string currentEpubname;
         ofBuffer currentFileBuffer; //Content of ChosenFile
 
-        void ePubZip();
+
 
 
         float           nextLetterTime;
