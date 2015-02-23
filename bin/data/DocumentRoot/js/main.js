@@ -248,22 +248,39 @@ function handleServerEvent(evt) {
 	// Dropdown - remove all elements
 	else if (evt.method == "test-dropdown-removeAll")
    	{
+	
+		/*
+		var text = "no text";
+		editor.setValue(text,true);
+		editor2.setValue(text,true);
+		editor2.setValue(document.getElementById("textarea").value,true); // not sure?
+		
+		document.getElementById("epubtitle").innerHTML = "";
+		document.getElementById("epubtitlepre").innerHTML = "";
+		document.getElementById("dropdown-label").style.display = 'none';
+		document.getElementById("wrapper").style.display = 'none';
+		*/
+		
 		removeOptions(document.getElementById("test-dropdown"));
+		
+		
+
 	}
 	else if (evt.method == "reset")
    	{
 		show('content2','a1');
 		show('content' ,'aU');
 		
-		
-
-		document.getElementById("epubtitle").innerHTML = " &#9679; current epub: " + evt.params["value"];
-
-		editor2.setValue(document.getElementById("textarea").value,true); // not sure?
-		
 		document.getElementById("dropdown-label").style.display = 'inline';
 		document.getElementById("wrapper").style.display = 'block';
 		document.getElementById("wrapper").style.height = (window.innerHeight * 0.9) + "px";
+
+		document.getElementById("epubtitle").innerHTML = evt.params["value"];
+		document.getElementById("epubtitlepre").innerHTML = " &#9679; current epub: ";
+
+		editor2.setValue(document.getElementById("textarea").value,true); // not sure?
+		
+		
 		
 	}
 	else if (evt.method == "set-dropdown")
@@ -277,7 +294,9 @@ function handleServerEvent(evt) {
 	}
 	else if (evt.method == "zipready")
    	{
+	document.getElementById("downloader").setAttribute('href', document.getElementById("epubtitle").innerHTML + ".epub");
 	document.getElementById("downloader").click();
+	
 	}
 
     console.log(evt);

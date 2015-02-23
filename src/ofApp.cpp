@@ -48,6 +48,9 @@ void ofApp::exit()
          ofLogVerbose("File successfully deleted" );
     */
 
+    reset_all();
+
+    /*
 
     for(int i = 0; i < (int)files.size(); i++){
 
@@ -119,7 +122,7 @@ void ofApp::exit()
                 }
 
                 tmpDir.remove(false);
-                */
+
 
 
         }
@@ -132,7 +135,7 @@ void ofApp::exit()
 
     }
 
-
+  */
 
 
 }
@@ -191,7 +194,7 @@ void ofApp::update()
 
     if(zipped)        ziptimer++;
 
-    if(ziptimer>30) {
+    if(ziptimer>100) {
      ePubList();
      ziptimer=0; zipped=false;}
 
@@ -377,6 +380,7 @@ void ofApp::keyPressed(int key)
     if(key == 't') {
 
 
+   reset_all();
 
     }
 
@@ -508,35 +512,34 @@ void ofApp::getDropdown(ofx::JSONRPC::MethodArgs& args)
 
 void ofApp::setTextareaWeb(string fn)
 {
-    // Set the user text.
+
+    ///send text to browser
 
     ofFile t_file(dir.getAbsolutePath() + "/" + fn);
 
-
-
     if((t_file.getExtension()=="html")||(t_file.getExtension()=="opf")||(t_file.getExtension()=="xhtml")){
 
-    filename3 = dir.getAbsolutePath() +"/"+ fn;
+        filename3 = dir.getAbsolutePath() +"/"+ fn;
 
-    ofLogVerbose("ofApp::SentFilename") << filename3;
+        ofLogVerbose("ofApp::SentFilename") << filename3;
 
-    buffer = ofBufferFromFile(filename3);
+        buffer = ofBufferFromFile(filename3);
 
-    Json::Value params2;
-    params2["value"] = buffer.getText();
-    Json::Value json;
-    json = toJSONMethod("Server", "textarea", params2);
-    sendJSONMessage(json);
-    }
-    else{
+        Json::Value params2;
+        params2["value"] = buffer.getText();
+        Json::Value json;
+        json = toJSONMethod("Server", "textarea", params2);
+        sendJSONMessage(json);
+        }
+        else{
 
-    Json::Value params2;
-    params2["value"] = "Es kann kein Text angezeigt werden";
-    Json::Value json;
-    json = toJSONMethod("Server", "textarea", params2);
-    sendJSONMessage(json);
+        Json::Value params2;
+        params2["value"] = "Es kann kein Text angezeigt werden";
+        Json::Value json;
+        json = toJSONMethod("Server", "textarea", params2);
+        sendJSONMessage(json);
 
-    }
+        }
 
 
 
@@ -545,41 +548,28 @@ void ofApp::setTextareaWeb(string fn)
 void ofApp::getEpubName(ofx::JSONRPC::MethodArgs& args)
 {
    ofScopedLock lock(mutex);
-
    ofLogVerbose("ofApp::getEpubName") << args.params.asString();
-
    currentEpubname = args.params.asString();
-
-
-
-
 }
 
 
 void ofApp::getTextArea2(ofx::JSONRPC::MethodArgs& args)
 {
-     ofScopedLock lock(mutex);
-    // Set the user text.
-   // setTextArea(args.params.asString());
-   ofLogVerbose("ofApp::getTextArea") << args.params.asString();
+    ofScopedLock lock(mutex);
 
+   /// save file
 
    files[currentFile].setWriteable(true);
    ofBuffer tempbuffer;
    tempbuffer.set(args.params.asString());
 
    string tmppath;
-
    tmppath = files[currentFile].getAbsolutePath();
 
    files[currentFile].close();
 
    ofBufferToFile(tmppath,tempbuffer);
-
-
    files[currentFile].open(tmppath,ofFile::Reference);
-
-
 
    ofLogVerbose("Write ") << " to File: " << currentFilename << " Nr.: " << currentFile;
 
@@ -643,11 +633,6 @@ void ofApp::setTextArea(const std::string& text)
 {
    ofScopedLock lock(mutex);
 
-
-
-
-
-
 }
 
 std::string ofApp::getTextArea() const
@@ -709,13 +694,13 @@ void ofApp::onHTTPUploadEvent(ofx::HTTP::PostUploadEventArgs& args)
             break;
     }
 
- //   ofLogNotice("ofApp::onHTTPUploadEvent") << "";
- //   ofLogNotice("ofApp::onHTTPUploadEvent") << "         state: " << stateString;
- //   ofLogNotice("ofApp::onHTTPUploadEvent") << " formFieldName: " << args.getFormFieldName();
-  //  ofLogNotice("ofApp::onHTTPUploadEvent") << "orig. filename: " << args.getOriginalFilename();
-  //  ofLogNotice("ofApp::onHTTPUploadEvent") <<  "      filename: " << args.getFilename();
- //   ofLogNotice("ofApp::onHTTPUploadEvent") <<  "      fileType: " << args.getFileType().toString();
-//    ofLogNotice("ofApp::onHTTPUploadEvent") << "# bytes xfer'd: " << args.getNumBytesTransferred();
+    ofLogNotice("ofApp::onHTTPUploadEvent") << "";
+    ofLogNotice("ofApp::onHTTPUploadEvent") << "         state: " << stateString;
+    ofLogNotice("ofApp::onHTTPUploadEvent") << " formFieldName: " << args.getFormFieldName();
+    ofLogNotice("ofApp::onHTTPUploadEvent") << "orig. filename: " << args.getOriginalFilename();
+   ofLogNotice("ofApp::onHTTPUploadEvent") <<  "      filename: " << args.getFilename();
+    ofLogNotice("ofApp::onHTTPUploadEvent") <<  "      fileType: " << args.getFileType().toString();
+    ofLogNotice("ofApp::onHTTPUploadEvent") << "# bytes xfer'd: " << args.getNumBytesTransferred();
 
 
 
@@ -848,6 +833,8 @@ void ofApp::sendJSONMessage(Json::Value json)
 
 void ofApp::ePubUnzip(string i_file){
 
+    ofLogVerbose("clear1");
+
 ofFile tmpfile(currentEpubname);
 currentEpubname = tmpfile.getBaseName();
 
@@ -856,17 +843,34 @@ poco_assert (inp);
 // decompress to current working dir
 
 //Poco::Zip::Decompress dec(inp, "data/temp/temp"); /// works
-Poco::Zip::Decompress dec(inp, "data/DocumentRoot/temp");
-
+Poco::Zip::Decompress dec(inp, "data/DocumentRoot/tempzip",false,true);
 
 // if an error happens invoke the ZipTest::onDecompressError method
-dec.EError += Poco::Delegate<ofApp, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string> >(this, &ofApp::onDecompressError);
+ ofLogVerbose("clear2");
 dec.decompressAllFiles();
+   ofLogVerbose("clear3");
 
-dec.EError -= Poco::Delegate<ofApp, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string> >(this, &ofApp::onDecompressError);
-dec.EOk -= Poco::Delegate<ofApp, std::pair<const Poco::Zip::ZipLocalFileHeader, const Poco::Path> >(this, &ofApp::onOk);
+
+  ofDirectory zipdir;
+   ofDirectory zipdir2;
+
+    if(zipdir.doesDirectoryExist("DocumentRoot/tempzip/OEBPS")) {
+
+
+        zipdir.listDir("DocumentRoot/tempzip/OEBPS");
+        zipdir.copyTo("DocumentRoot");
+
+
+        zipdir.renameTo("DocumentRoot/temp",true,true);
+
+
+
+    }
+
+        zipdir.close();
 
 zipped=true;
+
 
 
 
@@ -874,17 +878,36 @@ zipped=true;
 
 void ofApp::ePubZip(){
 
-string zn =  "data/DocumentRoot/"+ currentEpubname ;
+string zn =  "data/DocumentRoot/"+ currentEpubname + ".epub";
 std::ofstream out( zn.c_str() , std::ios::binary);
 Poco::Zip::Compress c(out, true);
 // Poco::Path theFile("data/temp/temp/mimetype");/// works
-Poco::Path theFile("data/DocumentRoot/temp/mimetype");
+Poco::Path theFile("data/epubessentials/mimetype");
+
+//c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL);
 
 c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL);
+
+Poco::Path data("data/DocumentRoot/temp");
+Poco::Path name("OEBPS");
+data.makeDirectory();
+name.makeDirectory();
+c.addRecursive(data, Poco::Zip::ZipCommon::CL_NORMAL, false, name);
+
+
+/*
 // Poco::Path data("data/temp/temp");/// works
 Poco::Path data("data/DocumentRoot/temp");
 data.makeDirectory();
-c.addRecursive(data, Poco::Zip::ZipCommon::CL_NORMAL , true);
+
+c.addRecursive(data, Poco::Zip::ZipCommon::CL_NORMAL , false);
+*/
+
+//c.addRecursive(data, Poco::Zip::ZipCommon::CL_NORMAL , true, "");  //mit false gehts!
+
+
+
+
 c.close(); // MUST be done to finalize the Zip file
 
 Json::Value json = toJSONMethod("Server", "zipready", 0);
@@ -893,10 +916,11 @@ sendJSONMessage(json);
 }
 
 
-
+/*
 void ofApp::onDecompressError(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>& info)
 {
 
+    ofLogVerbose("Zip Error");
 
 
 }
@@ -908,10 +932,13 @@ void ofApp::onOk(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHea
 
 
 }
+*/
 
 void ofApp::ePubList(){
 
+    ofLogVerbose("clearlist");
 
+    /*
     if(dir.doesDirectoryExist("DocumentRoot/temp/OPS"))
     {
 
@@ -923,11 +950,13 @@ void ofApp::ePubList(){
 
     }else{
 
+
     dir.listDir("DocumentRoot/temp");
     }
-    // dir.listDir("temp/temp"); //works
+     */
+     dir.listDir("DocumentRoot/temp"); //works
 
-
+    /*
     ofDirectory i_dir;
 
     if(i_dir.doesDirectoryExist("DocumentRoot/temp/images")){
@@ -945,6 +974,7 @@ void ofApp::ePubList(){
 
 
     i_dir.close();
+    */
 
     if( dir.size() > 0 ){
             files.assign(dir.size(), ofFile());
@@ -1008,28 +1038,35 @@ void ofApp::ePubList(){
 
 }
 
-string ofApp::dir_del(string dir){
+string ofApp::dir_del(string fdir){
 
         ofDirectory tmpDir;
 
-        tmpDir.listDir(dir);
+        if(tmpDir.doesDirectoryExist(fdir)){
+
+
+        tmpDir.listDir(fdir);
 
         vector<ofFile> tmpfiles = tmpDir.getFiles();
 
-        for(int i = 0; i < (int)tmpfiles.size(); i++){
+        int lauf = (int)tmpfiles.size();
+
+        for(int i = 0; i < lauf; i++){
+
+             if((tmpfiles[i].isDirectory())!=true){
 
                         string fn;
                         fn = tmpfiles[i].getAbsolutePath();
 
                         /// Escape String
                         std::stringstream ss;
-                        for (int i = 0; i < fn.length(); ++i) {
-                            if (fn[i] == '\\') {
+                        for (int j = 0; j < fn.length(); j++) {
+                            if (fn[j] == '\\') {
                                 ss << "\\\\";
                             }
                             else
                             {
-                                ss << fn[i];
+                                ss << fn[j];
                             }
                         }
                         /// Escape String
@@ -1038,21 +1075,109 @@ string ofApp::dir_del(string dir){
 
                         int ti = std::remove( ss.str().c_str() );
 
-                        if( ti != 0 )
-                            perror("\tError deleting file");
-                        else
-                            ofLogVerbose("File successfully deleted: " ) << ofToString(i);
+                        if( ti != 0 ){}
+                          //  perror("\tError deleting file");
+                        else {}
+                        //    ofLogVerbose("File successfully deleted: " ) << ofToString(i);
+
+                }else{
+
+
+                        string fn4;
+                        fn4 = tmpfiles[i].getAbsolutePath();
+
+                        ofDirectory tmpDir2;
+                        tmpDir2.listDir(fn4);
+
+                        ofLogVerbose("Files listed: check!" );
+
+                        vector<ofFile> tmpfiles2 = tmpDir2.getFiles();
+
+                        int lauf2 = (int)tmpfiles2.size();
+
+                        for(int a = 0; a < lauf2; a++){
+
+                            string fn5;
+                            fn5 = tmpfiles2[a].getAbsolutePath();
+
+                            /// Escape String
+                            std::stringstream ss2;
+                            for (int b = 0; b < fn5.length(); b++) {
+                                if (fn5[b] == '\\') {
+                                    ss2 << "\\\\";
+                                }
+                                else
+                                {
+                                    ss2 << fn5[b];
+                                }
+                            }
+                            /// Escape String
+
+                            tmpfiles2[a].close();
+
+                            int ti2 = std::remove( ss2.str().c_str() );
+
+                            if( ti2 != 0 ) {   perror("\tError deleting file");}
+                            else {}
+                                //ofLogVerbose("File successfully deleted: " ) << ofToString(a);
+
+                        }
+
+
+                        string tp2;
+                        tp2 = tmpDir2.getAbsolutePath();
+
+                        if(tmpDir2.remove(false)){
+                            //return "Path: " + tp2 + " succesfully deleted";
+                        }else{
+                            //return "Error deleting: " + tp2;
+                        }
+
+
 
                 }
 
-                string tp;
-                tp = tmpDir.getAbsolutePath();
+        }
+
+                /// wenn Ordner leer ist, Ordner löschen!
+
+                string tp8;
+                tp8 = tmpDir.getAbsolutePath();
 
                 if(tmpDir.remove(false)){
-                    return "Path: " + tp + " succesfully deleted";
+                    return "Path: " + tp8 + " succesfully deleted";
                 }else{
-                    return "Error deleting: " + tp;
+                    return "Error deleting: " + tp8;
                 }
+
+
+
+
+}} //Function and exits question
+
+void ofApp::reset_all(){
+
+
+
+
+        for(int i = 0; i < (int)files.size(); i++){
+
+            files[i].close();
+
+        }
+        ofLogVerbose("All Files closed");
+
+
+
+        ofLogVerbose(dir_del("DocumentRoot/images"));
+        ofLogVerbose(dir_del("DocumentRoot/temp"));
+        ofLogVerbose(dir_del("DocumentRoot/tempzip"));
+        ofLogVerbose(dir_del("DocumentRoot/OEBPS"));
+
+
+    Json::Value json = toJSONMethod("Server", "test-dropdown-removeAll", 0);
+    sendJSONMessage(json);
+
 
 
 }

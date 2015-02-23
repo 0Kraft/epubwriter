@@ -120,9 +120,11 @@ public:
     void onOk(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const Poco::Path>& info);
 	bool zipped;
 
+	void reset_all();
+
 	// Delete
 
-	string dir_del(string dir);
+	string dir_del(string fdir);
 
 
 
@@ -134,6 +136,8 @@ public:
 			int ziptimer;
 
         ofDirectory dir;
+
+
 
 
         vector<ofFile> files; // Current Files of Directory

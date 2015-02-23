@@ -7060,3 +7060,32 @@
 
 1424606920 source:c:\arbeit\programming\of_v0.8.4_win_cb_release\apps\myapps\epubwriter\icon.rc
 
+1424624173 source:f:\arbeit\programming\of_v0.8.4_win_cb_release\of_v0.8.4_win_cb_release\apps\myapps\epubwriter\icon.rc
+
+1424624173 source:f:\arbeit\programming\of_v0.8.4_win_cb_release\of_v0.8.4_win_cb_release\apps\myapps\epubwriter\src\main.cpp
+	"ofMain.h"
+	"ofApp.h"
+
+1424684769 f:\arbeit\programming\of_v0.8.4_win_cb_release\of_v0.8.4_win_cb_release\apps\myapps\epubwriter\src\ofapp.h
+	"ofMain.h"
+	"ofxJSONRPC.h"
+	"WebSocketLoggerChannel.h"
+	"Poco/Zip/Decompress.h"
+	"Poco/Zip/Compress.h"
+	"Poco/Zip/ZipCommon.h"
+	"Poco/Delegate.h"
+	"Poco/Checksum.h"
+	"Poco/Util/Application.h"
+	<stdio.h>
+
+1424624173 f:\arbeit\programming\of_v0.8.4_win_cb_release\of_v0.8.4_win_cb_release\apps\myapps\epubwriter\src\websocketloggerchannel.h
+	<string>
+	"ofLog.h"
+	"ofxHTTP.h"
+
+1424688277 source:f:\arbeit\programming\of_v0.8.4_win_cb_release\of_v0.8.4_win_cb_release\apps\myapps\epubwriter\src\ofapp.cpp
+	"ofApp.h"
+
+1424624173 source:f:\arbeit\programming\of_v0.8.4_win_cb_release\of_v0.8.4_win_cb_release\apps\myapps\epubwriter\src\websocketloggerchannel.cpp
+	"WebSocketLoggerChannel.h"
+

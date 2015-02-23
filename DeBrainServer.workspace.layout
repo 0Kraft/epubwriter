@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_layout_file>
-	<ActiveProject path="../../../../../of_v0.8.0_win_cb_release/of_v0.8.0_win_cb_release/apps/myApps/simpleWebInterface/simpleWebInterface.cbp" />
+	<ActiveProject path="DeBrainServer.cbp" />
+	<PreferredTarget name="release" />
 </CodeBlocks_workspace_layout_file>
