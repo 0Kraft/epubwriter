@@ -48,7 +48,7 @@ void ofApp::exit()
          ofLogVerbose("File successfully deleted" );
     */
 
-    reset_all();
+    //reset_all();
 
     /*
 
@@ -833,8 +833,11 @@ void ofApp::sendJSONMessage(Json::Value json)
 
 void ofApp::ePubUnzip(string i_file){
 
-    ofLogVerbose("clear1");
 
+    reset_all();
+
+
+    ofLogVerbose("clear1");
 ofFile tmpfile(currentEpubname);
 currentEpubname = tmpfile.getBaseName();
 
@@ -944,7 +947,9 @@ void ofApp::onOk(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHea
 void ofApp::ePubList(){
 
     ofLogVerbose("clearlist");
+  //  dir.close();
 
+    ofLogVerbose("deleted all");
     /*
     if(dir.doesDirectoryExist("DocumentRoot/temp/OPS"))
     {
@@ -1059,6 +1064,9 @@ string ofApp::dir_del(string fdir){
         if(tmpDir.doesDirectoryExist(fdir)){
 
 
+        ofLogVerbose("Directory exists " ) << fdir;
+
+
         tmpDir.listDir(fdir);
 
         vector<ofFile> tmpfiles = tmpDir.getFiles();
@@ -1164,29 +1172,28 @@ string ofApp::dir_del(string fdir){
                     return "Error deleting: " + tp8;
                 }
 
+                tmpDir.close();
 
 
 
-}} //Function and exits question
+
+}else{
+ return "no dir";
+}
+  tmpDir.close();
+
+} //Function and exits question
 
 void ofApp::reset_all(){
 
-
-
-        if((int)files.size()!=0){
-        for(int i = 0; i < (int)files.size(); i++){
-
-            files[i].close();
-
-        }
-        ofLogVerbose("All Files closed");}
-
-
-
-        ofLogVerbose(dir_del("DocumentRoot/images"));
+         ofLogVerbose(dir_del("DocumentRoot/images"));
+         ofLogVerbose("reset 1");
         ofLogVerbose(dir_del("DocumentRoot/temp"));
+         ofLogVerbose("reset 2");
         ofLogVerbose(dir_del("DocumentRoot/tempzip"));
+         ofLogVerbose("reset 3");
         ofLogVerbose(dir_del("DocumentRoot/OEBPS"));
+         ofLogVerbose("reset 4");
 
 }
 
