@@ -1,0 +1,441 @@
+@charset "UTF-8";
+
+
+* {
+    margin: 0 ;
+    padding: 0 ;
+    border: 0 none ;
+}
+
+.debug {
+
+border-style: solid;
+border-width: 1px;
+border-color: black;
+
+ 
+ 
+
+}
+
+body {
+  
+  cursor:default;
+  font-size: 1.5em;
+ 
+   font-family: "Times New Roman", Georgia, Serif;
+   
+   -moz-hyphens: auto;
+   -o-hyphens: auto;
+   -webkit-hyphens: auto;
+   -ms-hyphens: auto;
+   hyphens: auto; 
+   
+   -ms-word-break: break-all;
+     word-break: break-all;
+
+     // Non standard for webkit
+     word-break: break-word;
+	 
+	max-width: 100%;
+    overflow-x: hidden;
+}
+
+html {
+max-width: 100%;
+    overflow-x: hidden;
+}
+
+#uploadFile{
+font-size: 1.0em;
+ font-family: "Times New Roman", Georgia, Serif;
+  cursor:text;
+  background-color: white;
+  font-style: italic;
+ 
+}
+
+ #iupload{
+font-size: 1.0em;
+ font-family: "Times New Roman", Georgia, Serif;
+  cursor:text;
+  background-color: white;
+  font-style: italic;
+  display:inline;
+}
+
+#isubmit,.sub{
+font-size: 1.0em;
+ font-family: "Times New Roman", Georgia, Serif;
+  cursor:text;
+  background-color: white;
+  font-style: italic;
+  display: inline;
+}
+
+#iemail{
+font-size: 1.0em;
+font-family: "Times New Roman", Georgia, Serif;
+cursor:text;
+/*
+border-style: solid;
+border-width: 1px;
+border-color: black;
+
+  border:0;
+  border-bottom:solid 1px #000;
+
+*/
+ font-weight: bold;
+text-decoration: underline;
+  outline:none; 
+}
+
+
+div {
+
+ 
+ 
+-ms-word-break: break-all;
+     word-break: break-all;
+
+     // Non standard for webkit
+     word-break: break-word;
+
+
+ -moz-hyphens: auto;
+   -o-hyphens: auto;
+   -webkit-hyphens: auto;
+   -ms-hyphens: auto;
+   hyphens: auto; 
+   cursor:default;
+}
+
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+
+
+/* -- styles -- */
+
+.wa2 {
+
+ color: #000;
+    text-decoration: underline;
+    cursor: pointer;
+
+}
+
+a:link,a:active,a:visited {
+
+ 
+   font-weight: bold;
+   text-decoration:none;
+   color: black;
+   
+    cursor:text;
+   
+}
+
+a:hover {
+ 
+   text-decoration:none;
+   
+    cursor:text;
+}
+
+.tlink,.tlink:link,.tlink:active,.tlink:visited
+{
+
+font-style: italic;
+font-weight: normal;
+   text-decoration:none;
+   color: black;
+}
+
+.wysiwyg-font-size-smaller {
+  font-size: smaller;
+}
+
+.wysiwyg-font-size-larger {
+  font-size: larger;
+}
+
+.wysiwyg-font-size-xx-large {
+  font-size: xx-large;
+}
+
+.wysiwyg-font-size-x-large {
+  font-size: x-large;
+}
+
+.wysiwyg-font-size-large {
+  font-size: large;
+}
+
+.wysiwyg-font-size-medium {
+  font-size: medium;
+}
+
+.wysiwyg-font-size-small {
+  font-size: small;
+}
+
+.wysiwyg-font-size-x-small {
+  font-size: x-small;
+}
+
+.wysiwyg-font-size-xx-small {
+  font-size: xx-small;
+}
+
+.wysiwyg-color-black {
+  color: black;
+}
+
+.wysiwyg-color-silver {
+  color: silver;
+}
+
+.wysiwyg-color-gray {
+  color: gray;
+}
+
+.wysiwyg-color-white {
+  color: white;
+}
+
+.wysiwyg-color-maroon {
+  color: maroon;
+}
+
+.wysiwyg-color-red {
+  color: red;
+}
+
+.wysiwyg-color-purple {
+  color: purple;
+}
+
+.wysiwyg-color-fuchsia {
+  color: fuchsia;
+}
+
+.wysiwyg-color-green {
+  color: green;
+}
+
+.wysiwyg-color-lime {
+  color: lime;
+}
+
+.wysiwyg-color-olive {
+  color: olive;
+}
+
+.wysiwyg-color-yellow {
+  color: yellow;
+}
+
+.wysiwyg-color-navy {
+  color: navy;
+}
+
+.wysiwyg-color-blue {
+  color: blue;
+}
+
+.wysiwyg-color-teal {
+  color: teal;
+}
+
+.wysiwyg-color-aqua {
+  color: aqua;
+}
+
+.wysiwyg-text-align-right {
+  text-align: right;
+}
+
+.wysiwyg-text-align-center {
+  text-align: center;
+}
+
+.wysiwyg-text-align-left {
+  text-align: left;
+}
+
+.wysiwyg-float-left {
+  float: left;
+  margin: 0 8px 8px 0;
+}
+
+.wysiwyg-float-right {
+  float: right;
+  margin: 0 0 8px 8px;
+}
+
+.wysiwyg-clear-right {
+  clear: right;
+}
+
+.wysiwyg-clear-left {
+  clear: left;
+}
+
+#toolbar2 [data-wysihtml5-action] {
+    float: right;
+    margin-right: 10px;
+  }
+
+#toolbar [data-wysihtml5-action] {
+    float: right;
+    margin-right: 10px;
+  }
+  
+  #toolbar,#toolbar2,
+  textarea {
+    width: 100%;
+   
+  }
+  
+  textarea {
+    height: 90%;
+	color: black;
+     
+    font-family: Verdana;
+    font-size: 11px;
+	resize: none;
+	
+	
+	
+		
+  }
+  
+    
+  #textarea {
+    border-right:  2px solid black;
+ 
+  }
+  #textarea2 {
+    border-left:  2px solid black;
+    padding-left: 2px;
+  }
+  
+  .wysihtml5-command-active {
+    font-weight: bold;
+  }
+  
+ #container-dropdown {
+ 
+ float:left;
+ width: 4%;
+ height:100%;
+  
+ }
+ 
+ #container-editor {
+ 
+
+ float:left;
+ height:100%;
+ width: 50%;
+
+ 
+  
+ 
+ 
+ }
+ 
+ #container-editor2 {
+ 
+
+ float:left;
+ height:100%;
+ width: 50%;
+
+
+ 
+ 
+ }
+ 
+ #container-command {
+ width: 5%;
+ float:right;
+ height:100%;
+ 
+ }
+ 
+#wrapper{
+height:500px;
+width:100%;
+display: none;
+margin-top: 5px;
+
+ 
+}
+
+#blackline {
+
+width:5%;
+
+background-color: black;
+ margin: 0 auto;
+      position: relative;
+	  
+}
+
+input[type="file"] {
+    display: none;
+}
+ 
+.custom-file-upload {
+	display: inline;
+    cursor: grab;
+	font-style: italic;
+}
+
+#dropdown-label {
+display: none;
+}
+
+.buttons {
+	display: inline;
+    cursor: grab;
+	font-style: italic;
+}
+
+#textarea-button {
+	display: inline;
+}
+
+#content,#content2 {
+
+
+}
+
+
+#epubtitle {
+font-style:normal;
+cursor: default;
+}
+
+#test-dropdown {
+
+ cursor:grab;
+ font-size: 1.0em;
+ font-style: italic;
+ font-family: "Times New Roman", Georgia, Serif;
+  -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
+	
+
+}
+
+/* -- media queries -- */
+
+
