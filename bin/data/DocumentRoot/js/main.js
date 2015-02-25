@@ -249,17 +249,6 @@ function handleServerEvent(evt) {
 	else if (evt.method == "test-dropdown-removeAll")
    	{
 	
-		/*
-		var text = "no text";
-		editor.setValue(text,true);
-		editor2.setValue(text,true);
-		editor2.setValue(document.getElementById("textarea").value,true); // not sure?
-		
-		document.getElementById("epubtitle").innerHTML = "";
-		document.getElementById("epubtitlepre").innerHTML = "";
-		document.getElementById("dropdown-label").style.display = 'none';
-		document.getElementById("wrapper").style.display = 'none';
-		*/
 		
 		removeOptions(document.getElementById("test-dropdown"));
 		

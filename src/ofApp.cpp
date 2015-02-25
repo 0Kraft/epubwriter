@@ -152,7 +152,7 @@ void ofApp::setup()
 
     ///ZIP
 
-
+    reset_all();
 
 
 
@@ -194,7 +194,7 @@ void ofApp::update()
 
     if(zipped)        ziptimer++;
 
-    if(ziptimer>100) {
+    if(ziptimer>200) {
      ePubList();
      ziptimer=0; zipped=false;}
 
@@ -445,7 +445,7 @@ void ofApp::keyPressed(int key)
 
     if(key=='f'){
 
-        ePubZip();
+        ePubList();
 
     }
 
@@ -858,12 +858,19 @@ dec.decompressAllFiles();
 
 
         zipdir.listDir("DocumentRoot/tempzip/OEBPS");
+        zipdir.copyTo("DocumentRoot",true,true);
+
+
+        zipdir.renameTo("DocumentRoot/temp");
+
+
+
+    }else{
+        zipdir.listDir("DocumentRoot/tempzip");
         zipdir.copyTo("DocumentRoot");
 
 
         zipdir.renameTo("DocumentRoot/temp",true,true);
-
-
 
     }
 
@@ -986,24 +993,28 @@ void ofApp::ePubList(){
 
     currentFile = 0;
 
-    buffer = ofBufferFromFile(dir.getPath(currentFile));
-    if(buffer.size()) {
 
-            // we now keep grabbing the next line
-            // until we reach the end of the file
-            while(buffer.isLastLine() == false) {
+    if((files[0].getExtension()=="html")||(files[0].getExtension()=="opf")||(files[0].getExtension()=="xhtml")){
 
-            // move on to the next line
-            string line = buffer.getNextLine();
 
-            // copy the line to draw later
-            // make sure its not a empty line
-            if(line.empty() == false) {
-                seussLines.push_back(line);
-            }
+        buffer = ofBufferFromFile(files[0].getAbsolutePath());
 
-            }
-    }
+        Json::Value params2;
+        params2["value"] = buffer.getText();
+        Json::Value json;
+        json = toJSONMethod("Server", "textarea", params2);
+        sendJSONMessage(json);
+        }
+        else{
+
+        Json::Value params2;
+        params2["value"] = "Es kann kein Text angezeigt werden";
+        Json::Value json;
+        json = toJSONMethod("Server", "textarea", params2);
+        sendJSONMessage(json);
+
+        }
+
 
     Json::Value json = toJSONMethod("Server", "test-dropdown-removeAll", 0);
     sendJSONMessage(json);
@@ -1025,11 +1036,14 @@ void ofApp::ePubList(){
     Json::Value json2 = toJSONMethod("Server", "test-dropdown", params);
     sendJSONMessage(json2);
 
+    if(buffer.size()){
+
     Json::Value params2;
     params2["value"] = buffer.getText();
 
     json = toJSONMethod("Server", "textarea", params2);
     sendJSONMessage(json);
+    }
 
     Json::Value params3;
     params3["value"] = currentEpubname;
@@ -1159,13 +1173,13 @@ void ofApp::reset_all(){
 
 
 
-
+        if((int)files.size()!=0){
         for(int i = 0; i < (int)files.size(); i++){
 
             files[i].close();
 
         }
-        ofLogVerbose("All Files closed");
+        ofLogVerbose("All Files closed");}
 
 
 
@@ -1173,12 +1187,6 @@ void ofApp::reset_all(){
         ofLogVerbose(dir_del("DocumentRoot/temp"));
         ofLogVerbose(dir_del("DocumentRoot/tempzip"));
         ofLogVerbose(dir_del("DocumentRoot/OEBPS"));
-
-
-    Json::Value json = toJSONMethod("Server", "test-dropdown-removeAll", 0);
-    sendJSONMessage(json);
-
-
 
 }
 
