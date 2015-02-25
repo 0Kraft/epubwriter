@@ -218,3 +218,8 @@ pip-log.txt
 *.o
 *.o
 obj/Release/addons/ofxIO/libs/ofxIO/src/ByteBufferUtils.o
+bin/DeBrainServer.exe
+*.exe
+bin/DeBrainServer.exe
+*.depend
+obj/Release/apps/myApps/epubwriter/src/ofApp.o

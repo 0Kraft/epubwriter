@@ -391,7 +391,7 @@ void ofApp::keyPressed(int key)
 
      if(key=='z'){
 
-     ofLogVerbose(dir_del("DocumentRoot/images"));
+    dir_del("DocumentRoot/images");
 
     }
 
@@ -833,11 +833,10 @@ void ofApp::sendJSONMessage(Json::Value json)
 
 void ofApp::ePubUnzip(string i_file){
 
-
+    ofLogVerbose("clear2");
     reset_all();
-
-
     ofLogVerbose("clear1");
+
 ofFile tmpfile(currentEpubname);
 currentEpubname = tmpfile.getBaseName();
 
@@ -858,28 +857,25 @@ dec.decompressAllFiles();
    ofDirectory zipdir2;
 
     if(zipdir.doesDirectoryExist("DocumentRoot/tempzip/OEBPS")) {
-
-
         zipdir.listDir("DocumentRoot/tempzip/OEBPS");
-        zipdir.copyTo("DocumentRoot",true,true);
-
-
+        zipdir.copyTo("DocumentRoot");
         zipdir.renameTo("DocumentRoot/temp");
-
-
-
+    }else if (zipdir.doesDirectoryExist("DocumentRoot/tempzip/Version01")){
+        zipdir.listDir("DocumentRoot/tempzip/Version01");
+        zipdir.copyTo("DocumentRoot");
+        zipdir.renameTo("DocumentRoot/temp");
+    }else if(zipdir.doesDirectoryExist("DocumentRoot/tempzip/OPS")){
+        zipdir.listDir("DocumentRoot/tempzip/OPS");
+        zipdir.copyTo("DocumentRoot");
+        zipdir.renameTo("DocumentRoot/temp");
     }else{
         zipdir.listDir("DocumentRoot/tempzip");
         zipdir.copyTo("DocumentRoot");
-
-
-        zipdir.renameTo("DocumentRoot/temp",true,true);
-
+        zipdir.renameTo("DocumentRoot/temp");
     }
 
         zipdir.close();
-
-zipped=true;
+        zipped=true;
 
 
 
@@ -968,25 +964,30 @@ void ofApp::ePubList(){
      */
      dir.listDir("DocumentRoot/temp"); //works
 
-    /*
+
     ofDirectory i_dir;
 
     if(i_dir.doesDirectoryExist("DocumentRoot/temp/images")){
     i_dir.listDir("DocumentRoot/temp/images");
     i_dir.copyTo("DocumentRoot/images");
     }
-    if(i_dir.doesDirectoryExist("DocumentRoot/temp/OPS/images")){
-    i_dir.listDir("DocumentRoot/temp/OPS/images");
+     if(i_dir.doesDirectoryExist("DocumentRoot/temp/img")){
+    i_dir.listDir("DocumentRoot/temp/img");
     i_dir.copyTo("DocumentRoot/images");
     }
-    if(i_dir.doesDirectoryExist("DocumentRoot/temp/OEBPS/images")){
-    i_dir.listDir("DocumentRoot/temp/OEBPS/images");
+     if(i_dir.doesDirectoryExist("DocumentRoot/temp/pic")){
+    i_dir.listDir("DocumentRoot/temp/pic");
     i_dir.copyTo("DocumentRoot/images");
     }
+     if(i_dir.doesDirectoryExist("DocumentRoot/temp/pictures")){
+    i_dir.listDir("DocumentRoot/temp/pictures");
+    i_dir.copyTo("DocumentRoot/images");
+    }
+
 
 
     i_dir.close();
-    */
+
 
     if( dir.size() > 0 ){
             files.assign(dir.size(), ofFile());
@@ -1057,7 +1058,7 @@ void ofApp::ePubList(){
 
 }
 
-string ofApp::dir_del(string fdir){
+void ofApp::dir_del(string fdir){
 
         ofDirectory tmpDir;
 
@@ -1099,17 +1100,18 @@ string ofApp::dir_del(string fdir){
 
                         if( ti != 0 ){}
                           //  perror("\tError deleting file");
-                        else {}
-                        //    ofLogVerbose("File successfully deleted: " ) << ofToString(i);
+                        else {
+                           ofLogVerbose("File successfully deleted: 1. Ebene " ) << ofToString(i);
+                        }
 
                 }else{
 
 
-                        string fn4;
-                        fn4 = tmpfiles[i].getAbsolutePath();
+                        string fn;
+                        fn = tmpfiles[i].getAbsolutePath();
 
                         ofDirectory tmpDir2;
-                        tmpDir2.listDir(fn4);
+                        tmpDir2.listDir(fn);
 
                         ofLogVerbose("Files listed: check!" );
 
@@ -1140,8 +1142,11 @@ string ofApp::dir_del(string fdir){
                             int ti2 = std::remove( ss2.str().c_str() );
 
                             if( ti2 != 0 ) {   perror("\tError deleting file");}
-                            else {}
-                                //ofLogVerbose("File successfully deleted: " ) << ofToString(a);
+                            else {
+                                ofLogVerbose("File successfully deleted: 2. Ebene " ) << ofToString(a);
+                            }
+
+
 
                         }
 
@@ -1150,12 +1155,12 @@ string ofApp::dir_del(string fdir){
                         tp2 = tmpDir2.getAbsolutePath();
 
                         if(tmpDir2.remove(false)){
-                            //return "Path: " + tp2 + " succesfully deleted";
+                           ofLogVerbose("Unterordner geloescht");
                         }else{
-                            //return "Error deleting: " + tp2;
+                            ofLogVerbose("Unterordner nicht geloescht");
                         }
 
-
+                        tmpDir2.close();
 
                 }
 
@@ -1167,9 +1172,9 @@ string ofApp::dir_del(string fdir){
                 tp8 = tmpDir.getAbsolutePath();
 
                 if(tmpDir.remove(false)){
-                    return "Path: " + tp8 + " succesfully deleted";
+                   // return "Path: " + tp8 + " succesfully deleted";
                 }else{
-                    return "Error deleting: " + tp8;
+                   // return "Error deleting: " + tp8;
                 }
 
                 tmpDir.close();
@@ -1178,7 +1183,8 @@ string ofApp::dir_del(string fdir){
 
 
 }else{
- return "no dir";
+  tmpDir.close();
+ //return "no dir";
 }
   tmpDir.close();
 
@@ -1186,13 +1192,22 @@ string ofApp::dir_del(string fdir){
 
 void ofApp::reset_all(){
 
-         ofLogVerbose(dir_del("DocumentRoot/images"));
+
+        for(int i = 0; i < (int)files.size(); i++){
+
+                files[i].close();
+
+        }
+
+
+         dir_del("DocumentRoot/images");
          ofLogVerbose("reset 1");
-        ofLogVerbose(dir_del("DocumentRoot/temp"));
+       dir_del("DocumentRoot/temp");
          ofLogVerbose("reset 2");
-        ofLogVerbose(dir_del("DocumentRoot/tempzip"));
+          dir_del("DocumentRoot/temp");
+      dir_del("DocumentRoot/tempzip");
          ofLogVerbose("reset 3");
-        ofLogVerbose(dir_del("DocumentRoot/OEBPS"));
+       dir_del("DocumentRoot/OEBPS");
          ofLogVerbose("reset 4");
 
 }

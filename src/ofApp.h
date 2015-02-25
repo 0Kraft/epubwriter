@@ -124,7 +124,7 @@ public:
 
 	// Delete
 
-	string dir_del(string fdir);
+	void dir_del(string fdir);
 
 
 

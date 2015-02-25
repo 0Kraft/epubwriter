@@ -323,6 +323,7 @@ font-weight: normal;
   #textarea2 {
     border-left:  2px solid black;
     padding-left: 2px;
+	  padding-right: 4px;
   }
   
   .wysihtml5-command-active {
@@ -432,6 +433,7 @@ cursor: default;
   -moz-appearance: none;
     text-indent: 0.01px;
     text-overflow: '';
+	width: 100px;
 	
 
 }
