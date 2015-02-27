@@ -99,12 +99,10 @@ function initializeButtons() {
 	
 	$(document).on('keypress','#textarea2', function() {
 	
-	var $this = $(this);
-	editor.setValue($('#textarea2').val(),true);
-	
+		
 	});
 	
-	$(document).on('click','#textarea', function() {
+	$(document).on('click','#textarea2', function() {
 	
 	var $this = $(this);
 	editor2.setValue($('#textarea').val(),true);

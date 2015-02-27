@@ -115,12 +115,15 @@ public:
     // ZIP
 
     void ePubUnzip(string i_file);
+    void ePubUnzipFlat(string i_file);
     void ePubZip();
 	void onDecompressError(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>& info);
     void onOk(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const Poco::Path>& info);
 	bool zipped;
 
 	void reset_all();
+
+	void cleanup_structure();
 
 	// Delete
 

@@ -86,24 +86,22 @@ var wysihtml5ParserRules = {
 	th:		{},
 	thead:		{},
 	tr:		{},
-	"img": {
-                "check_attributes": {
+	 "img": {
+            "check_attributes": {
+                "width": "numbers",
                 "alt": "alt",
                 "src": "src", // if you compiled master manually then change this from 'url' to 'src'
-                 },
+                "height": "numbers"
+            },
             "add_class": {
                 "align": "align_img"
             }
-        },
-      
-	
+        },	
 	area:	{},
 	map:	{},
-	meta:	{},
 	noscript:		{},
 	script:		{},
 	style:		{},
-	link:		{},
 	base:		{}
 	
    

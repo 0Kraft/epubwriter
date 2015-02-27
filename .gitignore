@@ -223,3 +223,5 @@ bin/DeBrainServer.exe
 bin/DeBrainServer.exe
 *.depend
 obj/Release/apps/myApps/epubwriter/src/ofApp.o
+bin/DeBrainServer.exe
+DeBrainServer.depend

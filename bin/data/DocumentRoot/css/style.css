@@ -286,17 +286,24 @@ font-weight: normal;
   clear: left;
 }
 
-#toolbar2 [data-wysihtml5-action] {
-    float: right;
-    margin-right: 10px;
-  }
 
 #toolbar [data-wysihtml5-action] {
-    float: right;
-    margin-right: 10px;
-  }
+ 	
+}
+
+#toolbar {
+	font-size: 0.7em;
+ 	width:8%;
+	height: 100%;
+	float:left;
+}
+
+.tbutton {
+	
+	width: 100%;
+	text-align:center;
+}
   
-  #toolbar,#toolbar2,
   textarea {
     width: 100%;
    
@@ -343,7 +350,7 @@ font-weight: normal;
 
  float:left;
  height:100%;
- width: 50%;
+ width: 45%;
 
  
   
@@ -356,7 +363,7 @@ font-weight: normal;
 
  float:left;
  height:100%;
- width: 50%;
+ width: 45%;
 
 
  

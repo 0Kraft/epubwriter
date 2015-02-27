@@ -57,6 +57,16 @@
 						
 					</div>
 					
+					  <div id="toolbar" >
+							
+							<div class="tbutton"><a id="htmlchange" data-wysihtml5-action="change_view">html-view</a></div>
+						<br>
+					  
+						<div class="tbutton"><a  data-wysihtml5-command="bold" title="CTRL+B">bold</a></div>
+						<div class="tbutton"><a  data-wysihtml5-command="italic" title="CTRL+I">italic</a></div>
+						
+					
+					  </div>
 										
 					<div id="container-editor2">
 										
@@ -131,11 +141,7 @@
 						<!-- the html page for the live view -->
 						<div id ="contentLiveView"> </div>
 					</div>
-					  <div id="toolbar" style="display: none;">
-						<a data-wysihtml5-command="bold" title="CTRL+B">bold</a> |
-						<a data-wysihtml5-command="italic" title="CTRL+I">italic</a>
-						<a id="htmlchange" data-wysihtml5-action="change_view">switch to html view</a>
-					  </div>
+					
 				</div>
     </div>
 	</body> 
@@ -171,24 +177,26 @@
 
 	var editor = new wysihtml5.Editor("textarea", {
    		toolbar: "toolbar",
-		parser: function(html) {
-        return html;
-    }
+		//parser: function(html) {
+		//  return html;
+		//	 }
+		
+		parserRules:  wysihtml5ParserRules 
 	
 	 });
 	 
 	var editor2 = new wysihtml5.Editor("textarea2", {
-   
-	<!--! parserRules:  wysihtml5ParserRules   -->
+	
+	parserRules:  wysihtml5ParserRules 
 		
 	 });
 	 
 	 
 var log = document.getElementById("log");
   
-  editor
+  editor2
     .on("load", function() {
-     editor.fire("change_view", "textarea");
+     editor2.fire("change_view", "textarea");
     })
     .on("focus", function() {
     

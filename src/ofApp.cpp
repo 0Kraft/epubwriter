@@ -194,7 +194,7 @@ void ofApp::update()
 
     if(zipped)        ziptimer++;
 
-    if(ziptimer>200) {
+    if(ziptimer>50) {
      ePubList();
      ziptimer=0; zipped=false;}
 
@@ -399,13 +399,7 @@ void ofApp::keyPressed(int key)
 
     currentFile++;
 
-    /*
-    Json::Value params;
-    params["value"] = buffer.getText();
 
-    Json::Value json = toJSONMethod("Server", "textarea", params);
-    sendJSONMessage(json);
-    */
 
     Json::Value params;
     params["value"] = files[currentFile].getFileName();
@@ -445,7 +439,7 @@ void ofApp::keyPressed(int key)
 
     if(key=='f'){
 
-        ePubList();
+     ePubUnzipFlat("Original.epub");
 
     }
 
@@ -690,7 +684,8 @@ void ofApp::onHTTPUploadEvent(ofx::HTTP::PostUploadEventArgs& args)
         case ofx::HTTP::PostUploadEventArgs::UPLOAD_FINISHED:
             stateString = "FINISHED";
             up_filename=args.getFilename();
-            ePubUnzip(up_filename);
+            ePubUnzipFlat(up_filename);
+
             break;
     }
 
@@ -942,31 +937,9 @@ void ofApp::onOk(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHea
 
 void ofApp::ePubList(){
 
-    ofLogVerbose("clearlist");
-  //  dir.close();
-
-    ofLogVerbose("deleted all");
-    /*
-    if(dir.doesDirectoryExist("DocumentRoot/temp/OPS"))
-    {
-
-         dir.listDir("DocumentRoot/temp/OPS");
-
-    }else if(dir.doesDirectoryExist("DocumentRoot/temp/OEBPS")) {
-
-     dir.listDir("DocumentRoot/temp/OEBPS");
-
-    }else{
-
-
-    dir.listDir("DocumentRoot/temp");
-    }
-     */
-     dir.listDir("DocumentRoot/temp"); //works
-
+    dir.listDir("DocumentRoot/temp"); //works
 
     ofDirectory i_dir;
-
     if(i_dir.doesDirectoryExist("DocumentRoot/temp/images")){
     i_dir.listDir("DocumentRoot/temp/images");
     i_dir.copyTo("DocumentRoot/images");
@@ -984,9 +957,9 @@ void ofApp::ePubList(){
     i_dir.copyTo("DocumentRoot/images");
     }
 
-
-
     i_dir.close();
+
+    dir.listDir("DocumentRoot/temp/text"); //works
 
 
     if( dir.size() > 0 ){
@@ -996,6 +969,8 @@ void ofApp::ePubList(){
                 files[i].open(dir.getPath(i),ofFile::ReadWrite);
             }
     }
+
+
 
     currentFile = 0;
 
@@ -1028,7 +1003,10 @@ void ofApp::ePubList(){
 
     vector<string> vec;
     for(int i = 0; i < int(dir.size()); i++) {
-        vec.push_back(files[i].getFileName());
+          if((files[i].getExtension()=="html")||(files[i].getExtension()=="xhtml"))
+            {
+                vec.push_back(files[i].getFileName());
+            }
     }
 
 
@@ -1206,10 +1184,103 @@ void ofApp::reset_all(){
          ofLogVerbose("reset 2");
           dir_del("DocumentRoot/temp");
       dir_del("DocumentRoot/tempzip");
+         dir_del("DocumentRoot/tempzipflat");
          ofLogVerbose("reset 3");
        dir_del("DocumentRoot/OEBPS");
          ofLogVerbose("reset 4");
 
 }
+
+void ofApp::cleanup_structure(){
+
+  ofDirectory zipdir;
+
+  ofDirectory checkdir;
+
+  zipdir.listDir("DocumentRoot/tempzipflat");
+
+  if(!checkdir.doesDirectoryExist("DocumentRoot/tempzipflat/images"))
+  {
+      checkdir.createDirectory("DocumentRoot/tempzipflat/images");
+  }
+  if(!checkdir.doesDirectoryExist("DocumentRoot/tempzipflat/text"))
+  {
+      checkdir.createDirectory("DocumentRoot/tempzipflat/text");
+  }
+  if(!checkdir.doesDirectoryExist("DocumentRoot/tempzipflat/styles"))
+  {
+      checkdir.createDirectory("DocumentRoot/tempzipflat/styles");
+  }
+
+  vector<ofFile> flatfiles = zipdir.getFiles();
+
+    for(int i = 0; i < (int)flatfiles.size(); i++){
+
+            if((flatfiles[i].getExtension()=="jpg")||
+               (flatfiles[i].getExtension()=="jpeg")||
+               (flatfiles[i].getExtension()=="png")||
+               (flatfiles[i].getExtension()=="gif")||
+               (flatfiles[i].getExtension()=="svg"))
+            {
+                   flatfiles[i].copyTo("DocumentRoot/tempzipflat/images");
+                   flatfiles[i].remove();
+            }
+
+            if((flatfiles[i].getExtension()=="html")||
+               (flatfiles[i].getExtension()=="xhtml"))
+            {
+                   flatfiles[i].copyTo("DocumentRoot/tempzipflat/text");
+                   flatfiles[i].remove();
+            }
+
+            if((flatfiles[i].getExtension()=="css"))
+            {
+                   flatfiles[i].copyTo("DocumentRoot/tempzipflat/styles");
+                   flatfiles[i].remove();
+            }
+
+            if((flatfiles[i].getBaseName()=="mimetype"))
+            {
+                    flatfiles[i].remove();
+            }
+
+    flatfiles[i].close();
+
+    }
+
+    ofLogVerbose("cleaned UP!");
+    zipdir.renameTo("DocumentRoot/temp");
+
+
+
+    zipdir.close();
+
+
+}
+
+void ofApp::ePubUnzipFlat(string i_file){
+
+std::ifstream inp(i_file.c_str(), std::ios::binary);
+poco_assert (inp);
+// decompress to current working dir
+
+//Poco::Zip::Decompress dec(inp, "data/temp/temp"); /// works
+Poco::Zip::Decompress dec(inp, "data/DocumentRoot/tempzipflat",true,true);
+
+// if an error happens invoke the ZipTest::onDecompressError method
+
+dec.decompressAllFiles();
+
+
+ofLogVerbose("Unzipped Flat: ") << i_file;
+
+cleanup_structure();
+
+zipped=true;
+
+
+}
+
+
 
 
