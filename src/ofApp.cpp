@@ -33,109 +33,8 @@ void ofApp::exit()
     // remaining messages are logged correctly.
     ofLogToConsole();
 
-    /*
-    string tp;
+    reset_all();
 
-    tp = files[3].getAbsolutePath();
-
-    files[3].close();
-
-    int ti = remove( files[3].getAbsolutePath().c_str() );
-
-    if( ti != 0 )
-         ofLogVerbose("Error deleting file: " ) << ti;
-    else
-         ofLogVerbose("File successfully deleted" );
-    */
-
-    //reset_all();
-
-    /*
-
-    for(int i = 0; i < (int)files.size(); i++){
-
-        if((files[i].isDirectory())!=true){
-                string fn;
-                fn = files[i].getAbsolutePath();
-
-                  std::stringstream ss;
-                    for (int i = 0; i < fn.length(); ++i) {
-                if (fn[i] == '\\') {
-                ss << "\\\\";
-                }
-                 else {
-                   ss << fn[i];
-                 }
-                }
-                files[i].close();
-
-                ofLogVerbose("Path" ) << ss.str();
-
-                int ti = std::remove( ss.str().c_str() );
-
-                if( ti != 0 )
-                    perror("\tError deleting file");
-                else
-                    ofLogVerbose("File successfully deleted: " ) << ofToString(i);
-        }
-        else
-        {
-
-                ofLogVerbose(dir_del(files[i].getAbsolutePath()));
-
-               /*
-
-                ofDirectory tmpDir;
-                string fn;
-                fn = files[i].getAbsolutePath();
-                tmpDir.listDir(fn);
-                string tp;
-                tp = tmpDir.getAbsolutePath();
-
-                vector<ofFile> tmpfiles = tmpDir.getFiles();
-
-                for(int i = 0; i < (int)tmpfiles.size(); i++){
-
-                                string fn;
-                        fn = tmpfiles[i].getAbsolutePath();
-
-                          std::stringstream ss;
-                            for (int i = 0; i < fn.length(); ++i) {
-                        if (fn[i] == '\\') {
-                        ss << "\\\\";
-                        }
-                         else {
-                           ss << fn[i];
-                         }
-                        }
-                        tmpfiles[i].close();
-
-                        ofLogVerbose("Path" ) << ss.str();
-
-                        int ti = std::remove( ss.str().c_str() );
-
-                        if( ti != 0 )
-                            perror("\tError deleting file");
-                        else
-                            ofLogVerbose("File successfully deleted: " ) << ofToString(i);
-
-                }
-
-                tmpDir.remove(false);
-
-
-
-        }
-
-         ofLogVerbose(dir_del("DocumentRoot/images"));
-
-
-
-
-
-    }
-
-  */
 
 
 }
@@ -149,41 +48,21 @@ void ofApp::setup()
     zipped = false;
     ziptimer=0;
 
-
     ///ZIP
 
     reset_all();
 
-
-
     ofSetFrameRate(30);
     ofSetLogLevel(OF_LOG_VERBOSE);
-    textarea="initiated";
-
-	/*
-    // Set up our camera
-    cam.listDevices();
-    cam.setDeviceID(0);
-    cam.setDesiredFrameRate(60);
-    cam.initGrabber(640, 480);
 
 
-    // Init FBO
-    fbo.allocate(cam.getWidth(), cam.getHeight());
-    fbo.begin();
-    ofClear(255,255,255, 0);
-    fbo.end();
-
-    // Init image
-    img.allocate(cam.getWidth(), cam.getHeight(), OF_IMAGE_COLOR);
-    */
+    currentFile=0;   // Chosen Filenumber
+    currentFilename="null";
+    currentEpubname="null";
 
 
     // JSON-RPC server
     initServerJSONRPC(8197);
-
-    // Video server
-    initServerVideo(7890);
 
     // Launch a browser with the address of the server.
     ofLaunchBrowser(serverJSON->getURL());
@@ -192,43 +71,13 @@ void ofApp::setup()
 void ofApp::update()
 {
 
-    if(zipped)        ziptimer++;
+    if(zipped)  ziptimer++;
 
     if(ziptimer>50) {
-     ePubList();
-     ziptimer=0; zipped=false;}
-
-/*
- // Update the video grabber.
-    //cam.update();
-
-    // If the frame is new, then send it to the server to be broadcast.
- //   if(cam.isFrameNew())
- //   {
-        fbo.begin();
-        ofClear(255,255,255, 0);
-
-        // Draw the video on the screen.
-  //      cam.draw(0,0);
-
-
-  std::stringstream ss;
-
-        ss << "Text: " << userText << endl;
-        ss << "Slider: " << sliderValue << endl;
-        ss << "Checkbox: " << checkboxValue << endl;
-
-        ofDrawBitmapStringHighlight(ss.str(), 20, 20);
-
-        fbo.end();
-
-        // Put the FBO into an ofImage
-        fbo.readToPixels(img.getPixelsRef());
-        img.update();
-//    }
-*/
-//
-
+        ePubList();
+        ziptimer=0;
+        zipped=false;
+     }
 
 }
 
@@ -236,61 +85,19 @@ void ofApp::update()
 void ofApp::draw()
 {
     ofBackground(0);
-
-    std::stringstream ss;
-
-        ss << "Text: " << userText << endl;
-        ss << "Slider: " << sliderValue << endl;
-        ss << "Checkbox: " << checkboxValue << endl;
-     //   ss << "Textarea: " << filecontent << endl;
-
-    ofSetColor(30,30,30);
-    ofDrawBitmapString(ss.str(), 20, 20);
-
-    //  img.draw(0, 0);
-    /*
-    if(serverVideo->isRunning()) {
-        // This can be any kind of pixels.
-        serverVideo->send(img.getPixelsRef());
-    }
-    */
-
-    ///ZIP
     ofSetColor(255,255,255);
-    ofDrawBitmapString("Z for unzip!", 300,20);
 
     if(zipped){
-    ofDrawBitmapString("ePub has been unzipped!", 300,35);
+    ofDrawBitmapString(currentFilename + " has been unzipped!", 5,5);
+    }else{
+     ofDrawBitmapString("Waiting for epub to unzip ...", 5,20);
     }
 
-
-    ofSetColor(255,0,0);
-    ofDrawBitmapString(currentFilename, 50,25);
-     ofDrawBitmapString(ofToString(currentFile), 30,25);
+    ofDrawBitmapString("----------------------------------------", 5,50);
 
     /// DIR
 
     if (dir.size() > 0){
-            ofSetColor(ofColor::white);
-            ofSetColor(ofColor::gray);
-
-
-            /*
-            for(int i = 0;i<seussLines.size();i++)
-            {
-                 filecontent=filecontent + seussLines[i] + "\n";
-            }
-            */
-
-
-            /*
-
-            string pathInfo = dir.getName(currentFile) + " " + dir.getPath(currentFile) + "\n\n" +
-                filecontent;
-            ofSetColor(10,10,70);
-            ofDrawBitmapString(pathInfo, 300, 80);
-            */
-
 
         ofSetColor(ofColor::gray);
         for(int i = 0; i < (int)dir.size(); i++){
@@ -300,37 +107,11 @@ void ofApp::draw()
                 ofSetColor(ofColor::gray);
             }
             string fileInfo = "file " + ofToString(i + 1) + " = " + dir.getName(i);
-            ofDrawBitmapString(fileInfo, 50,i * 20 + 80);
+            ofDrawBitmapString(fileInfo, 5,i * 20 + 70);
         }
     }
 
 
-
-    if (files.size() > 0){
-
-           /*
-           ofSetColor(40,40,100);
-           ofBuffer tempbuffer;
-           tempbuffer = ofBufferFromFile(files[currentFile].getAbsolutePath());
-           ofDrawBitmapString(tempbuffer.getText(), 20,20);
-           */
-
-
-        for(int i = 0; i < (int)files.size(); i++){
-            if(i == currentFile) {
-                ofSetColor(ofColor::red);
-            }	else {
-                ofSetColor(ofColor::gray);
-            }
-            string fileInfo = "file " + ofToString(i + 1) + " = " + files[i].getFileName();
-            ofDrawBitmapString(fileInfo, 300,i * 20 + 80);
-        }
-
-    }
-
-
-
-    ///ZIP
 
 
 }
@@ -338,68 +119,11 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
-    // Populate drop-down menu from vector
-    if(key == 'd') {
-        vector<string> vec;
-        vec.push_back("OF item 1");
-        vec.push_back("OF item number 2");
-        vec.push_back("OF item is the tree");
 
-        // Create vector
-        Json::Value params;
-        for(int i = 0; i < vec.size(); i++) {
-            params.append(vec[i]);
-        }
-
-        // Send vector
-        Json::Value json = toJSONMethod("Server", "test-dropdown", params);
-        sendJSONMessage(json);
-    }
-    // Empty drop-down menu
-    if(key == 'D') {
-        Json::Value json = toJSONMethod("Server", "test-dropdown-removeAll", 0);
-        sendJSONMessage(json);
-    }
-    // Checkbox
-    else if(key == 'c') {
-        Json::Value params;
-        params["bool"] = false;
-
-        Json::Value json = toJSONMethod("Server", "test-checkbox", params);
-        sendJSONMessage(json);
-    }
-    // Checkbox
-    else if(key == 'C') {
-        Json::Value params;
-        params["bool"] = true;
-
-        Json::Value json = toJSONMethod("Server", "test-checkbox", params);
-        sendJSONMessage(json);
-    }
-
-    if(key == 't') {
-
-
-   reset_all();
-
-    }
-
-    if(key == 'T') {
-
-      textarea="woooot";
-    }
-
-     if(key=='z'){
-
-    dir_del("DocumentRoot/images");
-
-    }
 
     if(key=='+'){
 
     currentFile++;
-
-
 
     Json::Value params;
     params["value"] = files[currentFile].getFileName();
@@ -425,69 +149,21 @@ void ofApp::keyPressed(int key)
 
     setTextareaWeb(files[currentFile].getFileName());
 
-    /*
-
-    Json::Value params;
-    params["value"] = buffer.getText();
-
-    Json::Value json = toJSONMethod("Server", "textarea", params);
-    sendJSONMessage(json);
-
-    */
-
     }
 
     if(key=='f'){
 
-     ePubUnzipFlat("Original.epub");
+            ePubParseContent();
 
     }
 
 
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-    // Map the horizontal position of the mouse to the slider
-    float slider = ofMap(x, 0, ofGetWindowWidth(), 0.0, 1.0);
-
-    Json::Value params;
-    params["value"] = slider;
-
-    Json::Value json = toJSONMethod("Server", "test-slider", params);
-    sendJSONMessage(json);
-}
-
-//--------------------------------------------------------------
-void ofApp::getCheckBox(ofx::JSONRPC::MethodArgs& args)
-{
-    // Set the user text.
-    setUserText(args.params.asString());
-    setCheckboxValue(args.params.asBool());
-    ofLogVerbose("ofApp::getCheckBox") << args.params.asString();
-}
-
-//--------------------------------------------------------------
-void ofApp::getSlider(ofx::JSONRPC::MethodArgs& args)
-{
-    // Set the user text.
-    setUserText(args.params.asString());
-    setSliderValue(ofToFloat(args.params.asString()));
-    ofLogVerbose("ofApp::getSlider") << args.params.asString();
-
-}
-
-//--------------------------------------------------------------
-void ofApp::getButton()
-{
-    ofLogVerbose("ofApp::getButton") << "Pushed!";
 }
 
 //--------------------------------------------------------------
 void ofApp::getDropdown(ofx::JSONRPC::MethodArgs& args)
 {
-    // Set the user text.
-    setUserText(args.params.asString());
+
     ofLogVerbose("ofApp::getDropdown") << args.params.asString();
 
     setTextareaWeb(args.params.asString());
@@ -513,14 +189,16 @@ void ofApp::setTextareaWeb(string fn)
 
     if((t_file.getExtension()=="html")||(t_file.getExtension()=="opf")||(t_file.getExtension()=="xhtml")){
 
-        filename3 = dir.getAbsolutePath() +"/"+ fn;
+        string selectedFilePath;
 
-        ofLogVerbose("ofApp::SentFilename") << filename3;
+        selectedFilePath = dir.getAbsolutePath() +"/"+ fn;
 
-        buffer = ofBufferFromFile(filename3);
+        ofLogVerbose("ofApp::SentFilename") << selectedFilePath;
+
+        currentFileBuffer = ofBufferFromFile(selectedFilePath);
 
         Json::Value params2;
-        params2["value"] = buffer.getText();
+        params2["value"] = currentFileBuffer.getText();
         Json::Value json;
         json = toJSONMethod("Server", "textarea", params2);
         sendJSONMessage(json);
@@ -569,59 +247,6 @@ void ofApp::getTextArea2(ofx::JSONRPC::MethodArgs& args)
 
 }
 
-//--------------------------------------------------------------
-void ofApp::startVideoServer()
-{
-    // Set the user text.
-    ofLogVerbose("ofApp::startVideoServer");
-
-    // Start the video server
-    if(!serverVideo->isRunning()) {
-        serverVideo->start();
-    }
-}
-
-//--------------------------------------------------------------
-void ofApp::stopVideoServer()
-{
-    // Set the user text.
-    ofLogVerbose("ofApp::stopVideoServer");
-
-    // Stop the video server
-    if(serverVideo->isRunning()) {
-        serverVideo->stop();
-    }
-}
-
-//--------------------------------------------------------------
-std::string ofApp::getUserText() const
-{
-    ofScopedLock lock(mutex);
-    return userText;
-}
-
-
-//--------------------------------------------------------------
-void ofApp::setUserText(const std::string& text)
-{
-    ofScopedLock lock(mutex);
-    userText = text;
-}
-
-//--------------------------------------------------------------
-float ofApp::getSliderValue() const
-{
-    ofScopedLock lock(mutex);
-    return sliderValue;
-}
-
-
-//--------------------------------------------------------------
-void ofApp::setSliderValue(const float& f)
-{
-    ofScopedLock lock(mutex);
-    sliderValue = f;
-}
 
 void ofApp::setTextArea(const std::string& text)
 {
@@ -634,24 +259,6 @@ std::string ofApp::getTextArea() const
     ofScopedLock lock(mutex);
     return textarea;
 }
-
-//--------------------------------------------------------------
-bool ofApp::getCheckboxValue() const
-{
-    ofScopedLock lock(mutex);
-    return checkboxValue;
-}
-
-
-//--------------------------------------------------------------
-void ofApp::setCheckboxValue(const bool& b)
-{
-    ofScopedLock lock(mutex);
-    checkboxValue = b;
-}
-
-
-
 
 //--------------------------------------------------------------
 void ofApp::onHTTPPostEvent(ofx::HTTP::PostEventArgs& args)
@@ -693,7 +300,7 @@ void ofApp::onHTTPUploadEvent(ofx::HTTP::PostUploadEventArgs& args)
     ofLogNotice("ofApp::onHTTPUploadEvent") << "         state: " << stateString;
     ofLogNotice("ofApp::onHTTPUploadEvent") << " formFieldName: " << args.getFormFieldName();
     ofLogNotice("ofApp::onHTTPUploadEvent") << "orig. filename: " << args.getOriginalFilename();
-   ofLogNotice("ofApp::onHTTPUploadEvent") <<  "      filename: " << args.getFilename();
+    ofLogNotice("ofApp::onHTTPUploadEvent") <<  "      filename: " << args.getFilename();
     ofLogNotice("ofApp::onHTTPUploadEvent") <<  "      fileType: " << args.getFileType().toString();
     ofLogNotice("ofApp::onHTTPUploadEvent") << "# bytes xfer'd: " << args.getNumBytesTransferred();
 
@@ -732,35 +339,11 @@ void ofApp::initServerJSONRPC(int port)
     ofSetLoggerChannel(loggerChannel);
 
     // Register RPC methods.
-    serverJSON->registerMethod("test-checkbox",
-                               "Get the value of a checkbox",
-                               this,
-                               &ofApp::getCheckBox);
-
-    serverJSON->registerMethod("test-slider",
-                               "Get the value of a slider",
-                               this,
-                               &ofApp::getSlider);
-
-    serverJSON->registerMethod("test-button",
-                               "Get the value of a button",
-                               this,
-                               &ofApp::getButton);
 
     serverJSON->registerMethod("test-dropdown",
                                "Get the select item from the drobdown",
                                this,
                                &ofApp::getDropdown);
-
-    serverJSON->registerMethod("start-videoServer",
-                               "Start the BasicIPVideoServer.",
-                               this,
-                               &ofApp::startVideoServer);
-
-    serverJSON->registerMethod("stop-videoServer",
-                               "Stop the BasicIPVideoServer.",
-                               this,
-                               &ofApp::stopVideoServer);
 
     serverJSON->registerMethod("textarea",
                                "Get the text!",
@@ -777,33 +360,10 @@ void ofApp::initServerJSONRPC(int port)
                                this,
                                &ofApp::ePubZip);
 
-
-
-
-   //  serverJSON->registerMethod("setDropbox",
-   //                            "Set selected File!",
-   //                            this,
-   //                            &ofApp::setDropbox);
-
-
-
     // Start the server.
     serverJSON->start();
 }
 
-
-//--------------------------------------------------------------
-void ofApp::initServerVideo(int port)
-{
-    ofx::HTTP::BasicIPVideoServerSettings settings;
-
-    // Many other settings are available.
-    settings.setPort(port);
-    settings.setDefaultIndex("liveView.html");
-
-    // Apply the settings.
-    serverVideo = ofx::HTTP::BasicIPVideoServer::makeShared(settings);
-}
 
 //--------------------------------------------------------------
 Json::Value ofApp::toJSONMethod(const std::string& module, const std::string& method, const Json::Value& params)
@@ -825,6 +385,29 @@ void ofApp::sendJSONMessage(Json::Value json)
     serverJSON->getWebSocketRoute()->broadcast(frame);
 
 }
+
+void ofApp::ePubUnzipFlat(string i_file){
+
+std::ifstream inp(i_file.c_str(), std::ios::binary);
+poco_assert (inp);
+// decompress to current working dir
+
+//Poco::Zip::Decompress dec(inp, "data/temp/temp"); /// works
+Poco::Zip::Decompress dec(inp, "data/DocumentRoot/tempzipflat",true,true);
+
+// if an error happens invoke the ZipTest::onDecompressError method
+
+dec.decompressAllFiles();
+
+
+ofLogVerbose("Unzipped Flat: ") << i_file;
+
+cleanup_structure();
+
+zipped=true;
+
+}
+
 
 void ofApp::ePubUnzip(string i_file){
 
@@ -877,6 +460,8 @@ dec.decompressAllFiles();
 
 }
 
+
+
 void ofApp::ePubZip(){
 
 string zn =  "data/DocumentRoot/"+ currentEpubname + ".epub";
@@ -888,6 +473,14 @@ Poco::Path theFile("data/epubessentials/mimetype");
 //c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL);
 
 c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL);
+
+
+Poco::Path meta("data/epubessentials/META-INF");
+Poco::Path metaname("META-INF");
+meta.makeDirectory();
+metaname.makeDirectory();
+c.addRecursive(meta, Poco::Zip::ZipCommon::CL_NORMAL, false, metaname);
+
 
 Poco::Path data("data/DocumentRoot/temp");
 Poco::Path name("OEBPS");
@@ -916,24 +509,6 @@ sendJSONMessage(json);
 
 }
 
-
-/*
-void ofApp::onDecompressError(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>& info)
-{
-
-    ofLogVerbose("Zip Error");
-
-
-}
-
-void ofApp::onOk(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const Poco::Path>& info)
-{
-	test = "OK: " + info.second.toString(Poco::Path::PATH_UNIX);
-
-
-
-}
-*/
 
 void ofApp::ePubList(){
 
@@ -978,10 +553,10 @@ void ofApp::ePubList(){
     if((files[0].getExtension()=="html")||(files[0].getExtension()=="opf")||(files[0].getExtension()=="xhtml")){
 
 
-        buffer = ofBufferFromFile(files[0].getAbsolutePath());
+        currentFileBuffer = ofBufferFromFile(files[0].getAbsolutePath());
 
         Json::Value params2;
-        params2["value"] = buffer.getText();
+        params2["value"] = currentFileBuffer.getText();
         Json::Value json;
         json = toJSONMethod("Server", "textarea", params2);
         sendJSONMessage(json);
@@ -1020,10 +595,10 @@ void ofApp::ePubList(){
     Json::Value json2 = toJSONMethod("Server", "test-dropdown", params);
     sendJSONMessage(json2);
 
-    if(buffer.size()){
+    if(currentFileBuffer.size()){
 
     Json::Value params2;
-    params2["value"] = buffer.getText();
+    params2["value"] = currentFileBuffer.getText();
 
     json = toJSONMethod("Server", "textarea", params2);
     sendJSONMessage(json);
@@ -1150,9 +725,9 @@ void ofApp::dir_del(string fdir){
                 tp8 = tmpDir.getAbsolutePath();
 
                 if(tmpDir.remove(false)){
-                   // return "Path: " + tp8 + " succesfully deleted";
+                     ofLogVerbose("Ordner geloescht");
                 }else{
-                   // return "Error deleting: " + tp8;
+                     ofLogVerbose("Ordner nicht geloescht");
                 }
 
                 tmpDir.close();
@@ -1162,14 +737,13 @@ void ofApp::dir_del(string fdir){
 
 }else{
   tmpDir.close();
- //return "no dir";
+
 }
   tmpDir.close();
 
 } //Function and exits question
 
 void ofApp::reset_all(){
-
 
         for(int i = 0; i < (int)files.size(); i++){
 
@@ -1178,16 +752,16 @@ void ofApp::reset_all(){
         }
 
 
-         dir_del("DocumentRoot/images");
-         ofLogVerbose("reset 1");
-       dir_del("DocumentRoot/temp");
-         ofLogVerbose("reset 2");
-          dir_del("DocumentRoot/temp");
+      dir_del("DocumentRoot/images");
+
+      dir_del("DocumentRoot/temp");
+
       dir_del("DocumentRoot/tempzip");
-         dir_del("DocumentRoot/tempzipflat");
-         ofLogVerbose("reset 3");
-       dir_del("DocumentRoot/OEBPS");
-         ofLogVerbose("reset 4");
+
+      dir_del("DocumentRoot/tempzipflat");
+
+      dir_del("DocumentRoot/OEBPS");
+
 
 }
 
@@ -1244,6 +818,12 @@ void ofApp::cleanup_structure(){
                     flatfiles[i].remove();
             }
 
+            if((flatfiles[i].getFileName()=="container.xml"))
+            {
+                    flatfiles[i].remove();
+            }
+
+
     flatfiles[i].close();
 
     }
@@ -1258,28 +838,186 @@ void ofApp::cleanup_structure(){
 
 }
 
-void ofApp::ePubUnzipFlat(string i_file){
 
-std::ifstream inp(i_file.c_str(), std::ios::binary);
-poco_assert (inp);
-// decompress to current working dir
-
-//Poco::Zip::Decompress dec(inp, "data/temp/temp"); /// works
-Poco::Zip::Decompress dec(inp, "data/DocumentRoot/tempzipflat",true,true);
-
-// if an error happens invoke the ZipTest::onDecompressError method
-
-dec.decompressAllFiles();
+ void ofApp::ePubParseContent(){
 
 
-ofLogVerbose("Unzipped Flat: ") << i_file;
+    /*
+    string itsmainstring;
+    ofBuffer itsbuffer;
+    itsbuffer = ofBufferFromFile("content.opf");
+    itsmainstring = itsbuffer.getText();
+    */
 
-cleanup_structure();
+    /// File in Vektor einlesen
 
-zipped=true;
+    std::vector<std::string>    itscontent;
+
+    string line;
+    ifstream myfile("content.opf");
+    if (myfile.is_open())
+    {
+        while ( myfile.good() )
+        {
+          getline (myfile,line);
+          itscontent.push_back(line);
+        }
+        myfile.close();
+    }
+
+    /// File in Vektor einlesen
 
 
-}
+    /// content.opf Linie für Linie ändern
+
+    for(int i = 0;i<itscontent.size();i++)
+        {
+
+            string ts4 = itscontent[i];
+            string ts5 = itscontent[i];
+
+            size_t bpos2=0;
+
+            size_t nFPos = ts4.find("item");
+            size_t nFPos2 = ts5.find("media-type");
+
+            if((nFPos!=std::string::npos)&&(nFPos2!=std::string::npos))
+            {
+
+                  ofLogVerbose("Treffer: ITEM");
+
+
+                  /// JPEG
+
+                  size_t s_search = ts4.find("image/jpeg",bpos2);
+                  if(s_search!=std::string::npos){
+
+                         ofLogVerbose("Treffer: JPEG");
+
+                         size_t s_path = ts4.find("href=\"images",bpos2);
+
+                         if(s_path==std::string::npos){
+
+                               ofLogVerbose("Treffer: Pfad nicht korrekt");
+
+                               size_t s_pathbegin = ts4.find("href=",bpos2);
+
+                               itscontent[i].insert(s_pathbegin+6,"images/");
+
+                               ofLogVerbose("Treffer: Pfad korrigiert");
+
+                         }
+
+                  }
+
+                  /// JPEG
+
+                  /// PNG
+
+                  s_search = ts4.find("image/png",bpos2);
+                  if(s_search!=std::string::npos){
+
+                         ofLogVerbose("Treffer: PNG");
+
+                         size_t s_path = ts4.find("href=\"images",bpos2);
+
+                         if(s_path==std::string::npos){
+
+                               ofLogVerbose("Treffer: Pfad nicht korrekt");
+
+                               size_t s_pathbegin = ts4.find("href=",bpos2);
+
+                               itscontent[i].insert(s_pathbegin+6,"images/");
+
+                               ofLogVerbose("Treffer: Pfad korrigiert");
+
+                         }
+
+                  }
+
+                  /// PNG
+
+                   /// XHTML
+
+                  s_search = ts4.find("application/xhtml+xml",bpos2);
+                  if(s_search!=std::string::npos){
+
+                         ofLogVerbose("Treffer: XHTML");
+
+                         size_t s_path = ts4.find("href=\"text",bpos2);
+
+                         if(s_path==std::string::npos){
+
+                               ofLogVerbose("Treffer: Pfad nicht korrekt");
+
+                               size_t s_pathbegin = ts4.find("href=",bpos2);
+
+                               itscontent[i].insert(s_pathbegin+6,"text/");
+
+                               ofLogVerbose("Treffer: Pfad korrigiert");
+
+                         }
+
+                  }
+
+                  /// XHTML
+
+                  /// CSS
+
+                  s_search = ts4.find("text/css",bpos2);
+                  if(s_search!=std::string::npos){
+
+                         ofLogVerbose("Treffer: CSS");
+
+                         size_t s_path = ts4.find("href=\"styles\/",bpos2);
+
+                         if(s_path==std::string::npos){
+
+                               ofLogVerbose("Treffer: Pfad nicht korrekt");
+
+                               size_t s_pathbegin = ts4.find("href=",bpos2);
+
+                               itscontent[i].insert(s_pathbegin+6,"styles/");
+
+                               ofLogVerbose("Treffer: Pfad korrigiert");
+
+                         }
+
+                  }
+
+                  /// CSS
+
+
+            }else{
+
+                ofLogVerbose("Kein Treffer");
+
+            }
+
+
+
+        }
+
+
+
+    ofstream myoutfile ("contennparsed.opf");
+        if (myoutfile.is_open())
+        {
+
+             for(size_t i = 0; i < itscontent.size(); i++)
+        {
+            myoutfile << itscontent[i] << std::endl;
+        }
+
+           myoutfile.close();
+        }
+     else cout << "Unable to open file";
+
+
+
+ }
+
+
 
 
 

@@ -48,34 +48,19 @@ public:
     void draw();
     void exit();
     void keyPressed(int key);
-    void mouseDragged(int x, int y, int button);
-
-    ofVideoGrabber cam;
-    ofFbo fbo;
-
-    ofImage img;
 
     void initServerJSONRPC(int port);
-    void initServerVideo(int port);
 
 
-    // Registered methods.
-    void getCheckBox(ofx::JSONRPC::MethodArgs& args);
-    void getSlider(ofx::JSONRPC::MethodArgs& args);
-    void getButton(void);
+
     void getTextArea2(ofx::JSONRPC::MethodArgs& args);
     void getDropdown(ofx::JSONRPC::MethodArgs& args);
     void getEpubName(ofx::JSONRPC::MethodArgs& args);
-    void startVideoServer(void);
-    void stopVideoServer(void);
 
     /// \brief The server that handles the JSONRPC requests.
     ofx::HTTP::BasicJSONRPCServer::SharedPtr serverJSON;
 
-    /// \brief The server that handles the Video stream.
-    ofx::HTTP::BasicIPVideoServer::SharedPtr serverVideo;
-
-    /// \brief Get the user text in a thread-safe way.
+     /// \brief Get the user text in a thread-safe way.
     /// \returns The user text.
     std::string getUserText() const;
 
@@ -86,16 +71,7 @@ public:
     void setUserText(const std::string& text);
     void setTextArea(const std::string& text);
 
-    float getSliderValue() const;
-    void setSliderValue(const float& f);
-
-    bool getCheckboxValue() const;
-    void setCheckboxValue(const bool& b);
-
-
-    void setTextareaWeb(string fn);
-
-
+     void setTextareaWeb(string fn);
 
     void onHTTPPostEvent(ofx::HTTP::PostEventArgs& evt);
     void onHTTPFormEvent(ofx::HTTP::PostFormEventArgs& evt);
@@ -106,86 +82,55 @@ public:
     void sendJSONMessage(Json::Value json);
 
 
-
-    //
+   //
     string up_filename;
 
     void ePubList();
+
+
 
     // ZIP
 
     void ePubUnzip(string i_file);
     void ePubUnzipFlat(string i_file);
     void ePubZip();
-	void onDecompressError(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>& info);
-    void onOk(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const Poco::Path>& info);
+
+    void ePubParseContent();
+
 	bool zipped;
+	int ziptimer;
+	// Structuring Epub
 
 	void reset_all();
-
 	void cleanup_structure();
-
-	// Delete
-
 	void dir_del(string fdir);
 
 
+    ofDirectory dir;
+    vector<ofFile> files; // Current Files of Directory
+    int currentFile;   // Chosen Filenumber
+    string currentFilename;
+    string currentEpubname;
+    ofBuffer currentFileBuffer; //Content of ChosenFile
+    string textarea;
 
-		string test;
-			string test2;
+    /// Display Buffer in OF
 
-			string filename3;
+    float           nextLetterTime;
+    int             lineCount;
+    int             letterCount;
+    vector <string> seussLines;
 
-			int ziptimer;
+    /// Display Buffer in OF
 
-        ofDirectory dir;
-
-
-
-
-        vector<ofFile> files; // Current Files of Directory
-        int currentFile;   // Chosen File
-        string currentFilename;
-        string currentEpubname;
-        ofBuffer currentFileBuffer; //Content of ChosenFile
-
-
-
-
-        float           nextLetterTime;
-        int             lineCount;
-        int             letterCount;
-        vector <string> seussLines;
-
-        ofBuffer buffer;
-
-        string filecontent;
-         string filecontent_file;
-
-
-    ///ZIPSHIT
-
-
-
-
-
-
-
-private:
+    private:
     // A custom logging channel to mirror all log messages to the web clients.
     WebSocketLoggerChannel::SharedPtr loggerChannel;
-
-    // This piece of text might be modified by multiple client threads.
-    // Thus we must use a mutex to protect it during multi-threaded access.
-    std::string userText;
-    float sliderValue;
-    bool checkboxValue;
-
-    std::string textarea;
 
     // We use a mutex to protect any variables that can be
     // modified by multiple clients.  In our case, userText must be protected.
     // We mark the mutex as mutable so that it can be used in const functions.
+
     mutable ofMutex mutex;
 
     //UploadRouter uploadRouter;
