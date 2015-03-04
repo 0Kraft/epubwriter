@@ -39,6 +39,30 @@
 
 #include <stdio.h>
 
+struct nav_point {
+    string id;
+    string playOrder;
+    string label;
+    string contentpath;
+
+
+
+};
+
+struct item {
+    string id;
+    string mediatype;
+    string contentpath;
+    string fallbackpath;
+    int spine_pos;
+    string line;
+    string spineline;
+
+};
+
+
+
+
 
 class ofApp: public ofBaseApp
 {
@@ -51,7 +75,7 @@ public:
 
     void initServerJSONRPC(int port);
 
-
+    void updateGUI();
 
     void getTextArea2(ofx::JSONRPC::MethodArgs& args);
     void getDropdown(ofx::JSONRPC::MethodArgs& args);
@@ -96,6 +120,17 @@ public:
     void ePubZip();
 
     void ePubParseContent();
+    void ePubParseToc();
+    void ePubReadInToc();
+    void ePubReadInContent();
+
+    void ePubFindPaths();
+    void ePubFindMetaInf();
+
+    void ePubFinalizeContent();
+    void ePubFinalizeToc();
+
+    void ePubAddChapter(string chaptername);
 
 	bool zipped;
 	int ziptimer;
@@ -110,9 +145,48 @@ public:
     vector<ofFile> files; // Current Files of Directory
     int currentFile;   // Chosen Filenumber
     string currentFilename;
-    string currentEpubname;
+    string currentEpubname; // richtiger Name
     ofBuffer currentFileBuffer; //Content of ChosenFile
     string textarea;
+
+    ///toc headers
+
+    string epub_uid;
+    int epub_toc_depth;
+
+    std::vector<std::string>    epub_toc_head;
+    std::vector<nav_point>    epub_toc_navpoint;
+
+
+    string epub_path_root;
+    string epub_path_rootfile;
+
+    string epub_path_image;
+    string epub_path_text;
+    string epub_path_style;
+
+
+    ///
+
+    ///content.opf headers
+
+    string epub_creator;
+    string epub_title;
+    string epub_language;
+
+
+    std::vector<item>    epub_opf_item;
+    std::vector<std::string>    epub_opf_head;
+    string epub_opf_reference;
+
+
+
+    string epub_opf_guide;
+
+
+    std::vector<std::string>    target_opf;
+
+    ///
 
     /// Display Buffer in OF
 
