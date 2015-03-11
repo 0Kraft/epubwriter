@@ -311,6 +311,9 @@ void ofApp::getEpubName(ofx::JSONRPC::MethodArgs& args)
 
 
    currentEpubname = args.params.asString();
+    currentEpubname = currentEpubname.substr(12,currentEpubname.length());
+
+   /*
 
     string head_search = currentEpubname;
 
@@ -331,6 +334,7 @@ void ofApp::getEpubName(ofx::JSONRPC::MethodArgs& args)
 
 
             }
+            */
 
 
 }
