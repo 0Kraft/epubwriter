@@ -1745,6 +1745,7 @@ void ofApp::ePubParseToc(){
         {
           getline (myfile,line);
           itscontent.push_back(line);
+          ofLogVerbose(line);
         }
         myfile.close();
     }else{
