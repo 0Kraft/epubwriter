@@ -314,7 +314,7 @@ void ofApp::getEpubName(ofx::JSONRPC::MethodArgs& args)
 
     string head_search = currentEpubname;
 
-            size_t nFPos = head_search.find("\\\\");
+            size_t nFPos = head_search.find("\\");
             if(nFPos!=std::string::npos){
 
                      currentEpubname = currentEpubname.substr(0,nFPos+2);
@@ -324,7 +324,7 @@ void ofApp::getEpubName(ofx::JSONRPC::MethodArgs& args)
 
             head_search = currentEpubname;
 
-            nFPos = head_search.find("\\\\");
+            nFPos = head_search.find("\\");
             if(nFPos!=std::string::npos){
 
                      currentEpubname = currentEpubname.substr(0,nFPos+2);
