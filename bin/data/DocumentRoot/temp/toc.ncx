@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="eng">
+<head>
+<meta content="0c159d12-f5fe-4323-8194-f5c652b89xxx" name="dtb:uid"/>
+<meta content="1" name="dtb:depth"/>
+<meta content="calibre (0.8.68)" name="dtb:generator"/>
+<meta content="0" name="dtb:totalPageCount"/>
+<meta content="0" name="dtb:maxPageNumber"/>
+</head>
+
+
+<docTitle>
+<text>Epub Workshop</text>
+</docTitle>
+
+
+<navMap>
+<navPoint id="c1" playOrder="0">
+<navLabel>
+<text>Struktur ePub-Format</text>
+</navLabel>
+<content src="text/epubstruktur.html"/>
+</navPoint>
+<navPoint id="c2" playOrder="1">
+<navLabel>
+<text>Struktur HTML</text>
+</navLabel>
+<content src="text/htmlstruktur.html"/>
+</navPoint>
+<navPoint id="c3" playOrder="2">
+<navLabel>
+<text>Grafikeinbindung HTML/ePub</text>
+</navLabel>
+<content src="text/grafikeinbindung.html"/>
+</navPoint>
+</navMap>
+</ncx>

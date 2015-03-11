@@ -1747,6 +1747,11 @@ void ofApp::ePubParseToc(){
           itscontent.push_back(line);
         }
         myfile.close();
+    }else{
+
+      ofLogVerbose("Pfad stimmt nicht");
+
+
     }
 
      for(int i = 0;i<itscontent.size();i++)

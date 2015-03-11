@@ -1,0 +1,23 @@
+@page {
+  margin-bottom: 5pt;
+  margin-top: 10pt;
+  
+ 
+}
+
+body {
+  margin-bottom: 10pt;
+  margin-top: 5pt;
+  font-family:'Verdana', 'Geneva', sans-serif;
+ 
+ }
+ 
+ul {
+list-style-type:circle;
+
+}
+
+.footnote {
+ font-size: 70%;
+ }
+
