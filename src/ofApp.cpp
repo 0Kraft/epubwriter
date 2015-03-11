@@ -1537,6 +1537,9 @@ void ofApp::ePubParseToc(){
 
     std::vector<std::string>    itscontent;
 
+    epub_toc_head.clear();
+    epub_toc_navpoint.clear();
+
     string line;
 
     string correctpath;
@@ -2019,9 +2022,9 @@ void ofApp::ePubParseToc(){
 
     int ti = std::remove( correctpath.c_str() );
      if( ti != 0 ){
-                          ofLogVerbose("File not Ebene: content.opf " );
+                          ofLogVerbose("File not Ebene: toc.ncx" );
                         }else {
-                           ofLogVerbose("File successfully deleted: content.opf" );
+                           ofLogVerbose("File successfully deleted: toc.ncx" );
                         }
 
    ofstream myoutfile (correctpath.c_str());

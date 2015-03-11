@@ -14,14 +14,14 @@
 <body>
 	
        <a id="aU" href="" onclick="javascript:show('content','aU'); return false">epub writer</a>
-	   <div id="content" style="display:inline">
+	   <div id="content" style="display:none">
                
         <!-- Controls -->
 		<span style="font-weight: bold;" >&#8201;/&#8201;</span>
 			
 		<!-- Upload -->
 		<a id="a1" href="" onclick="javascript:show('content2','a1'); return false">upload</a>
-	    <div id="content2" style="display:inline">
+	    <div id="content2" style="display:none">
 		
 			<span style="font-weight: bold;" >&#8201;/&#8201;</span>
 			<!-- Upload -->
@@ -51,24 +51,67 @@
 					
 										
 			<!-- EDITOR-->
+			
+			<div id="container-editor2">
+										
+						<label class="buttons" id="addchapter">add chapter</label> / 
+						<label class="buttons" id="textarea-button">save file</label> / <label class="buttons" id="zip-epub">get epub</label> 
+						<br>
+						<a style="display:none" id="downloader" href="test.epub">get epub</a>
+					</div>
+			
 			<div id="container-editor">
 				
 						<textarea id="textarea" placeholder="Enter text ..."></textarea>
 						
-					</div>
-					
+			</div>
+								
 					  <div id="toolbar" >
 						<div id="wysihtml-toolbar" style="display: none;">
-						<div class="tbutton"><a id="htmlchange" data-wysihtml5-action="change_view">html-view</a></div>
-							
-						<div class="tbutton"><button type="submit" value="" data-wysihtml5-command="bold" title="CTRL+B"><img src="./img/toolbar_bold.gif" alt="test"></img></button></div>
-						<div class="tbutton"><button type="submit" value=""  data-wysihtml5-command="italic" title="CTRL+I"><img src="./img/toolbar_12.gif" alt="test"></img></button></div>
-						<div class="tbutton"><button type="submit" value="" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h1"><img src="./img/toolbar_07a.png" alt="test"></img></button></div>
+						<div class="tbutton"><a class="tbutton" id="htmlchange" data-wysihtml5-action="change_view">html-view</a></div>
 						
-						<div class="tbutton"><button type="submit" value=""  data-wysihtml5-command="insertOrderedList" ><img src="./img/toolbar_14.gif" alt="test"></img></button></div>
-						<div class="tbutton"><button type="submit" value=""  data-wysihtml5-command="insertUnorderedList" ><img src="./img/toolbar_19.gif" alt="test"></img></button></div>
+						<span> / </span>
 						
-						<!-- User can define the image's src: -->
+						<div class="tbutton"><button type="submit" value="" class="tbutton" data-wysihtml5-command="bold" title="CTRL+B">bold</button></div>
+						
+						<span> / </span>
+						
+						<div class="tbutton"><button type="submit" value="" class="tbutton" data-wysihtml5-command="italic" title="CTRL+I">italic</button></div>
+						
+						<span> / </span>
+						
+						<div class="tbutton"><button type="submit" value="" class="tbutton" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3">heading</button></div>
+						
+						<span> / </span>
+						
+						<div class="tbutton"><button type="submit" value="" class="tbutton" data-wysihtml5-command="insertOrderedList" >ordered list</button></div>
+						
+						<span> / </span>
+						
+						<div class="tbutton"><button type="submit" class="tbutton" value=""  data-wysihtml5-command="insertUnorderedList" >unordered list</button></div>
+						
+						<span> / </span>
+						
+						<div class="tbutton"><button type="submit" value=""  class="tbutton" data-wysihtml5-command="undo" >undo</button></div>
+						
+						<span> / </span>
+						
+						<div class="tbutton"><button type="submit" value=""  class="tbutton"  data-wysihtml5-command="redo" >redo</button></div>
+						
+						
+						
+						<!--
+						<div class="tbutton"><button type="submit" value="" data-wysihtml5-command="bold" title="CTRL+B"><img src="./img/toolbar_bold.gif" alt="bold"></img></button></div>
+						<div class="tbutton"><button type="submit" value=""  data-wysihtml5-command="italic" title="CTRL+I"><img src="./img/toolbar_12.gif" alt="italic"></img></button></div>
+						<div class="tbutton"><button type="submit" value="" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3"><img src="./img/toolbar_07a.png" alt="heading"></img></button></div>
+						
+						<div class="tbutton"><button type="submit" value=""  data-wysihtml5-command="insertOrderedList" ><img src="./img/toolbar_14.gif" alt="1. List"></img></button></div>
+						<div class="tbutton"><button type="submit" value=""  data-wysihtml5-command="insertUnorderedList" ><img src="./img/toolbar_19.gif" alt="- List"></img></button></div>
+						
+						-->
+						
+						<!-- User can define the image's src: 
+						
 						<div class="tbutton">
 						<button type="submit" value="" data-wysihtml5-command="insertImage"><img src="./img/toolbar_bold.gif" alt="test"></img></button>
 						
@@ -82,11 +125,13 @@
 						</div>
 						</div>
 						
+						
+						
 						<br>
-						<div class="tbutton"><button type="submit" value=""  class="tbutton" data-wysihtml5-command="undo" ><img src="./img/toolbar_16.gif" alt="test"></img></button></div>
-						<div class="tbutton"><button type="submit" value=""  class="tbutton"  data-wysihtml5-command="redo" ><img src="./img/toolbar_03.gif" alt="test"></img></button></div>
+						<div class="tbutton"><button type="submit" value=""  class="tbutton" data-wysihtml5-command="undo" ><img src="./img/toolbar_16.gif" alt="undo"></img></button></div>
+						<div class="tbutton"><button type="submit" value=""  class="tbutton"  data-wysihtml5-command="redo" ><img src="./img/toolbar_03.gif" alt="redo"></img></button></div>
 						
-						
+						-->
 						
 						
 						<br>
@@ -97,12 +142,7 @@
 					
 					  </div>
 										
-					<div id="container-editor2">
-										
-						<textarea id="textarea2" placeholder="Waiting for text ..."></textarea>
-						<label class="buttons" id="textarea-button">save file</label> / <label class="buttons" id="zip-epub">get epub</label>
-						<a style="display:none" id="downloader" href="test.epub">get epub</a>
-					</div>
+					
 					
 					
 			
@@ -135,19 +175,13 @@
 	
 	 });
 	 
-	var editor2 = new wysihtml5.Editor("textarea2", {
-	
-	parserRules:  wysihtml5ParserRules 
-		
-	 });
-	 
+		 
 	 
 var log = document.getElementById("log");
   
-  editor2
+  editor
     .on("load", function() {
-     editor2.fire("change_view", "textarea");
-	
+    	
 		
     })
     .on("focus", function() {

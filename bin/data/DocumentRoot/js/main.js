@@ -89,21 +89,10 @@ function initializeButtons() {
 	$(document).on('keypress','#textarea', function() {
 	
 	var $this = $(this);
-	editor2.setValue($('#textarea').val(),true);
+
 	
 	});
 	
-	$(document).on('keypress','#textarea2', function() {
-	
-		
-	});
-	
-	$(document).on('click','#textarea2', function() {
-	
-	var $this = $(this);
-	editor2.setValue($('#textarea').val(),true);
-	
-	});
 	
 	
 	$(window).on('resize', function(){
@@ -182,7 +171,7 @@ function handleServerEvent(evt) {
     if (evt.method == "textarea")
     {
 		editor.setValue(evt.params["value"],true);
-		editor2.setValue(evt.params["value"],true);
+	
 		//$('#textarea').val(evt.params["value"]);
 	}
 	// Dropdown - populate it
@@ -203,8 +192,8 @@ function handleServerEvent(evt) {
 	}
 	else if (evt.method == "reset")
    	{
-		//show('content2','a1');
-		//show('content' ,'aU');
+		show('content2','a1');
+		show('content' ,'aU');
 		
 		document.getElementById("dropdown-label").style.display = 'inline';
 		document.getElementById("wrapper").style.display = 'block';
@@ -213,7 +202,7 @@ function handleServerEvent(evt) {
 		document.getElementById("epubtitle").innerHTML = evt.params["value"];
 		document.getElementById("epubtitlepre").innerHTML = " &#9679; current epub: ";
 
-		editor2.setValue(document.getElementById("textarea").value,true); // not sure?
+	
 			
 	}
 	else if (evt.method == "set-dropdown")

@@ -292,16 +292,19 @@ font-weight: normal;
 }
 
 #toolbar {
-	font-size: 0.7em;
- 	width:8%;
+	width:30%;
 	height: 100%;
 	float:left;
+	
+	
 }
 
 .tbutton {
 	
-	width: 100%;
-	text-align:center;
+	display: inline;
+	font-family: "Times New Roman", Georgia, Serif;
+	 font-size: 1em;
+	
 }
   
   textarea {
@@ -313,9 +316,12 @@ font-weight: normal;
     height: 90%;
 	color: black;
      
-    font-family: Verdana;
-    font-size: 11px;
+   
 	resize: none;
+	
+	 font-size: 1em;
+ 
+   font-family: "Times New Roman", Georgia, Serif;
 	
 	
 	
@@ -335,7 +341,8 @@ font-weight: normal;
   
     
   #textarea {
-    border-right:  2px solid black;
+    border-right:  2px solid Lavender ;
+	border-left:  2px solid Lavender ;
  
   }
   #textarea2 {
@@ -361,7 +368,7 @@ font-weight: normal;
 
  float:left;
  height:100%;
- width: 45%;
+ width: 40%;
 
  
   
@@ -374,7 +381,7 @@ font-weight: normal;
 
  float:left;
  height:100%;
- width: 45%;
+ width: 30%;
 
 
  
@@ -460,8 +467,7 @@ cursor: default;
   -moz-appearance: none;
     text-indent: 0.01px;
     text-overflow: '';
-	width: 100px;
-	
+		
 
 }
 
