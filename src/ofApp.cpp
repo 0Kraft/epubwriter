@@ -629,7 +629,7 @@ dec.decompressAllFiles();
     ofDirectory zipdir;
 
         zipdir.listDir("DocumentRoot/tempzip");
-        zipdir.copyTo("DocumentRoot");
+        //zipdir.copyTo("DocumentRoot");
         zipdir.renameTo("DocumentRoot/temp");
 
     zipdir.close();
@@ -1775,6 +1775,8 @@ void ofApp::ePubParseToc(){
 
                  ofLogVerbose("Rootfile: ") <<  epub_path_rootfile;
                  ofLogVerbose("Path to Root: ") <<  epub_path_root;
+
+            }else{
 
             }
         }
