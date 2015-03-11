@@ -214,9 +214,13 @@ function handleServerEvent(evt) {
 	}
 	else if (evt.method == "zipready")
    	{
-	document.getElementById("downloader").setAttribute('href', document.getElementById("epubtitle").innerHTML + ".epub");
-	document.getElementById("downloader").click();
 	
+	setTimeout(function(){
+   document.getElementById("downloader").setAttribute('href', document.getElementById("epubtitle").innerHTML + ".epub");
+	document.getElementById("downloader").click();
+	}, 2000);
+	
+		
 	}
 
     console.log(evt);
