@@ -307,7 +307,32 @@ void ofApp::getEpubName(ofx::JSONRPC::MethodArgs& args)
 {
    ofScopedLock lock(mutex);
    ofLogVerbose("ofApp::getEpubName") << args.params.asString();
+
+
+
    currentEpubname = args.params.asString();
+
+    string head_search = currentEpubname;
+
+            size_t nFPos = head_search.find("\\\\");
+            if(nFPos!=std::string::npos){
+
+                     currentEpubname = currentEpubname.substr(0,nFPos+2);
+
+
+            }
+
+            head_search = currentEpubname;
+
+            nFPos = head_search.find("\\\\");
+            if(nFPos!=std::string::npos){
+
+                     currentEpubname = currentEpubname.substr(0,nFPos+2);
+
+
+            }
+
+
 }
 
 
