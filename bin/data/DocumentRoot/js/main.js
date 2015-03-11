@@ -203,8 +203,8 @@ function handleServerEvent(evt) {
 	}
 	else if (evt.method == "reset")
    	{
-		show('content2','a1');
-		show('content' ,'aU');
+		//show('content2','a1');
+		//show('content' ,'aU');
 		
 		document.getElementById("dropdown-label").style.display = 'inline';
 		document.getElementById("wrapper").style.display = 'block';

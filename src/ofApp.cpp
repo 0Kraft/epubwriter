@@ -1837,7 +1837,7 @@ void ofApp::ePubParseToc(){
                          }else{
 
 
-                               epub_path_image = epub_path_rootfile;
+                               epub_path_image = epub_path_root;
 
                                ofLogVerbose("ImagePath: ") << epub_path_image;
 
@@ -1875,7 +1875,7 @@ void ofApp::ePubParseToc(){
                          }else{
 
                                string cutpath;
-                               cutpath = epub_path_rootfile;
+                               cutpath = epub_path_root;
 
                                ofLogVerbose("kein Unterordner ") << epub_path_text;
 
@@ -1921,7 +1921,7 @@ void ofApp::ePubParseToc(){
                          }else{
 
 
-                               epub_path_style = epub_path_rootfile;
+                               epub_path_style = epub_path_root;
 
                                ofLogVerbose("Css-Path: ") << epub_path_style;
 
