@@ -57,7 +57,7 @@
 						<label class="buttons" id="addchapter">add chapter</label> / 
 						<label class="buttons" id="textarea-button">save file</label> / <label class="buttons" id="zip-epub">get epub</label> 
 						<br>
-						<a style="display:none" id="downloader" href="test.epub">get epub</a>
+						<a style="display:none" id="downloader" href="Tester.epub">get epub</a>
 					</div>
 			
 			<div id="container-editor">
@@ -210,6 +210,16 @@ var log = document.getElementById("log");
 </script>
 
 <script>
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
 
 			function show(id,aid) 
 			{ 

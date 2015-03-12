@@ -672,6 +672,8 @@ dec.decompressAllFiles();
 
 void ofApp::ePubZip(){
 
+ofLogVerbose("Start Zip");
+
 
 ePubFinalizeContent();
 ePubFinalizeToc();
@@ -683,19 +685,19 @@ correctpath="data/DocumentRoot/temp/mimetype";
 
     int ti = std::remove( correctpath.c_str() );
      if( ti != 0 ){
-                          ofLogVerbose("File not Ebene: content.opf " );
+                          ofLogVerbose("File not Ebene: mimetype " );
                         }else {
-                           ofLogVerbose("File successfully deleted: content.opf" );
+                           ofLogVerbose("File successfully deleted: mimetype" );
                         }
 
 ///MIMETYPE löschen
 
 
-string zn =  "data/DocumentRoot/"+ currentEpubname + ".epub";
+string zn =  "data\\DocumentRoot\\"+ currentEpubname + ".epub";
 std::ofstream out( zn.c_str() , std::ios::binary);
 Poco::Zip::Compress c(out, true);
 
-Poco::Path theFile("data/epubessentials/mimetype");
+Poco::Path theFile("data\\epubessentials\\mimetype");
 c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL);
 
  string fn;
@@ -775,6 +777,8 @@ for(int i = 0; i < tmpfiles.size(); i++){
 */
 
 c.close(); // MUST be done to finalize the Zip file
+
+ofLogVerbose("Zip Ready");
 
 Json::Value json = toJSONMethod("Server", "zipready", 0);
 sendJSONMessage(json);
@@ -1149,7 +1153,7 @@ void ofApp::cleanup_structure(){
             string ts4 = itscontent[i];
             string ts5 = itscontent[i];
 
-            size_t bpos2=0;
+
 
             size_t nFPos = ts4.find("item");
             size_t nFPos2 = ts5.find("media-type");
@@ -1162,18 +1166,18 @@ void ofApp::cleanup_structure(){
 
                   /// JPEG
 
-                  size_t s_search = ts4.find("image/jpeg",bpos2);
+                  size_t s_search = ts4.find("image/jpeg");
                   if(s_search!=std::string::npos){
 
                          ofLogVerbose("Treffer: JPEG");
 
-                         size_t s_path = ts4.find("href=\"images",bpos2);
+                         size_t s_path = ts4.find("href=\"images");
 
                          if(s_path==std::string::npos){
 
                                ofLogVerbose("Treffer: Pfad nicht korrekt");
 
-                               size_t s_pathbegin = ts4.find("href=",bpos2);
+                               size_t s_pathbegin = ts4.find("href=");
 
                                itscontent[i].insert(s_pathbegin+6,"images/");
 
@@ -1187,18 +1191,18 @@ void ofApp::cleanup_structure(){
 
                   /// PNG
 
-                  s_search = ts4.find("image/png",bpos2);
+                  s_search = ts4.find("image/png");
                   if(s_search!=std::string::npos){
 
                          ofLogVerbose("Treffer: PNG");
 
-                         size_t s_path = ts4.find("href=\"images",bpos2);
+                         size_t s_path = ts4.find("href=\"images");
 
                          if(s_path==std::string::npos){
 
                                ofLogVerbose("Treffer: Pfad nicht korrekt");
 
-                               size_t s_pathbegin = ts4.find("href=",bpos2);
+                               size_t s_pathbegin = ts4.find("href=");
 
                                itscontent[i].insert(s_pathbegin+6,"images/");
 
@@ -1212,18 +1216,18 @@ void ofApp::cleanup_structure(){
 
                    /// XHTML
 
-                  s_search = ts4.find("application/xhtml+xml",bpos2);
+                  s_search = ts4.find("application/xhtml+xml");
                   if(s_search!=std::string::npos){
 
                          ofLogVerbose("Treffer: XHTML");
 
-                         size_t s_path = ts4.find("href=\"text",bpos2);
+                         size_t s_path = ts4.find("href=\"text");
 
                          if(s_path==std::string::npos){
 
                                ofLogVerbose("Treffer: Pfad nicht korrekt");
 
-                               size_t s_pathbegin = ts4.find("href=",bpos2);
+                               size_t s_pathbegin = ts4.find("href=");
 
                                itscontent[i].insert(s_pathbegin+6,"text/");
 
@@ -1237,18 +1241,18 @@ void ofApp::cleanup_structure(){
 
                   /// CSS
 
-                  s_search = ts4.find("text/css",bpos2);
+                  s_search = ts4.find("text/css");
                   if(s_search!=std::string::npos){
 
                          ofLogVerbose("Treffer: CSS");
 
-                         size_t s_path = ts4.find("href=\"styles\/",bpos2);
+                         size_t s_path = ts4.find("href=\"styles\/");
 
                          if(s_path==std::string::npos){
 
                                ofLogVerbose("Treffer: Pfad nicht korrekt");
 
-                               size_t s_pathbegin = ts4.find("href=",bpos2);
+                               size_t s_pathbegin = ts4.find("href=");
 
                                itscontent[i].insert(s_pathbegin+6,"styles/");
 
@@ -1368,7 +1372,7 @@ void ofApp::ePubReadInContent(){
             string ts4 = itscontent[i];
             string ts5 = itscontent[i];
 
-            size_t bpos2=0;
+
 
             nFPos = ts4.find("item");
             size_t nFPos2 = ts5.find("media-type");
@@ -1503,7 +1507,7 @@ void ofApp::ePubParseToc(){
             string ts4 = itscontent[i];
             string ts5 = itscontent[i];
 
-            size_t bpos2=0;
+
 
             size_t nFPos = ts4.find("content");
             size_t nFPos2 = ts5.find("src=");
@@ -1516,13 +1520,13 @@ void ofApp::ePubParseToc(){
 
                   /// Content
 
-                  size_t s_search = ts4.find("src=\"text\/",bpos2);
+                  size_t s_search = ts4.find("src=\"text\/");
                   if(s_search==std::string::npos){
 
                          ofLogVerbose("Treffer: Pfad nicht korrekt");
 
 
-                               size_t s_pathbegin = ts4.find("src=",bpos2);
+                               size_t s_pathbegin = ts4.find("src=");
 
                                itscontent[i].insert(s_pathbegin+5,"text/");
 
@@ -1635,7 +1639,6 @@ void ofApp::ePubParseToc(){
             string ts4 = itscontent[i];
 
 
-            size_t bpos2=0;
 
              nFPos = ts4.find("navPoint");
             size_t nFPos_id = ts4.find("id");
@@ -1846,7 +1849,6 @@ void ofApp::ePubParseToc(){
             string ts4 = itscontent[i];
             string ts5 = itscontent[i];
 
-            size_t bpos2=0;
 
             size_t nFPos = ts4.find("media-type=\"image");
 

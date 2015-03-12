@@ -142,6 +142,12 @@ function initializeButtons() {
 		JSONRPCClient.notify('zip-epub');
 			
     });
+	
+	$('#addchapter').on('click', function() {
+	
+		document.getElementById("downloader").click();
+			
+    });
 
    	
 	$('#aU').on('click', function() {
@@ -215,10 +221,12 @@ function handleServerEvent(evt) {
 	else if (evt.method == "zipready")
    	{
 	
-	setTimeout(function(){
-   document.getElementById("downloader").setAttribute('href', document.getElementById("epubtitle").innerHTML + ".epub");
+	
+	sleep(1000);
+	
+    document.getElementById("downloader").setAttribute('href', document.getElementById("epubtitle").innerHTML + ".epub");
 	document.getElementById("downloader").click();
-	}, 2000);
+
 	
 		
 	}

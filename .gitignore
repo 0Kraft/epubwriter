@@ -1,0 +1,3 @@
+*.exe
+DeBrainServer.layout
+obj/Release/apps/myApps/epubwriter/src/ofApp.o
