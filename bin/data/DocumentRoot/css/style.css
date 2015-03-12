@@ -471,6 +471,13 @@ cursor: default;
 
 }
 
+.fontnorm{
+
+font-family: "Times New Roman", Georgia, Serif;
+
+ font-size: 1em;
+}
+
 /* -- media queries -- */
 
 

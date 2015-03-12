@@ -700,7 +700,7 @@ Poco::Zip::Compress c(out, true);
 ofLogVerbose("Zip") << "Objekt erstellt";
 
 //Poco::Path theFile("data\\epubessentials\\mimetype");
-//c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL);
+//c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL); WINDOWS
 
 Poco::Path theFile("data/epubessentials/mimetype");
 c.addFile(theFile, "mimetype");
@@ -726,10 +726,17 @@ ofLogVerbose("Zip") << "Mimetype hinzugefügt";
 
 */
 
-
- Poco::Path data("data\\DocumentRoot\\temp");
+Poco::Path data("data/DocumentRoot/temp");
  data.makeDirectory();
  c.addRecursive(data);
+
+/*
+
+ Poco::Path data("data\\DocumentRoot\\temp");     // WINDOWS
+ data.makeDirectory();
+ c.addRecursive(data);
+
+*/
 
 ofLogVerbose("Zip") << "Ordner hinzugefügt";
 
