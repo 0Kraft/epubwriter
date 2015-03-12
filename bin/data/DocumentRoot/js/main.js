@@ -145,7 +145,11 @@ function initializeButtons() {
 	
 	$('#addchapter').on('click', function() {
 	
-		document.getElementById("downloader").click();
+		
+		var mydiv = document.getElementById("addchapter-input");
+		mydiv.style.display = (mydiv.style.display=='inline'?'none':'inline'); 
+		
+		
 			
     });
 

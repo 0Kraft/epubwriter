@@ -699,8 +699,12 @@ Poco::Zip::Compress c(out, true);
 
 ofLogVerbose("Zip") << "Objekt erstellt";
 
-Poco::Path theFile("data\\epubessentials\\mimetype");
-c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL);
+//Poco::Path theFile("data\\epubessentials\\mimetype");
+//c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL);
+
+Poco::Path theFile("data/epubessentials/mimetype");
+c.addFile(theFile, "mimetype");
+
 
 ofLogVerbose("Zip") << "Mimetype hinzugefügt";
 
