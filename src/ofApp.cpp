@@ -208,13 +208,13 @@ void ofApp::setTextareaWeb(string fn)
 
     ///send text to browser
 
-    ofFile t_file(dir.getAbsolutePath() + "\\" + fn);
+    ofFile t_file(dir.getAbsolutePath() + "/" + fn);
 
     if((t_file.getExtension()=="html")||(t_file.getExtension()=="opf")||(t_file.getExtension()=="xhtml")){
 
         string selectedFilePath;
 
-        selectedFilePath = dir.getAbsolutePath() +"\\"+ fn;
+        selectedFilePath = dir.getAbsolutePath() +"/"+ fn;
 
         ofLogVerbose("ofApp::SentFilename") << selectedFilePath;
 
