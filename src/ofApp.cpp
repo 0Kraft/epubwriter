@@ -697,9 +697,14 @@ string zn =  "data\\DocumentRoot\\"+ currentEpubname + ".epub";
 std::ofstream out( zn.c_str() , std::ios::binary);
 Poco::Zip::Compress c(out, true);
 
+ofLogVerbose("Zip") << "Objekt erstellt";
+
 Poco::Path theFile("data\\epubessentials\\mimetype");
 c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL);
 
+ofLogVerbose("Zip") << "Mimetype hinzugefügt";
+
+/*
  string fn;
  fn = "data//DocumentRoot//temp";
 
@@ -715,14 +720,14 @@ c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipComm
         }
                         /// Escape String
 
-
+*/
 
 
  Poco::Path data("data\\DocumentRoot\\temp");
  data.makeDirectory();
  c.addRecursive(data);
 
-
+ofLogVerbose("Zip") << "Ordner hinzugefügt";
 
 /*
 Poco::Path theFile("data/epubessentials/mimetype");
@@ -1637,7 +1642,6 @@ void ofApp::ePubParseToc(){
 
 
             string ts4 = itscontent[i];
-
 
 
              nFPos = ts4.find("navPoint");
