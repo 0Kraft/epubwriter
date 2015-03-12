@@ -144,13 +144,25 @@ function initializeButtons() {
     });
 	
 	$('#addchapter').on('click', function() {
-	
 		
 		var mydiv = document.getElementById("addchapter-input");
 		mydiv.style.display = (mydiv.style.display=='inline'?'none':'inline'); 
+				
+    });
+	
+	$('#addchaptertitlesubmit').on('click', function() {
+	
+		var $this = $(this);
+        JSONRPCClient.call('add-chapter',
+            $('#addchaptertitle').val(),
+            function(result) {},
+            function(error) {
+                addError(error);
+            });
 		
-		
-			
+		var mydiv = document.getElementById("addchapter-input");
+		mydiv.style.display = (mydiv.style.display=='inline'?'none':'inline'); 
+				
     });
 
    	

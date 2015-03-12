@@ -130,7 +130,8 @@ public:
     void ePubFinalizeContent();
     void ePubFinalizeToc();
 
-    void ePubAddChapter(string chaptername);
+    void ePubAddChapter(ofx::JSONRPC::MethodArgs& args);
+    void ePubNewEpub(ofx::JSONRPC::MethodArgs& args);
 
 	bool zipped;
 	int ziptimer;

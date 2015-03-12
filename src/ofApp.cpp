@@ -122,7 +122,6 @@ void ofApp::draw()
 
 
 
-
 }
 
 //--------------------------------------------------------------
@@ -177,7 +176,7 @@ void ofApp::keyPressed(int key)
 
     if(key=='d'){
 
-          ePubAddChapter("newchapter");
+        //  ePubAddChapter("newchapter");
 
     }
 
@@ -209,13 +208,13 @@ void ofApp::setTextareaWeb(string fn)
 
     ///send text to browser
 
-    ofFile t_file(dir.getAbsolutePath() + "/" + fn);
+    ofFile t_file(dir.getAbsolutePath() + "\\" + fn);
 
     if((t_file.getExtension()=="html")||(t_file.getExtension()=="opf")||(t_file.getExtension()=="xhtml")){
 
         string selectedFilePath;
 
-        selectedFilePath = dir.getAbsolutePath() +"/"+ fn;
+        selectedFilePath = dir.getAbsolutePath() +"\\"+ fn;
 
         ofLogVerbose("ofApp::SentFilename") << selectedFilePath;
 
@@ -264,6 +263,7 @@ void ofApp::setTextareaWeb(string fn)
     }
 
    currentFileBuffer.clear();
+
 
    for(size_t i = 0;i<itscontent.size();i++)
         {
@@ -585,6 +585,16 @@ void ofApp::initServerJSONRPC(int port)
                                this,
                                &ofApp::ePubZip);
 
+     serverJSON->registerMethod("add-chapter",
+                               "add chapter",
+                               this,
+                               &ofApp::ePubAddChapter);
+
+     serverJSON->registerMethod("new_epub",
+                               "new epub",
+                               this,
+                               &ofApp::ePubNewEpub);
+
     // Start the server.
     serverJSON->start();
 }
@@ -704,8 +714,8 @@ ofLogVerbose("Zip") << "Objekt erstellt";
 //c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL); WINDOWS
 
 Poco::Path theFile("data/epubessentials/mimetype");
-c.addFile(theFile, "mimetype");
-
+//c.addFile(theFile, "mimetype");
+c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL);
 
 ofLogVerbose("Zip") << "Mimetype hinzugefügt";
 
@@ -2116,9 +2126,11 @@ void ofApp::ePubParseToc(){
  }
 
 
-void ofApp::ePubAddChapter(string chaptername)
+void ofApp::ePubAddChapter(ofx::JSONRPC::MethodArgs& args)
 {
 
+
+   string chaptername = args.params.asString();
 
    ///verify
    bool verify = true;
@@ -2138,8 +2150,38 @@ void ofApp::ePubAddChapter(string chaptername)
    tempbuffer = ofBufferFromFile("epubessentials/header.html");
    tempbuffer.append("\n");
 
+    tempbuffer.append("New Chapter\n");
+
    tempbuffer.append("</body>");
    tempbuffer.append("</html>");
+
+
+   /// Titel korrigieren
+
+
+
+  string title_search = tempbuffer.getText();
+  string newbuffer = title_search;
+
+
+   size_t title_begin = title_search.find("<title>");
+            if(title_begin!=std::string::npos){
+
+               newbuffer.insert(title_begin+7,chaptername);
+
+            }
+
+ tempbuffer.clear();
+ tempbuffer = newbuffer;
+
+
+
+
+   /// Title korrigieren
+
+
+
+
 
    string correctpath;
    correctpath = epub_path_text + chaptername + ".xhtml";
@@ -2260,6 +2302,14 @@ void ofApp::updateGUI(){
 
 
 
+
+}
+
+void ofApp::ePubNewEpub(ofx::JSONRPC::MethodArgs& args){
+
+
+
+    string titlename = args.params.asString();
 
 }
 
