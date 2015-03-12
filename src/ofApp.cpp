@@ -178,6 +178,8 @@ void ofApp::keyPressed(int key)
 
         //  ePubAddChapter("newchapter");
 
+
+
     }
 
 
@@ -590,7 +592,7 @@ void ofApp::initServerJSONRPC(int port)
                                this,
                                &ofApp::ePubAddChapter);
 
-     serverJSON->registerMethod("new_epub",
+     serverJSON->registerMethod("new-epub",
                                "new epub",
                                this,
                                &ofApp::ePubNewEpub);
@@ -2152,6 +2154,107 @@ void ofApp::ePubAddChapter(ofx::JSONRPC::MethodArgs& args)
 
     tempbuffer.append("New Chapter\n");
 
+   tempbuffer.append("</body>\n");
+   tempbuffer.append("</html>");
+
+
+   /// Titel korrigieren
+
+
+
+  string title_search = tempbuffer.getText();
+  string newbuffer = title_search;
+
+
+   size_t title_begin = title_search.find("<title>");
+            if(title_begin!=std::string::npos){
+
+               newbuffer.insert(title_begin+7,chaptername);
+
+            }
+
+ tempbuffer.clear();
+ tempbuffer = newbuffer;
+
+
+
+
+   /// Title korrigieren
+
+
+
+
+
+   string correctpath;
+   correctpath = epub_path_text + chaptername + ".xhtml";
+
+   ofBufferToFile("DocumentRoot/temp/" + correctpath,tempbuffer);
+
+   item tmp_item;
+   tmp_item.mediatype = "application/xhtml+xml";
+   tmp_item.contentpath = correctpath;
+   tmp_item.id = "id_" + chaptername;
+   tmp_item.line = "<item href=\""+correctpath+"\" id=\""+tmp_item.id+"\" media-type=\"application/xhtml+xml\"/>";
+
+   int getlastspinepos = 1;
+   int checkspinepos;
+
+   for(int i = 0; i<epub_opf_item.size();i++) {
+
+   if(epub_opf_item[i].spine_pos>0)
+        getlastspinepos++;
+
+   }
+
+   tmp_item.spine_pos = getlastspinepos;
+   tmp_item.spineline = "<itemref idref=\""+tmp_item.id+"\" linear=\"yes\"/>";
+
+   epub_opf_item.push_back(tmp_item);
+
+
+   nav_point tmp_np;
+
+   tmp_np.id = "id_" + chaptername;
+   tmp_np.contentpath = correctpath;
+   tmp_np.label = chaptername;
+   tmp_np.playOrder = ofToString(getlastspinepos-2);
+
+   epub_toc_navpoint.push_back(tmp_np);
+
+   }
+
+ updateGUI();
+
+
+
+}
+
+void ofApp::ePubAddChapter(string chaptername)
+{
+
+
+
+
+   ///verify
+   bool verify = true;
+
+   for(int i = 0; i<epub_opf_item.size();i++) {
+
+   if(epub_opf_item[i].id=="id_" + chaptername) verify = false;
+
+   }
+
+   ///verify
+
+   if(verify) {
+
+   ofBuffer tempbuffer;
+
+   tempbuffer = ofBufferFromFile("epubessentials/header.html");
+   tempbuffer.append("\n");
+
+    tempbuffer.append("New Chapter\n");
+
    tempbuffer.append("</body>");
    tempbuffer.append("</html>");
 
@@ -2187,6 +2290,7 @@ void ofApp::ePubAddChapter(ofx::JSONRPC::MethodArgs& args)
    correctpath = epub_path_text + chaptername + ".xhtml";
 
    ofBufferToFile("DocumentRoot/temp/" + correctpath,tempbuffer);
+
 
    item tmp_item;
    tmp_item.mediatype = "application/xhtml+xml";
@@ -2307,9 +2411,81 @@ void ofApp::updateGUI(){
 
 void ofApp::ePubNewEpub(ofx::JSONRPC::MethodArgs& args){
 
-
-
     string titlename = args.params.asString();
+
+    currentEpubname = titlename;
+
+    reset_all(); // Delete Files
+
+    ofDirectory newTemp;
+    newTemp.createDirectory("DocumentRoot/temp");
+    newTemp.createDirectory("DocumentRoot/temp/text");
+    newTemp.createDirectory("DocumentRoot/temp/images");
+    newTemp.createDirectory("DocumentRoot/temp/styles");
+
+    ofLogVerbose("Create") << "Directory Structure";
+
+    ofDirectory Meta;
+    Meta.listDir("epubessentials/META-INF");
+    Meta.copyTo("DocumentRoot/temp/META-INF");
+
+
+
+
+    epub_toc_head.clear(); // Delete Navpoints
+    epub_toc_navpoint.clear();
+
+    epub_toc_head.push_back("<?xml version='1.0' encoding='utf-8'?>");
+    epub_toc_head.push_back("<ncx xmlns=\"http://www.daisy.org/z3986/2005/ncx/\" version=\"2005-1\" xml:lang=\"eng\">");
+    epub_toc_head.push_back("<head>");
+    epub_toc_head.push_back("<meta content=\"0815\" name=\"dtb:uid\"/>");
+    epub_toc_head.push_back("<meta content=\"1\" name=\"dtb:depth\"/>");
+    epub_toc_head.push_back("<meta content=\"0\" name=\"dtb:totalPageCount\"/>");
+    epub_toc_head.push_back("<meta content=\"0\" name=\"dtb:maxPageNumber\"/>");
+    epub_toc_head.push_back("</head>");
+    epub_toc_head.push_back("<docTitle>");
+    epub_toc_head.push_back("<text>" + titlename + "</text>");
+    epub_toc_head.push_back("</docTitle>");
+
+
+
+
+    epub_opf_item.clear();
+    epub_opf_head.clear();
+
+    epub_opf_head.push_back("<?xml version=\"1.0\"  encoding=\"UTF-8\"?>");
+    epub_opf_head.push_back("<package xmlns=\"http://www.idpf.org/2007/opf\" version=\"2.0\" unique-identifier=\"uuid_id\">");
+    epub_opf_head.push_back("<metadata xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:opf=\"http://www.idpf.org/2007/opf\" xmlns:dcterms=\"http://purl.org/dc/terms/\" xmlns:calibre=\"http://calibre.kovidgoyal.net/2009/metadata\"");
+    epub_opf_head.push_back("xmlns:dc=\"http://purl.org/dc/elements/1.1/\">");
+    epub_opf_head.push_back("<dc:creator opf:role=\"aut\" opf:file-as=\"VfH\">VfH</dc:creator>");
+    epub_opf_head.push_back("<dc:identifier id=\"uuid_id\" opf:scheme=\"uuid\">0815</dc:identifier>");
+    epub_opf_head.push_back("<meta name=\"cover\" content=\"cover\"/>");
+    epub_opf_head.push_back("<dc:title>" + titlename + "</dc:title>");
+     epub_opf_head.push_back("<dc:language>en</dc:language>");
+    epub_opf_head.push_back("</metadata>");
+
+
+   item tmp_item;
+   tmp_item.mediatype = "application/x-dtbncx+xml";
+   tmp_item.contentpath = "toc.ncx";
+   tmp_item.id = "ncx";
+   tmp_item.line = "<item href=\"toc.ncx\" id=\"ncx\" media-type=\"application/x-dtbncx+xml\"/>";
+
+   epub_opf_item.push_back(tmp_item);
+
+
+   epub_path_rootfile = "content.opf";
+   epub_path_root = "/";
+
+     epub_path_image = "images/";
+     epub_path_text = "text/";
+     epub_path_style = "styles/";
+
+      Json::Value params3;
+    params3["value"] = currentEpubname;
+    Json::Value json5 = toJSONMethod("Server", "reset", params3);
+    sendJSONMessage(json5);
+
 
 }
 

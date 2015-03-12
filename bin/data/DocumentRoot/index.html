@@ -37,9 +37,9 @@
 			<label id="dropdown-label">
 			&#9679; current file: 
 						<select id="test-dropdown">
-							<option>1-One item</option>
-							<option>2-Another item</option>
-							<option>3-Another one again!</option>
+							<option>-</option>
+							<option>-</option>
+							<option>-</option>
 						</select>
 						<!-- select button -->
 			
@@ -53,8 +53,11 @@
 			<!-- EDITOR-->
 			
 			<div id="container-editor2">
-										
-						<label class="buttons" id="addchapter">add chapter</label> <div class="tbutton" id="addchapter-input" style="display:none" >
+			
+						<label class="buttons" id="newepub">new epub</label><div class="tbutton" id="newepub-input" style="display:none" >
+						<form style="display:inline" action="" ><input name="newepubtitle" class="fontnorm" id="newepubtitle" onkeydown="setTimeout('addLetter(document.getElementById(\'newepubtitle\'))')" value="" size="1" type="Text" autofocus>&#8201;<label class="fontnorm" id="newepubtitlesubmit" name="" value=""><b>+</b> </label></form></div>
+						/ 										
+						<label class="buttons" id="addchapter">add chapter</label><div class="tbutton" id="addchapter-input" style="display:none" >
 						<form style="display:inline" action="" ><input name="chaptertitle" class="fontnorm" id="addchaptertitle" onkeydown="setTimeout('addLetter(document.getElementById(\'addchaptertitle\'))')" value="" size="1" type="Text" autofocus>&#8201;<label class="fontnorm" id="addchaptertitlesubmit" name="" value=""><b>+</b> </label></form></div>
 						/ 
 						<label class="buttons" id="textarea-button">save file</label> / 

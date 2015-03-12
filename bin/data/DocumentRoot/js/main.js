@@ -164,6 +164,28 @@ function initializeButtons() {
 		mydiv.style.display = (mydiv.style.display=='inline'?'none':'inline'); 
 				
     });
+	
+	$('#newepub').on('click', function() {
+		
+		var mydiv = document.getElementById("newepub-input");
+		mydiv.style.display = (mydiv.style.display=='inline'?'none':'inline'); 
+				
+    });
+	
+	$('#newepubtitlesubmit').on('click', function() {
+	
+		var $this = $(this);
+        JSONRPCClient.call('new-epub',
+            $('#newepubtitle').val(),
+            function(result) {},
+            function(error) {
+                addError(error);
+            });
+		
+		var mydiv = document.getElementById("newepub-input");
+		mydiv.style.display = (mydiv.style.display=='inline'?'none':'inline'); 
+				
+    });
 
    	
 	$('#aU').on('click', function() {
