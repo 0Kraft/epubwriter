@@ -474,7 +474,7 @@ cursor: default;
 .fontnorm{
 
 font-family: "Times New Roman", Georgia, Serif;
-
+ outline:none; 
  font-size: 1em;
 }
 

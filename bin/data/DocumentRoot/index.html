@@ -54,7 +54,7 @@
 			
 			<div id="container-editor2">
 										
-						<label class="buttons" id="addchapter">add chapter</label> <div class="tbutton" id="addchapter-input" style="display:none" ><input class="fontnorm" id="addchaptertitle" value="" size="1" type="Text" autofocus>&#8201;<label class="fontnorm" id="addchaptertitlesubmit" name="" value="+"></div>
+						<label class="buttons" id="addchapter">add chapter</label> <div class="tbutton" id="addchapter-input" style="display:none" ><input class="fontnorm" id="addchaptertitle" onkeydown="setTimeout('addLetter(document.getElementById(\'addchaptertitle\'))')" value="" size="1" type="Text" autofocus>&#8201;<label class="fontnorm" id="addchaptertitlesubmit" name="" value=""> + </label></div>
 						/ 
 						<label class="buttons" id="textarea-button">save file</label> / 
 						<label class="buttons" id="zip-epub">get epub</label> 
@@ -212,6 +212,19 @@ var log = document.getElementById("log");
 </script>
 
 <script>
+
+function addLetter(eingabe) {
+				
+								
+				size = eingabe.value.length;
+				
+						
+				//eingabe.style.width = (size/1.8)+"em";
+				
+				eingabe.size = size+1;
+				
+			
+				}
 
 function sleep(milliseconds) {
   var start = new Date().getTime();

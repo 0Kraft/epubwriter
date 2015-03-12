@@ -693,7 +693,8 @@ correctpath="data/DocumentRoot/temp/mimetype";
 ///MIMETYPE löschen
 
 
-string zn =  "data\\DocumentRoot\\"+ currentEpubname + ".epub";
+//string zn =  "data\\DocumentRoot\\"+ currentEpubname + ".epub";
+string zn =  "data/DocumentRoot/"+ currentEpubname + ".epub";
 std::ofstream out( zn.c_str() , std::ios::binary);
 Poco::Zip::Compress c(out, true);
 
