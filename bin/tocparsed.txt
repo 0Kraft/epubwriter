@@ -1,0 +1,15 @@
+Struktur ePub-Format
+c1
+text/epubstruktur.html
+0
+-------------
+Struktur HTML
+c2
+text/htmlstruktur.html
+1
+-------------
+Grafikeinbindung HTML/ePub
+c3
+text/grafikeinbindung.html
+2
+-------------
