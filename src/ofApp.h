@@ -133,6 +133,8 @@ public:
     void ePubAddChapter(ofx::JSONRPC::MethodArgs& args);
     void ePubAddChapter(string chaptername);
 
+    void ePubAddImage(string up_file,string original_filename, string file_Type);
+
     void ePubNewEpub(ofx::JSONRPC::MethodArgs& args);
 
 	bool zipped;

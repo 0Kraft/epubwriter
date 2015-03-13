@@ -114,9 +114,15 @@ function initializeButtons() {
 			
 		var mydiv2 = document.getElementById("wrapper");
 		mydiv2.style.display = 'block';
+		
+		document.getElementById("uploadFile").value = "";
 	
 	});
 	
+	
+	
+	
+		
 	$(document).on('change','#test-dropdown', function() {
 		var $this = $(this);
         JSONRPCClient.call('test-dropdown',
@@ -317,6 +323,14 @@ function handleServerEvent(evt) {
 
 	
 		
+	}else if(evt.method == "addimageready")
+	{
+	
+		var imgpath = '<div style=\"width:100%;\"><img style=\"width:100%;\" alt=\"img\" src=\"../images/' + evt.params["value"] + '\"/></div>';
+		editor.focus();
+		editor.composer.commands.exec("insertHTML", imgpath);
+		document.getElementById("imguploadFile").value = "";
+	
 	}
 
     console.log(evt);

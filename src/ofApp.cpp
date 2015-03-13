@@ -120,6 +120,15 @@ void ofApp::draw()
         }
     }
 
+       ofSetColor(ofColor::gray);
+
+    ofDrawBitmapString("-------------ITEMS-------------------", 350,100);
+
+    for(size_t i = 0; i < epub_opf_item.size(); i++)
+        {
+            ofDrawBitmapString(epub_opf_item[i].line, 350 ,i * 20 + 130);
+        }
+
 
 
 }
@@ -513,9 +522,18 @@ void ofApp::onHTTPUploadEvent(ofx::HTTP::PostUploadEventArgs& args)
             break;
         case ofx::HTTP::PostUploadEventArgs::UPLOAD_FINISHED:
             stateString = "FINISHED";
-            up_filename=args.getFilename();
-           //ePubUnzipFlat(up_filename);
-           ePubUnzip(up_filename);
+
+             up_filename=args.getFilename();
+
+            if(args.getFileType().toString()=="application/octet-stream"){
+            ePubUnzip(up_filename);
+            }
+
+            if(args.getFileType().toString()=="image/gif"){
+            ePubAddImage(up_filename,args.getOriginalFilename(),args.getFileType().toString());
+            }
+
+
 
             break;
     }
@@ -2477,14 +2495,8 @@ void ofApp::updateGUI(){
     if((files[0].getExtension()=="html")||(files[0].getExtension()=="opf")||(files[0].getExtension()=="xhtml")){
 
 
-            currentFileBuffer = ofBufferFromFile(files[0].getAbsolutePath());
-                if(currentFileBuffer.size()){
-                    Json::Value params2;
-                    params2["value"] = currentFileBuffer.getText();
-                    Json::Value json;
-                    json = toJSONMethod("Server", "textarea", params2);
-                    sendJSONMessage(json);
-                }
+            setTextareaWeb(files[0].getFileName());
+
         }
         else{
 
@@ -2617,6 +2629,55 @@ void ofApp::ePubNewEpub(ofx::JSONRPC::MethodArgs& args){
     sendJSONMessage(json5);
 
 
+
+}
+
+void ofApp::ePubAddImage(string up_file,string original_filename, string file_Type){
+
+       ofFile tmp_img(up_file);
+       ofFile tmp_baseimg2(original_filename);
+
+
+       /// Validator
+
+       bool img_validation = true;
+
+       for(size_t i = 0; i < epub_opf_item.size(); i++)
+        {
+            if(epub_opf_item[i].id=="id_" + tmp_baseimg2.getBaseName()) {
+
+                img_validation=false;
+                ofLogVerbose("IMG") << "valid=false";
+
+            }
+        }
+
+       /// Validator
+
+
+
+       if(img_validation)
+       {
+
+       tmp_img.copyTo("DocumentRoot/temp/" + epub_path_image + original_filename );
+       tmp_img.copyTo("DocumentRoot/images/" + original_filename );
+       ofFile tmp_baseimg(ofToDataPath("DocumentRoot/temp/" + epub_path_image + original_filename));
+
+       item tmp_item;
+       tmp_item.mediatype = file_Type;
+       tmp_item.contentpath = epub_path_image + original_filename;
+       tmp_item.id = "id_" + tmp_baseimg.getBaseName();
+       tmp_item.line = "<item href=\""+tmp_item.contentpath+"\" id=\""+tmp_item.id+"\" media-type=\""+file_Type+"\"/>";
+       epub_opf_item.push_back(tmp_item);
+
+
+
+        }
+
+        Json::Value params3;
+        params3["value"] = original_filename;
+        Json::Value json5 = toJSONMethod("Server", "addimageready", params3);
+        sendJSONMessage(json5);
 
 }
 

@@ -27,7 +27,7 @@
 			<!-- Upload -->
 			<label class="custom-file-upload">
 			select epub
-			<form id="iupload" action="/post" method="post" enctype="multipart/form-data">
+			<form id="iupload" action="/post" target="shadow" method="post" enctype="multipart/form-data">
 			<input type="file" onchange="this.form.submit()" size= " " name="uploadFile" id="uploadFile" />
 			</form>
 			</label>
@@ -109,7 +109,7 @@
 						<span> / </span>
 						
 						<div class="tbutton"><button type="submit" class="tbutton" value=""  data-wysihtml5-command="insertUnorderedList" >unordered list</button></div>
-						
+											
 						<span> / </span>
 						
 						<div class="tbutton"><button type="submit" value=""  class="tbutton" data-wysihtml5-command="undo" >undo</button></div>
@@ -154,11 +154,16 @@
 						-->
 						
 						
-						<br>
-						<br>
-					
+										
 						</div>
 						
+						
+						<label style="padding-left:12px;font-style:normal;" class="custom-file-upload">
+						<span class="tbutton" > / image</span>
+						<form id="imgupload" action="/post" target="shadow" method="post" enctype="multipart/form-data">
+						<input type="file" onchange="this.form.submit()" size= " " name="imguploadFile" id="imguploadFile" />
+						</form>
+						</label>							
 					
 					  </div>
 										
@@ -173,7 +178,10 @@
 			<!-- Content2 -->
 			
 		</div><!-- Content1 -->
-				
+		
+		<div style="display:none">
+		<iframe id="shadow" name="shadow" src=""></iframe>
+		</div>		
 	</body> 
     
     <script src="./js/jquery.min.js"></script>
