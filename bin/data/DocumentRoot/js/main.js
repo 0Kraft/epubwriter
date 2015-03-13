@@ -111,6 +111,9 @@ function initializeButtons() {
             function(error) {
                 addError(error);
             });
+			
+		var mydiv2 = document.getElementById("wrapper");
+		mydiv2.style.display = 'block';
 	
 	});
 	
@@ -147,6 +150,8 @@ function initializeButtons() {
 		
 		var mydiv = document.getElementById("addchapter-input");
 		mydiv.style.display = (mydiv.style.display=='inline'?'none':'inline'); 
+		
+		document.getElementById("addchaptertitle").focus();
 				
     });
 	
@@ -165,10 +170,51 @@ function initializeButtons() {
 				
     });
 	
-	$('#newepub').on('click', function() {
+	$('#a2').on('click', function() {
 		
-		var mydiv = document.getElementById("newepub-input");
-		mydiv.style.display = (mydiv.style.display=='inline'?'none':'inline'); 
+		var mydiv = document.getElementById("contentstatus");
+		var mya = document.getElementById("content3"); 
+		
+		mya.style.display = (mya.style.display=='inline'?'none':'inline'); 
+		
+		if(mya.style.display=='inline') {
+		mydiv.style.display = 'inline';
+		document.getElementById("a2").innerHTML = 'c_________reate new epub';
+		document.getElementById("content2").style.display = 'none';
+		document.getElementById("a1").innerHTML = 'load epub';
+		}else{
+		document.getElementById("a2").innerHTML = 'create new epub';
+		
+				
+		}
+		
+		document.getElementById("newepubtitle").focus();
+				
+    });
+	
+	$('#a1').on('click', function() {
+		
+		var mydiv = document.getElementById("contentstatus");
+		var mya = document.getElementById("content2"); 
+		
+				
+		mya.style.display = (mya.style.display=='inline'?'none':'inline'); 
+		
+		if(mya.style.display=='inline') {
+		mydiv.style.display = 'inline';
+		document.getElementById("a1").innerHTML = 'l__________oad epub';
+		document.getElementById("content3").style.display = 'none';
+		document.getElementById("a2").innerHTML = 'create new epub';
+		}else{
+		document.getElementById("a1").innerHTML = 'load epub';
+		}
+		
+		document.getElementById("newepubtitle").focus();
+		
+				
+		
+		
+		
 				
     });
 	
@@ -182,8 +228,11 @@ function initializeButtons() {
                 addError(error);
             });
 		
-		var mydiv = document.getElementById("newepub-input");
+		var mydiv = document.getElementById("content3");
 		mydiv.style.display = (mydiv.style.display=='inline'?'none':'inline'); 
+		
+		var mydiv2 = document.getElementById("wrapper");
+		mydiv2.style.display = 'block';
 				
     });
 
@@ -236,9 +285,10 @@ function handleServerEvent(evt) {
 	}
 	else if (evt.method == "reset")
    	{
-		show('content2','a1');
-		show('content' ,'aU');
-		
+	
+		document.getElementById("contentstatus").style.display = 'inline';
+		document.getElementById("content").style.display = 'inline';
+				
 		document.getElementById("dropdown-label").style.display = 'inline';
 		document.getElementById("wrapper").style.display = 'block';
 		document.getElementById("wrapper").style.height = (window.innerHeight * 0.9) + "px";

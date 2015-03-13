@@ -13,29 +13,44 @@
 </head>
 <body>
 	
-       <a id="aU" href="" onclick="javascript:show('content','aU'); return false">epub writer</a>
+       <a id="aU" href="" onclick="javascript:show('content','aU'); return false">enchiridion</a>
 	   <div id="content" style="display:none">
                
         <!-- Controls -->
 		<span style="font-weight: bold;" >&#8201;/&#8201;</span>
 			
 		<!-- Upload -->
-		<a id="a1" href="" onclick="javascript:show('content2','a1'); return false">upload</a>
+		<a id="a1" href="" onclick="return false">load epub</a>
 	    <div id="content2" style="display:none">
 		
 			<span style="font-weight: bold;" >&#8201;/&#8201;</span>
 			<!-- Upload -->
 			<label class="custom-file-upload">
-			choose epub
-			<span id="epubtitlepre" ></span>
-			<span id="epubtitle" ></span>
+			select epub
 			<form id="iupload" action="/post" method="post" enctype="multipart/form-data">
 			<input type="file" onchange="this.form.submit()" size= " " name="uploadFile" id="uploadFile" />
 			</form>
 			</label>
-				
+			
+		</div>
+		
+		<span style="font-weight: bold;" >&#8201;/&#8201;</span>
+		
+		<a id="a2" onclick="return false" href="">create new epub</a>
+	    <div id="content3" style="display:none">
+		
+			
+			<form style="display:inline" action="" ><input name="newepubtitle" class="fontnorm" id="newepubtitle" onkeydown="setTimeout('addLetter(document.getElementById(\'newepubtitle\'))')" value="" size="1" type="Text" autofocus>&#8201;<label class="fontnorm" id="newepubtitlesubmit" name="" value="">✚</label></form>
+			
+						
+		</div>
+			
+
+			<div id="contentstatus" style="display:none">
+			<span id="epubtitlepre" ></span>
+			<span id="epubtitle" ></span>
 			<label id="dropdown-label">
-			&#9679; current file: 
+			&#9679; current chapter: 
 						<select id="test-dropdown">
 							<option>-</option>
 							<option>-</option>
@@ -44,24 +59,23 @@
 						<!-- select button -->
 			
 			</label>
+			</div>
 				
 			<!-- Upload -->
 				
-			<div id="wrapper" style="display:block">
+			<div id="wrapper" style="display:none">
 					
 										
 			<!-- EDITOR-->
 			
 			<div id="container-editor2">
 			
-						<label class="buttons" id="newepub">new epub</label><div class="tbutton" id="newepub-input" style="display:none" >
-						<form style="display:inline" action="" ><input name="newepubtitle" class="fontnorm" id="newepubtitle" onkeydown="setTimeout('addLetter(document.getElementById(\'newepubtitle\'))')" value="" size="1" type="Text" autofocus>&#8201;<label class="fontnorm" id="newepubtitlesubmit" name="" value=""><b>+</b> </label></form></div>
-						/ 										
-						<label class="buttons" id="addchapter">add chapter</label><div class="tbutton" id="addchapter-input" style="display:none" >
-						<form style="display:inline" action="" ><input name="chaptertitle" class="fontnorm" id="addchaptertitle" onkeydown="setTimeout('addLetter(document.getElementById(\'addchaptertitle\'))')" value="" size="1" type="Text" autofocus>&#8201;<label class="fontnorm" id="addchaptertitlesubmit" name="" value=""><b>+</b> </label></form></div>
+						 										
+						<label class="tbutton" id="addchapter">add chapter</label><div class="tbutton" id="addchapter-input" style="display:none" >
+						<form style="display:inline" action="" ><input name="chaptertitle" class="fontnorm" id="addchaptertitle" onkeydown="setTimeout('addLetter(document.getElementById(\'addchaptertitle\'))')" value="" size="1" type="Text" autofocus>&#8201;<label class="fontnorm" id="addchaptertitlesubmit" name="" value="">✚</label></form></div>
 						/ 
-						<label class="buttons" id="textarea-button">save file</label> / 
-						<label class="buttons" id="zip-epub">get epub</label> 
+						<label class="tbutton" id="textarea-button">save chapter</label> / 
+						<label class="tbutton" id="zip-epub">get epub</label> 
 						<br>
 						<a style="display:none" id="downloader" href="Tester.epub">get epub</a>
 					</div>
@@ -156,7 +170,7 @@
 				
 			
 				
-			</div><!-- Content2 -->
+			<!-- Content2 -->
 			
 		</div><!-- Content1 -->
 				
@@ -176,7 +190,7 @@
 
 	var editor = new wysihtml5.Editor("textarea", {
    		toolbar: "wysihtml-toolbar",
-				
+		useLineBreaks:       false,
 		parserRules:  wysihtml5ParserRules 
 	
 	 });
@@ -250,16 +264,16 @@ function sleep(milliseconds) {
 					var mya = document.getElementById(aid); 
 					if(mydiv.style.display=='inline') 
 					{
-						if(aid=='aU') { mya.innerHTML = 'epub w__________riter';  }
-						if(aid=='a1') { mya.innerHTML = 'u__________pload';  }
+						if(aid=='aU') { mya.innerHTML = 'e_________chiridion';  }
+						if(aid=='a1') { mya.innerHTML = 'l__________oad epub';  }
 						
 						
 					}
 					
 					if(mydiv.style.display=='none') 
 					{
-						if(aid=='aU') { mya.innerHTML = 'epub writer';  }
-						if(aid=="a1")  {  mya.innerHTML = 'upload'; }
+						if(aid=='aU') { mya.innerHTML = 'enchiridion';  }
+						if(aid=="a1")  {  mya.innerHTML = 'load epub'; }
 					
 					}
 				} 

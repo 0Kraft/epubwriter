@@ -73,7 +73,7 @@ void ofApp::update()
 
     if(zipped)  ziptimer++;
 
-    if(ziptimer>50) {
+    if(ziptimer>100) {
         ePubList();
         ziptimer=0;
         zipped=false;
@@ -819,15 +819,23 @@ void ofApp::ePubList(){
 
     dir.listDir("DocumentRoot/temp"); //works
 
+    ofLogVerbose("List") << "Start Parsing";
+
     ePubFindMetaInf();
+
+    ofLogVerbose("List") << "Meta-Inf";
+
     ePubFindPaths();
 
-
+    ofLogVerbose("List") << "Paths";
 
 
     ePubReadInContent();
-    ePubReadInToc();
 
+    ofLogVerbose("List") << "Readin Content";
+
+    ePubReadInToc();
+    ofLogVerbose("List") << "Readin Toc";
 
 
     ofDirectory i_dir;
@@ -835,11 +843,16 @@ void ofApp::ePubList(){
     i_dir.copyTo("DocumentRoot/images");
     i_dir.close();
 
-    ofLogVerbose(epub_path_rootfile);
+    ofLogVerbose("List") << "Copy images";
+
+
+    //ofLogVerbose(epub_path_rootfile);
     //ofLogVerbose(epub_path_text);
 
 
    dir.listDir("DocumentRoot/temp/" + epub_path_text); //works Hier muss der Ordner hin, der die html enthält°
+
+   ofLogVerbose("List") << "List Text Directory";
 
 
     if( dir.size() > 0 ){
@@ -849,6 +862,8 @@ void ofApp::ePubList(){
                 files[i].open(dir.getPath(i),ofFile::ReadWrite);
             }
     }
+
+    ofLogVerbose("List") << "Open Text Directory Files";
 
 
 
@@ -876,9 +891,13 @@ void ofApp::ePubList(){
 
         }
 
+    ofLogVerbose("List") << "Send Text to Editor";
+
 
     Json::Value json = toJSONMethod("Server", "test-dropdown-removeAll", 0);
     sendJSONMessage(json);
+
+    ofLogVerbose("List") << "Remove Dropdown Chapters";
 
 
     vector<string> vec;
@@ -900,19 +919,14 @@ void ofApp::ePubList(){
     Json::Value json2 = toJSONMethod("Server", "test-dropdown", params);
     sendJSONMessage(json2);
 
-    if(currentFileBuffer.size()){
-
-    Json::Value params2;
-    params2["value"] = currentFileBuffer.getText();
-
-    json = toJSONMethod("Server", "textarea", params2);
-    sendJSONMessage(json);
-    }
+     ofLogVerbose("List") << "Send Dropdowns";
 
     Json::Value params3;
     params3["value"] = currentEpubname;
     Json::Value json5 = toJSONMethod("Server", "reset", params3);
     sendJSONMessage(json5);
+
+    ofLogVerbose("List") << "Reset Website";
 
 }
 
@@ -964,6 +978,8 @@ void ofApp::dir_del(string fdir){
 
                 }else{
 
+                    ///
+
 
                         string fn;
                         fn = tmpfiles[i].getAbsolutePath();
@@ -978,6 +994,105 @@ void ofApp::dir_del(string fdir){
                         int lauf2 = (int)tmpfiles2.size();
 
                         for(int a = 0; a < lauf2; a++){
+
+                /// 3. Ebene
+
+                    if((tmpfiles2[a].isDirectory())!=true){
+
+                        string fn3;
+                        fn3 = tmpfiles2[a].getAbsolutePath();
+
+                        /// Escape String
+                        std::stringstream ss3;
+                        for (int n = 0; n < fn3.length(); n++) {
+                            if (fn3[n] == '\\') {
+                                ss3 << "\\\\";
+                            }
+                            else
+                            {
+                                ss3 << fn3[n];
+                            }
+                        }
+                        /// Escape String
+
+                        tmpfiles2[a].close();
+
+                        int ti3 = std::remove( ss3.str().c_str() );
+
+                        if( ti3 != 0 ){}
+                          //  perror("\tError deleting file");
+                        else {
+                           ofLogVerbose("File successfully deleted: 2. Ebene " ) << ofToString(i);
+                        }
+
+                }else{
+
+                    ///
+
+
+                        string fn3;
+                        fn3 = tmpfiles2[a].getAbsolutePath();
+
+                        ofDirectory tmpDir3;
+                        tmpDir3.listDir(fn3);
+
+                        ofLogVerbose("Files listed: 3. Ebene check!" );
+
+                        vector<ofFile> tmpfiles3 = tmpDir3.getFiles();
+
+                        int lauf3 = (int)tmpfiles3.size();
+
+                        for(int m = 0; m < lauf3; m++){
+
+                            string fn6;
+                            fn6 = tmpfiles3[m].getAbsolutePath();
+
+                            /// Escape String
+                            std::stringstream ss6;
+                            for (int l = 0; l < fn6.length(); l++) {
+                                if (fn6[l] == '\\') {
+                                    ss6 << "\\\\";
+                                }
+                                else
+                                {
+                                    ss6 << fn6[l];
+                                }
+                            }
+                            /// Escape String
+
+                            tmpfiles3[m].close();
+
+                            int ti6 = std::remove( ss6.str().c_str() );
+
+                            if( ti6 != 0 ) {   perror("\tError deleting file");}
+                            else {
+                                ofLogVerbose("File successfully deleted: 3. Ebene " ) << ofToString(a);
+                            }
+
+
+
+                        }
+
+
+                        string tp3;
+                        tp3 = tmpDir3.getAbsolutePath();
+
+                        if(tmpDir3.remove(false)){
+                           ofLogVerbose("Unterordner 2. Ebene geloescht");
+                        }else{
+                            ofLogVerbose("Unterordner 2. Ebene nicht geloescht");
+                        }
+
+                        tmpDir3.close();
+
+
+                    ///
+
+                }
+
+
+                            ///  3.Ebene Ende
+
 
                             string fn5;
                             fn5 = tmpfiles2[a].getAbsolutePath();
@@ -1019,6 +1134,9 @@ void ofApp::dir_del(string fdir){
                         }
 
                         tmpDir2.close();
+
+
+                    ///
 
                 }
 
@@ -2335,7 +2453,11 @@ void ofApp::updateGUI(){
 
  dir.listDir("DocumentRoot/temp/" + epub_path_text); //works Hier muss der Ordner hin, der die html enthält°
 
+ ofLogVerbose("UpdateGui") << "List new Text Dir.";
+
  files.clear();
+
+ ofLogVerbose("UpdateGui") << "Files cleared";
 
     if( dir.size() > 0 ){
             files.assign(dir.size(), ofFile());
@@ -2345,66 +2467,72 @@ void ofApp::updateGUI(){
             }
     }
 
+ ofLogVerbose("UpdateGui") << "Files loaded";
 
+ currentFile = 0;
 
-    currentFile = 0;
+  if( files.size() > 0 ){
 
 
     if((files[0].getExtension()=="html")||(files[0].getExtension()=="opf")||(files[0].getExtension()=="xhtml")){
 
 
-        currentFileBuffer = ofBufferFromFile(files[0].getAbsolutePath());
-
-        Json::Value params2;
-        params2["value"] = currentFileBuffer.getText();
-        Json::Value json;
-        json = toJSONMethod("Server", "textarea", params2);
-        sendJSONMessage(json);
+            currentFileBuffer = ofBufferFromFile(files[0].getAbsolutePath());
+                if(currentFileBuffer.size()){
+                    Json::Value params2;
+                    params2["value"] = currentFileBuffer.getText();
+                    Json::Value json;
+                    json = toJSONMethod("Server", "textarea", params2);
+                    sendJSONMessage(json);
+                }
         }
         else{
 
-        Json::Value params2;
-        params2["value"] = "Es kann kein Text angezeigt werden";
+            Json::Value params2;
+            params2["value"] = "Es kann kein Text angezeigt werden";
+            Json::Value json;
+            json = toJSONMethod("Server", "textarea", params2);
+            sendJSONMessage(json);
+
+        }
+
+                     Json::Value json = toJSONMethod("Server", "test-dropdown-removeAll", 0);
+                sendJSONMessage(json);
+
+
+                vector<string> vec;
+                for(int i = 0; i < int(dir.size()); i++) {
+                       if((files[0].getExtension()=="html")||(files[0].getExtension()=="opf")||(files[0].getExtension()=="xhtml"))
+                        {
+                            vec.push_back(files[i].getFileName());
+                        }
+                }
+
+
+                // Create vector
+                Json::Value params;
+                for(int i = 0; i < vec.size(); i++) {
+                    params.append(vec[i]);
+                }
+
+                    // Send vector
+                Json::Value json2 = toJSONMethod("Server", "test-dropdown", params);
+                sendJSONMessage(json2);
+
+
+
+    }else{
+
+    Json::Value params2;
+        params2["value"] = "Es ist noch kein Kapitel vorhanden. Bitte erstellen Sie mit 'add chapter' ein neues Kapitel.";
         Json::Value json;
         json = toJSONMethod("Server", "textarea", params2);
         sendJSONMessage(json);
 
-        }
+    json = toJSONMethod("Server", "test-dropdown-removeAll", 0);
+                sendJSONMessage(json);
 
-
-    Json::Value json = toJSONMethod("Server", "test-dropdown-removeAll", 0);
-    sendJSONMessage(json);
-
-
-    vector<string> vec;
-    for(int i = 0; i < int(dir.size()); i++) {
-           if((files[0].getExtension()=="html")||(files[0].getExtension()=="opf")||(files[0].getExtension()=="xhtml"))
-            {
-                vec.push_back(files[i].getFileName());
-            }
     }
-
-
-    // Create vector
-    Json::Value params;
-    for(int i = 0; i < vec.size(); i++) {
-        params.append(vec[i]);
-    }
-
-        // Send vector
-    Json::Value json2 = toJSONMethod("Server", "test-dropdown", params);
-    sendJSONMessage(json2);
-
-    if(currentFileBuffer.size()){
-
-    Json::Value params2;
-    params2["value"] = currentFileBuffer.getText();
-
-    json = toJSONMethod("Server", "textarea", params2);
-    sendJSONMessage(json);
-    }
-
-
 
 
 }
@@ -2477,14 +2605,17 @@ void ofApp::ePubNewEpub(ofx::JSONRPC::MethodArgs& args){
    epub_path_rootfile = "content.opf";
    epub_path_root = "/";
 
-     epub_path_image = "images/";
+   epub_path_image = "images/";
      epub_path_text = "text/";
      epub_path_style = "styles/";
 
-      Json::Value params3;
+    updateGUI();
+
+    Json::Value params3;
     params3["value"] = currentEpubname;
     Json::Value json5 = toJSONMethod("Server", "reset", params3);
     sendJSONMessage(json5);
+
 
 
 }
