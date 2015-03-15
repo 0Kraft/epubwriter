@@ -1,15 +1,20 @@
-Struktur ePub-Format
-c1
-text/epubstruktur.html
+Preface
+ap
+libetpreface.html
 0
 -------------
-Struktur HTML
-c2
-text/htmlstruktur.html
+Libet Implement
+a1
+libetimplement.html
 1
 -------------
-Grafikeinbindung HTML/ePub
-c3
-text/grafikeinbindung.html
+Libet Interrupt
+a2
+libetinterrupt.html
 2
+-------------
+Libet Session
+a3
+libetsession.html
+3
 -------------
