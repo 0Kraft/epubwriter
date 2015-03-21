@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="shortcut icon" href="img/favicon.ico">
 <!-- Bootstrap styles -->
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" id="css" href="css/style.css">
 </head>
 <body>
 	
@@ -28,7 +28,7 @@
 			<label class="custom-file-upload">
 			select epub
 			<form id="iupload" action="/post" target="shadow" method="post" enctype="multipart/form-data">
-			<input type="file" onchange="this.form.submit()" size= " " name="uploadFile" id="uploadFile" />
+			<input type="file" onchange="this.form.submit()" size= " " name="uploadFile" id="uploadFile"/>
 			</form>
 			</label>
 			
@@ -76,6 +76,23 @@
 						/ 
 						<label class="tbutton" id="textarea-button">save chapter</label> / 
 						<label class="tbutton" id="zip-epub">get epub</label> 
+						<br>
+						<label class="tbutton" id="reload-css">reload css</label>
+						<label class="custom-file-upload">
+						<span class="tbutton" style="font-style:normal;" id="coverbutton" > / cover</span>
+						<form id="coverupload" action="/post" target="shadow" method="post" enctype="multipart/form-data">
+						<input type="file" onchange="this.form.submit()" size= " " name="coveruploadFile" id="coveruploadFile" />
+						</form>
+						</label>		
+						<br>
+						<label id="dropdown-label2" >
+						Chapters
+						<select id="test-dropdown2" multiple="multiple" size="10">
+							<option>-</option>
+						</select>
+						<!-- select button -->
+			
+			</label>
 						<br>
 						<a style="display:none" id="downloader" href="Tester.epub">get epub</a>
 					</div>
@@ -199,7 +216,8 @@
 	var editor = new wysihtml5.Editor("textarea", {
    		toolbar: "wysihtml-toolbar",
 		useLineBreaks:       false,
-		parserRules:  wysihtml5ParserRules 
+		parserRules:  wysihtml5ParserRules ,
+		stylesheets:  "css/style.css"
 	
 	 });
 	 

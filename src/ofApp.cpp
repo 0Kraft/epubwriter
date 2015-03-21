@@ -66,6 +66,12 @@ void ofApp::setup()
 
     // Launch a browser with the address of the server.
     ofLaunchBrowser(serverJSON->getURL());
+
+    epub_opf_reference="null";
+
+    covermode=false;
+
+
 }
 
 void ofApp::update()
@@ -126,7 +132,9 @@ void ofApp::draw()
 
     for(size_t i = 0; i < epub_opf_item.size(); i++)
         {
+
             ofDrawBitmapString(epub_opf_item[i].line, 350 ,i * 20 + 130);
+            ofDrawBitmapString(ofToString(epub_opf_item[i].spine_pos), 300 ,i * 20 + 130);
         }
 
 
@@ -213,6 +221,36 @@ void ofApp::getDropdown(ofx::JSONRPC::MethodArgs& args)
     }
 
 }
+
+void ofApp::getSelection(ofx::JSONRPC::MethodArgs& args)
+{
+
+    ofLogVerbose("ofApp::getSelection") << args.params.asString();
+
+    for(int i = 0; i < int(epub_toc_navpoint.size()); i++) {
+            if(args.params.asString() == epub_toc_navpoint[i].label) {
+
+              currentFilename = epub_toc_navpoint[i].contentpath;
+
+
+            }
+        }
+
+
+
+    setTextareaWeb(currentFilename);
+
+    for(int i = 0; i < int(files.size()); i++) {
+        if(args.params.asString() == files[i].getFileName()) {
+
+          currentFile = i;
+
+
+        }
+    }
+
+}
+
 
 void ofApp::setTextareaWeb(string fn)
 {
@@ -322,7 +360,7 @@ void ofApp::getEpubName(ofx::JSONRPC::MethodArgs& args)
 
 
    currentEpubname = args.params.asString();
-    currentEpubname = currentEpubname.substr(12,currentEpubname.length());
+   // currentEpubname = currentEpubname.substr(12,currentEpubname.length());
 
    /*
 
@@ -529,8 +567,17 @@ void ofApp::onHTTPUploadEvent(ofx::HTTP::PostUploadEventArgs& args)
             ePubUnzip(up_filename);
             }
 
-            if(args.getFileType().toString()=="image/gif"){
+            if((args.getFileType().toString()=="image/gif")||
+               (args.getFileType().toString()=="image/png")||
+               (args.getFileType().toString()=="image/jpeg")||
+               (args.getFileType().toString()=="image/svg+xml")){
+
+                   if(!covermode){
+
             ePubAddImage(up_filename,args.getOriginalFilename(),args.getFileType().toString());
+                   }else{
+            ePubAddCover(up_filename,args.getOriginalFilename(),args.getFileType().toString());
+                   }
             }
 
 
@@ -615,6 +662,16 @@ void ofApp::initServerJSONRPC(int port)
                                this,
                                &ofApp::ePubNewEpub);
 
+      serverJSON->registerMethod("add-cover",
+                               "add cover",
+                               this,
+                               &ofApp::ePubAddCoverMode);
+
+       serverJSON->registerMethod("send-toc",
+                                "send toc",
+                               this,
+                               &ofApp::getSelection);
+
     // Start the server.
     serverJSON->start();
 }
@@ -677,7 +734,7 @@ poco_assert (inp);
 // decompress to current working dir
 
 //Poco::Zip::Decompress dec(inp, "data/temp/temp"); /// works
-Poco::Zip::Decompress dec(inp, "data/DocumentRoot/tempzip",false,true);
+Poco::Zip::Decompress dec(inp, "data\\DocumentRoot\\tempzip",false,true);
 
 // if an error happens invoke the ZipTest::onDecompressError method
 
@@ -692,12 +749,17 @@ dec.decompressAllFiles();
         zipdir.renameTo("DocumentRoot/temp");
 
     zipdir.close();
+
+
     zipped=true;
 
 
 
 }
 
+void ofApp::ePubAddCoverMode(){
+covermode=true;
+}
 
 
 void ofApp::ePubZip(){
@@ -723,19 +785,19 @@ correctpath="data/DocumentRoot/temp/mimetype";
 ///MIMETYPE löschen
 
 
-//string zn =  "data\\DocumentRoot\\"+ currentEpubname + ".epub";
 string zn =  "data/DocumentRoot/"+ currentEpubname + ".epub";
+//string zn =  "data/DocumentRoot/"+ currentEpubname + ".epub";
 std::ofstream out( zn.c_str() , std::ios::binary);
 Poco::Zip::Compress c(out, true);
 
 ofLogVerbose("Zip") << "Objekt erstellt";
 
-//Poco::Path theFile("data\\epubessentials\\mimetype");
-//c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL); WINDOWS
-
-Poco::Path theFile("data/epubessentials/mimetype");
-//c.addFile(theFile, "mimetype");
+Poco::Path theFile("data\\epubessentials\\mimetype");
 c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL);
+
+//Poco::Path theFile("data/epubessentials/mimetype");
+//c.addFile(theFile, "mimetype");
+//c.addFile(theFile, "mimetype",Poco::Zip::ZipCommon::CM_STORE ,Poco::Zip::ZipCommon::CL_NORMAL);
 
 ofLogVerbose("Zip") << "Mimetype hinzugefügt";
 
@@ -757,17 +819,26 @@ ofLogVerbose("Zip") << "Mimetype hinzugefügt";
 
 */
 
-Poco::Path data("data/DocumentRoot/temp");
- data.makeDirectory();
- c.addRecursive(data);
+//Poco::Path data("data/DocumentRoot/temp");
+// data.makeDirectory();
+// c.addRecursive(data);
+
 
 /*
+Poco::Path data("data\\DocumentRoot\\temp");     // WINDOWS
 
- Poco::Path data("data\\DocumentRoot\\temp");     // WINDOWS
- data.makeDirectory();
- c.addRecursive(data);
+data.makeDirectory();
 
+c.addRecursive(data);
 */
+
+Poco::Path data("data/DocumentRoot/temp");
+Poco::Path name("");
+data.makeDirectory();
+name.makeDirectory();
+c.addRecursive(data, Poco::Zip::ZipCommon::CL_NORMAL, true, name);
+
+
 
 ofLogVerbose("Zip") << "Ordner hinzugefügt";
 
@@ -823,7 +894,7 @@ for(int i = 0; i < tmpfiles.size(); i++){
 
 */
 
-c.close(); // MUST be done to finalize the Zip file
+Poco::Zip::ZipArchive archive = c.close(); // MUST be done to finalize the Zip file
 
 ofLogVerbose("Zip Ready");
 
@@ -938,6 +1009,32 @@ void ofApp::ePubList(){
     sendJSONMessage(json2);
 
      ofLogVerbose("List") << "Send Dropdowns";
+
+
+     ///
+
+      vector<string> vec2;
+    for(int i = 0; i < int(epub_toc_navpoint.size()); i++) {
+
+                vec2.push_back(epub_toc_navpoint[i].label);
+
+    }
+
+
+    // Create vector
+    Json::Value params2;
+    for(int i = 0; i < vec2.size(); i++) {
+        params2.append(vec2[i]);
+    }
+
+        // Send vector
+    Json::Value jsontoc = toJSONMethod("Server", "set-toc", params2);
+    sendJSONMessage(jsontoc);
+
+     ofLogVerbose("List") << "Send Dropdowns";
+
+     ///
+
 
     Json::Value params3;
     params3["value"] = currentEpubname;
@@ -1908,24 +2005,6 @@ void ofApp::ePubParseToc(){
 
 
 
-    ofstream myoutfile ("tocparsed.txt");
-        if (myoutfile.is_open())
-        {
-
-             for(size_t i = 0; i < epub_toc_navpoint.size(); i++)
-        {
-            myoutfile << epub_toc_navpoint[i].label << std::endl;
-             myoutfile << epub_toc_navpoint[i].id << std::endl;
-              myoutfile << epub_toc_navpoint[i].contentpath << std::endl;
-               myoutfile << epub_toc_navpoint[i].playOrder << std::endl;
-                myoutfile << "-------------" << std::endl;
-        }
-
-           myoutfile.close();
-        }
-     else cout << "Unable to open file";
-
-
 
  }
 
@@ -1966,7 +2045,12 @@ void ofApp::ePubParseToc(){
                 size_t nFPos_end = searchstring.find("\"",nFPos+11);
                 epub_path_rootfile = itscontent[i].substr(nFPos+11,nFPos_end-nFPos-11);
 
-                epub_path_root = itscontent[i].substr(nFPos+11,nFPos_end-nFPos-22);
+                ofFile cutfile(epub_path_rootfile);
+
+                string cut = cutfile.getFileName();
+
+
+                epub_path_root = itscontent[i].substr(nFPos+11,nFPos_end-nFPos-11-cut.size());
 
 
                  ofLogVerbose("Rootfile: ") <<  epub_path_rootfile;
@@ -2085,7 +2169,7 @@ void ofApp::ePubParseToc(){
 
                                ofLogVerbose("kein Unterordner ") << epub_path_text;
 
-                               epub_path_text = cutpath.substr(0,cutpath.length()-11);
+                               epub_path_text = epub_path_root;
 
 
 
@@ -2135,6 +2219,32 @@ void ofApp::ePubParseToc(){
 
                   }
             }
+
+        nFPos = ts4.find("reference href");
+
+            if(nFPos!=std::string::npos)
+            {
+
+                  ofLogVerbose("Treffer: Guide Cover");
+
+                  size_t s_search = ts4.find("href=\"");
+                  if(s_search!=std::string::npos){
+
+                         ofLogVerbose("Treffer: Path");
+
+                         size_t s_search_end = ts4.find("\"",s_search+6);
+
+
+                               epub_path_guide = itscontent[i].substr(s_search+6,s_search_end-s_search-5);
+                               epub_path_guide_line = itscontent[i];
+
+                               ofLogVerbose("CSS-Path: ") << epub_path_guide;
+
+
+
+                  }
+            }
+
 
 
 
@@ -2190,14 +2300,17 @@ void ofApp::ePubParseToc(){
          myoutfile << "</manifest>" << std::endl;
          myoutfile << "<spine toc=\"ncx\">" << std::endl;
 
-         for(size_t i = 0; i < epub_opf_item.size(); i++)
-        {
 
-            for(int j = 0; j < 50; j++) {
-            if(epub_opf_item[i].spine_pos == j){
+
+        for(int j = 0; j < 50; j++) {
+            for(size_t i = 0; i < epub_opf_item.size(); i++)
+            {
+
+            if((epub_opf_item[i].spine_pos == j)&&(epub_opf_item[i].mediatype == "application/xhtml+xml"))
+            {
             myoutfile << epub_opf_item[i].spineline << std::endl;
             }
-            }
+             }
         }
 
          myoutfile << "</spine>" << std::endl;
@@ -2644,10 +2757,28 @@ void ofApp::ePubAddImage(string up_file,string original_filename, string file_Ty
 
        for(size_t i = 0; i < epub_opf_item.size(); i++)
         {
-            if(epub_opf_item[i].id=="id_" + tmp_baseimg2.getBaseName()) {
+            if(epub_opf_item[i].id=="id_" + tmp_baseimg2.getBaseName() ) {
 
                 img_validation=false;
                 ofLogVerbose("IMG") << "valid=false";
+
+                file_del("bin/data/DocumentRoot/temp/" + epub_path_image + original_filename );
+                 file_del("bin/data/DocumentRoot/images/" + original_filename );
+
+
+               tmp_img.copyTo("DocumentRoot/temp/" + epub_path_image + original_filename,true,true );
+               tmp_img.copyTo("DocumentRoot/images/" + original_filename,true,true );
+
+
+
+               ofFile tmp_baseimg(ofToDataPath("DocumentRoot/temp/" + epub_path_image + original_filename));
+
+                epub_opf_item[i].mediatype = file_Type;
+                epub_opf_item[i].contentpath = epub_path_image + original_filename;
+                epub_opf_item[i].id = "id_" + tmp_baseimg.getBaseName();
+                epub_opf_item[i].line = "<item href=\""+epub_opf_item[i].contentpath+"\" id=\""+epub_opf_item[i].id+"\" media-type=\""+file_Type+"\"/>";
+
+
 
             }
         }
@@ -2674,13 +2805,157 @@ void ofApp::ePubAddImage(string up_file,string original_filename, string file_Ty
 
         }
 
+        string html_code;
+
+       if((file_Type=="image/png")||(file_Type=="image/jpeg")||(file_Type=="image/gif"))
+        {html_code = "<div style=\"width:100%;\"><img style=\"width:100%;\" alt=\"img\" src=\"../images/" + original_filename + "\"/></div>";}
+
+        if((file_Type=="image/svg+xml")){
+        html_code = "<div style=\"width:100%;\"><object data=\"../images/" + original_filename + "\" type=\"image/svg+xml\" width=\"100%\" height=\"100%\"></object></div>";
+        }
+
+
+
         Json::Value params3;
-        params3["value"] = original_filename;
+        params3["value"] = html_code;
         Json::Value json5 = toJSONMethod("Server", "addimageready", params3);
         sendJSONMessage(json5);
 
 }
 
+void ofApp::file_del(string fdir){
+
+   string fn;
+                        fn = fdir;
+
+                        /// Escape String
+                        std::stringstream ss;
+                        for (int j = 0; j < fn.length(); j++) {
+                            if (fn[j] == '\\') {
+                                ss << "\\\\";
+                            }
+                            else
+                            {
+                                ss << fn[j];
+                            }
+                        }
+                        /// Escape String
+
+                        int ti = std::remove( ss.str().c_str() );
+
+                        if( ti != 0 ){
+                          ofLogVerbose("File not deleted " ) << fdir;}
+                        else {
+                           ofLogVerbose("File successfully deleted" ) << fdir;
+                        }
+
+}
+
+void ofApp::ePubAddCover(string up_file,string original_filename, string file_Type){
+
+
+
+    /// ContentOPF
+
+    if(epub_opf_reference=="null"){
+         epub_opf_reference = "<reference href=\"text/titlepage.xhtml\" type=\"cover\" title=\"Cover\"/>";
+
+
+
+      item tmp_item;
+      tmp_item.mediatype = file_Type;
+      tmp_item.contentpath = epub_path_image + original_filename;
+      tmp_item.id = "id_cover";
+      tmp_item.line = "<item href=\""+tmp_item.contentpath+"\" id=\""+tmp_item.id+"\" media-type=\""+file_Type+"\"/>";
+
+
+
+       ofFile tmp_img(up_file);
+       tmp_img.copyTo("DocumentRoot/temp/" + epub_path_image + original_filename );
+       tmp_img.copyTo("DocumentRoot/images/" + original_filename );
+
+       /// ContentOPF
+
+ /// alles überprüfen
+
+   ofBuffer tempbuffer;
+
+   tempbuffer = ofBufferFromFile("epubessentials/titlepage2.html");
+   tempbuffer.append("\n");
+
+   tempbuffer.append("<svg xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"100%\" height=\"100%\" viewBox=\"0 0 423 600\" preserveAspectRatio=\"none\">\n<image width=\"423\" height=\"600\" xlink:href=\"../images/" + original_filename + "\"/>\n</svg>\n</div>\n</body>\n</html>");
+
+
+   /// Titel korrigieren
+
+
+
+  string title_search = tempbuffer.getText();
+  string newbuffer = title_search;
+
+
+   size_t title_begin = title_search.find("<title>");
+            if(title_begin!=std::string::npos){
+
+               newbuffer.insert(title_begin+7,currentEpubname);
+
+            }
+
+ tempbuffer.clear();
+ tempbuffer = newbuffer;
+
+
+
+
+   /// Title korrigieren
+
+
+
+
+
+   string correctpath;
+   correctpath = epub_path_text + "titlepage.xhtml";
+
+   ofBufferToFile("DocumentRoot/temp/" + correctpath,tempbuffer);
+
+
+
+   item tmp_itemtext;
+   tmp_itemtext.mediatype = "application/xhtml+xml";
+   tmp_itemtext.contentpath = correctpath;
+   tmp_itemtext.id = "id_titlepage";
+   tmp_itemtext.line = "<item href=\""+correctpath+"\" id=\""+tmp_itemtext.id+"\" media-type=\"application/xhtml+xml\"/>";
+
+   tmp_itemtext.spine_pos = 0;
+   tmp_itemtext.spineline = "<itemref idref=\""+tmp_itemtext.id+"\" linear=\"yes\"/>";
+
+   epub_opf_item.push_back(tmp_itemtext);
+   epub_opf_item.push_back(tmp_item);
+
+   for(int i = 0; i<epub_opf_item.size();i++) {
+
+
+       if(epub_opf_item[i].mediatype == "application/xhtml+xml")
+        epub_opf_item[i].spine_pos++;
+
+   }
+
+
+
+   epub_opf_guide = "<reference href=\"text/titlepage.xhtml\" type=\"cover\" title=\"Cover\"/>";
+
+
+
+
+    updateGUI();
+
+    ofLogVerbose("Cover") << "added";
+
+    }
+
+covermode=false;
+
+}
 
 
 

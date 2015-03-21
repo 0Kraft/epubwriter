@@ -77,8 +77,13 @@ public:
 
     void updateGUI();
 
+
+
     void getTextArea2(ofx::JSONRPC::MethodArgs& args);
     void getDropdown(ofx::JSONRPC::MethodArgs& args);
+
+    void getSelection(ofx::JSONRPC::MethodArgs& args);
+
     void getEpubName(ofx::JSONRPC::MethodArgs& args);
 
     /// \brief The server that handles the JSONRPC requests.
@@ -118,6 +123,8 @@ public:
     void ePubUnzip(string i_file);
     void ePubUnzipFlat(string i_file);
     void ePubZip();
+    void ePubAddCoverMode();
+    bool covermode;
 
     void ePubParseContent();
     void ePubParseToc();
@@ -133,6 +140,8 @@ public:
     void ePubAddChapter(ofx::JSONRPC::MethodArgs& args);
     void ePubAddChapter(string chaptername);
 
+    void ePubAddCover(string up_file,string original_filename, string file_Type);
+
     void ePubAddImage(string up_file,string original_filename, string file_Type);
 
     void ePubNewEpub(ofx::JSONRPC::MethodArgs& args);
@@ -144,6 +153,8 @@ public:
 	void reset_all();
 	void cleanup_structure();
 	void dir_del(string fdir);
+
+	void file_del(string fdir);
 
 
     ofDirectory dir;
@@ -165,6 +176,9 @@ public:
 
     string epub_path_root;
     string epub_path_rootfile;
+
+    string epub_path_guide;
+    string epub_path_guide_line;
 
     string epub_path_image;
     string epub_path_text;

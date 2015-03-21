@@ -119,6 +119,12 @@ function initializeButtons() {
 	
 	});
 	
+	$(document).on('click','#coverbutton', function() {
+		var $this = $(this);
+       JSONRPCClient.notify('add-cover');
+			
+	});
+	
 	
 	
 	
@@ -127,6 +133,21 @@ function initializeButtons() {
 		var $this = $(this);
         JSONRPCClient.call('test-dropdown',
             $('#test-dropdown').val(),
+            function(result) {},
+            function(error) {
+                addError(error);
+            });
+	
+	});
+	
+	$(document).on('change','#test-dropdown2', function() {
+		var $this = $(this);
+		
+	var e = document.getElementById("test-dropdown2");
+	var strUser = e.options[e.selectedIndex].text;
+		
+        JSONRPCClient.call('send-toc',
+            strUser,
             function(result) {},
             function(error) {
                 addError(error);
@@ -150,6 +171,13 @@ function initializeButtons() {
 	
 		JSONRPCClient.notify('zip-epub');
 			
+    });
+	
+	$('#reload-css').on('click', function() {
+	
+			
+		$('#css').replaceWith('<link id="css" rel="stylesheet" href="css/style.css?t=' + Math.random(0,10) + '"></link>');
+					
     });
 	
 	$('#addchapter').on('click', function() {
@@ -283,11 +311,25 @@ function handleServerEvent(evt) {
             option.text = option.value = evt.params["item", i];
             document.getElementById("test-dropdown").add(option);
         }
+		
+		
+    } else if (evt.method == "set-toc")
+    {
+				
+		// Get the size of params and go through each to add its value to the dropdown
+        for(var i = 0; i < evt.params.length; i++) {
+            var option2 = document.createElement('option');
+		
+            option2.text = option2.value = evt.params["item", i];
+            document.getElementById("test-dropdown2").add(option2);
+        }
+		
     }
 	// Dropdown - remove all elements
 	else if (evt.method == "test-dropdown-removeAll")
    	{
 		removeOptions(document.getElementById("test-dropdown"));
+		removeOptions(document.getElementById("test-dropdown2"));
 	}
 	else if (evt.method == "reset")
    	{
@@ -310,6 +352,9 @@ function handleServerEvent(evt) {
 			
 	var element = document.getElementById("test-dropdown");
     element.value = evt.params["value"];
+	
+	var element = document.getElementById("test-dropdown2");
+    element.value = evt.params["value"];
 		
 	}
 	else if (evt.method == "zipready")
@@ -326,7 +371,9 @@ function handleServerEvent(evt) {
 	}else if(evt.method == "addimageready")
 	{
 	
-		var imgpath = '<div style=\"width:100%;\"><img style=\"width:100%;\" alt=\"img\" src=\"../images/' + evt.params["value"] + '\"/></div>';
+		var imgpath = evt.params["value"];
+		
+		
 		editor.focus();
 		editor.composer.commands.exec("insertHTML", imgpath);
 		document.getElementById("imguploadFile").value = "";
