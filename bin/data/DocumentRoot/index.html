@@ -10,6 +10,9 @@
 <link rel="shortcut icon" href="img/favicon.ico">
 <!-- Bootstrap styles -->
 <link rel="stylesheet" id="css" href="css/style.css">
+
+		
+		
 </head>
 <body>
 	
@@ -76,8 +79,7 @@
 						/ 
 						<label class="tbutton" id="textarea-button">save chapter</label> / 
 						<label class="tbutton" id="zip-epub">get epub</label> 
-						<br>
-						<label class="tbutton" id="reload-css">reload css</label>
+						<label class="tbutton" style="display:none" id="reload-css">reload css</label>
 						<label class="custom-file-upload">
 						<span class="tbutton" style="font-style:normal;" id="coverbutton" > / cover</span>
 						<form id="coverupload" action="/post" target="shadow" method="post" enctype="multipart/form-data">
@@ -85,9 +87,9 @@
 						</form>
 						</label>		
 						<br>
-						<label id="dropdown-label2" >
+						<label style="display:none" id="dropdown-label2" >
 						Chapters
-						<select id="test-dropdown2" multiple="multiple" size="10">
+						<select style="display:none" id="test-dropdown2" multiple="multiple" size="10">
 							<option>-</option>
 						</select>
 						<!-- select button -->
@@ -222,6 +224,7 @@
 	 });
 	 
 		 
+		 
 	 
 var log = document.getElementById("log");
   
@@ -255,6 +258,7 @@ var log = document.getElementById("log");
 
 </script>
 
+ 
 <script>
 
 function addLetter(eingabe) {

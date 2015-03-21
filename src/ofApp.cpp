@@ -2682,6 +2682,9 @@ void ofApp::ePubNewEpub(ofx::JSONRPC::MethodArgs& args){
     Meta.listDir("epubessentials/META-INF");
     Meta.copyTo("DocumentRoot/temp/META-INF");
 
+    ofFile tmpstyle("epubessentials/stylesheet.css");
+    tmpstyle.copyTo("DocumentRoot/temp/styles");
+
 
 
 
@@ -2725,6 +2728,14 @@ void ofApp::ePubNewEpub(ofx::JSONRPC::MethodArgs& args){
    tmp_item.line = "<item href=\"toc.ncx\" id=\"ncx\" media-type=\"application/x-dtbncx+xml\"/>";
 
    epub_opf_item.push_back(tmp_item);
+
+   item tmp_item2;
+   tmp_item2.mediatype = "text/css";
+   tmp_item2.contentpath = "styles/stylesheet.css";
+   tmp_item2.id = "css";
+   tmp_item2.line = " <item href=\"styles/stylesheet.css\" id=\"css\" media-type=\"text/css\"/>";
+
+   epub_opf_item.push_back(tmp_item2);
 
 
    epub_path_rootfile = "content.opf";
