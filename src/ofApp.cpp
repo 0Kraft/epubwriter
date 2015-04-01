@@ -32,9 +32,7 @@ void ofApp::exit()
     // Set the logger back to the default to make sure any
     // remaining messages are logged correctly.
     ofLogToConsole();
-
     reset_all();
-
     dir_del("uploads");
     ofDirectory createDir;
     createDir.createDirectory("uploads");
@@ -103,16 +101,23 @@ void ofApp::draw()
      ofDrawBitmapString("Waiting for epub to unzip ...", 5,20);
     }
 
-    ofDrawBitmapString("----------------------------------------", 5,50);
+
 
     /// DIR
 
-    ofDrawBitmapString(epub_path_rootfile, 350,20);
-    ofDrawBitmapString(epub_path_image, 350,40);
-    ofDrawBitmapString(epub_path_text, 350,60);
-    ofDrawBitmapString(epub_path_style, 350,80);
+    ofDrawBitmapString("Path Rootfile", 350,20);
+    ofDrawBitmapString("Path Images", 500,20);
+    ofDrawBitmapString("Path Text", 650,20);
+    ofDrawBitmapString("Path Styles", 800,20);
 
+      ofSetColor(0,255,0);
 
+    ofDrawBitmapString(epub_path_rootfile, 350,40);
+    ofDrawBitmapString(epub_path_image, 500,40);
+    ofDrawBitmapString(epub_path_text, 650,40);
+    ofDrawBitmapString(epub_path_style, 800,40);
+
+    /*
     if (dir.size() > 0){
 
 
@@ -129,17 +134,54 @@ void ofApp::draw()
             ofDrawBitmapString(fileInfo, 5,i * 20 + 70);
         }
     }
+    */
 
-       ofSetColor(ofColor::gray);
+       ofSetColor(ofColor::white);
 
-    ofDrawBitmapString("-------------ITEMS-------------------", 350,100);
+    ofDrawBitmapString("-------------NavPoints-------------------", 5,60);
 
-    for(size_t i = 0; i < epub_opf_item.size(); i++)
+     ofSetColor(0,255,0);
+
+    for(size_t i = 0; i < epub_toc_navpoint.size(); i++)
         {
-
-            ofDrawBitmapString(epub_opf_item[i].line, 350 ,i * 20 + 130);
-            ofDrawBitmapString(ofToString(epub_opf_item[i].spine_pos), 300 ,i * 20 + 130);
+            ofDrawBitmapString(ofToString(epub_toc_navpoint[i].playOrder) , 5 ,i * 20 + 80);
+            ofDrawBitmapString(ofToString(epub_toc_navpoint[i].label), 30 ,i * 20 + 80);
         }
+
+        ofSetColor(ofColor::white);
+
+    ofDrawBitmapString("-------------MetaData-------------------", 350,60);
+
+            ofDrawBitmapString("Filename ePub:", 350 , 80);
+            ofSetColor(0,255,0);
+            ofDrawBitmapString(currentEpubname, 500 ,80);
+
+            ofSetColor(ofColor::white);
+            ofDrawBitmapString("Title ePub:", 350 , 100);
+            ofSetColor(0,255,0);
+            ofDrawBitmapString(currentEpubTitle, 500 ,100);
+
+             ofSetColor(ofColor::white);
+            ofDrawBitmapString("OFFilename:", 350 , 200);
+            ofSetColor(0,255,0);
+            ofDrawBitmapString(currentFileOF.getAbsolutePath(), 500 ,200);
+
+
+            ofSetColor(ofColor::white);
+            ofDrawBitmapString("Filename Chapter:", 350 , 300);
+            ofSetColor(0,255,0);
+            ofDrawBitmapString(currentFilename, 500 ,300);
+
+            ofSetColor(ofColor::white);
+            ofDrawBitmapString("PlayOrder Chapter:", 350 , 320);
+            ofSetColor(0,255,0);
+            ofDrawBitmapString(currentChapterUid, 500 ,320);
+
+            ofSetColor(ofColor::white);
+            ofDrawBitmapString("Label Chapter:", 350 , 340);
+            ofSetColor(0,255,0);
+            ofDrawBitmapString(currentChapterLabel, 500 ,340);
+
 
 
 
@@ -197,7 +239,7 @@ void ofApp::keyPressed(int key)
 
     if(key=='d'){
 
-        //  ePubAddChapter("newchapter");
+      sendDatatoWeb();
 
 
 
@@ -234,15 +276,42 @@ void ofApp::getSelection(ofx::JSONRPC::MethodArgs& args)
     for(int i = 0; i < int(epub_toc_navpoint.size()); i++) {
             if(args.params.asString() == epub_toc_navpoint[i].label) {
 
+
+
+
               currentFilename = epub_toc_navpoint[i].contentpath;
+
+
+
+              currentChapterUid = epub_toc_navpoint[i].playOrder;
+              currentChapterLabel = epub_toc_navpoint[i].label;
+              currentFile = atoi(  currentChapterUid.c_str() );
+
+              currentFileOF.open("DocumentRoot/temp/"+ epub_path_root + epub_toc_navpoint[i].contentpath);
+
 
 
             }
         }
 
 
+    size_t nFPos = currentFilename.find(epub_path_text);
+
+          if((nFPos!=std::string::npos)){
+           currentFilename= currentFilename.substr(nFPos+epub_path_text.length(),currentFilename.length());
+          }
+
+     nFPos = currentFilename.find("#");
+
+          if((nFPos!=std::string::npos)){
+           currentFilename= currentFilename.substr(0,nFPos);
+          }else{
+
+          }
 
     setTextareaWeb(currentFilename);
+
+
 
     for(int i = 0; i < int(files.size()); i++) {
         if(args.params.asString() == files[i].getFileName()) {
@@ -399,7 +468,7 @@ void ofApp::getTextArea2(ofx::JSONRPC::MethodArgs& args)
 
    /// save file
 
-   files[currentFile].setWriteable(true);
+   currentFileOF.setWriteable(true);
 
 
 
@@ -415,9 +484,9 @@ void ofApp::getTextArea2(ofx::JSONRPC::MethodArgs& args)
   // tmp_buf_file =  files[currentFile].readToBuffer();
 
    string tmppath;
-   tmppath = files[currentFile].getAbsolutePath();
+   tmppath = currentFileOF.getAbsolutePath();
 
-   files[currentFile].close();
+   currentFileOF.close();
 
    /// Search for insert
 
@@ -515,9 +584,9 @@ void ofApp::getTextArea2(ofx::JSONRPC::MethodArgs& args)
 
 
 
-   files[currentFile].open(tmppath,ofFile::Reference);
+   currentFileOF.open(tmppath,ofFile::Reference);
 
-   ofLogVerbose("Write ") << " to File: " << currentFilename << " Nr.: " << currentFile;
+   ofLogVerbose("Write ") << " to File: " << currentFileOF.getFileName();
 
 }
 
@@ -1739,6 +1808,39 @@ void ofApp::ePubReadInContent(){
 
 
         }
+
+         ///Find title
+
+     for(int i = 0;i< epub_opf_head.size();i++)
+        {
+
+
+            ///HEAD
+            string title_search = epub_opf_head[i];
+
+            size_t nFPos = title_search.find("<dc:title");
+            if(nFPos!=std::string::npos){
+
+
+
+              size_t title_start = title_search.find(">",nFPos+9);
+
+              size_t title_end = title_search.find("</dc:title>",title_start+1);
+
+              currentEpubTitle = epub_opf_head[i].substr(title_start+1,title_end-title_start-1);
+
+            }
+
+            }
+
+
+
+    ///
+
+
+
+
+
 
 }
 
@@ -2969,6 +3071,37 @@ void ofApp::ePubAddCover(string up_file,string original_filename, string file_Ty
     }
 
 covermode=false;
+
+}
+
+void ofApp::sendDatatoWeb(){
+
+
+    /// Inhaltsverzeichnis
+
+      vector<string> vec2;
+    for(int i = 0; i < int(epub_toc_navpoint.size()); i++) {
+
+                vec2.push_back(epub_toc_navpoint[i].label);
+
+    }
+
+
+    // Create vector
+    Json::Value params2;
+    for(int i = 0; i < vec2.size(); i++) {
+        params2.append(vec2[i]);
+    }
+
+        // Send vector
+    Json::Value jsontoc = toJSONMethod("Server", "set-toc", params2);
+    sendJSONMessage(jsontoc);
+
+     ofLogVerbose("List") << "Send Dropdowns";
+
+    /// Inhaltsverzeichnis
+
+
 
 }
 

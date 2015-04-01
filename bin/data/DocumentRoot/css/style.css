@@ -495,6 +495,21 @@ cursor: default;
 
 }
 
+#test-dropdown2 {
+
+ cursor:grab;
+ font-size: 1.0em;
+ font-style: italic;
+ font-family: "Times New Roman", Georgia, Serif;
+  -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
+	width:100%;
+	height:auto;
+		
+
+}
+
 .fontnorm{
 
 font-family: "Times New Roman", Georgia, Serif;
