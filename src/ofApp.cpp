@@ -33,10 +33,6 @@ void ofApp::exit()
     // remaining messages are logged correctly.
     ofLogToConsole();
 
-    dir_del("uploads");
-    ofDirectory tempdir;
-    tempdir.createDirectory("uploads");
-
     reset_all();
 
 
