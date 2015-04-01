@@ -35,6 +35,10 @@ void ofApp::exit()
 
     reset_all();
 
+    dir_del("uploads");
+    ofDirectory createDir;
+    createDir.createDirectory("uploads");
+
 
 
 }
