@@ -182,6 +182,9 @@ void ofApp::draw()
             ofSetColor(0,255,0);
             ofDrawBitmapString(currentChapterLabel, 500 ,340);
 
+            ofSetColor(ofColor::grey);
+            ofDrawBitmapString(currentFileBuffer.getText(), 50 , 50);
+
 
 
 
@@ -317,7 +320,6 @@ void ofApp::getSelection(ofx::JSONRPC::MethodArgs& args)
         if(args.params.asString() == files[i].getFileName()) {
 
           currentFile = i;
-
 
         }
     }
@@ -1031,27 +1033,23 @@ void ofApp::ePubList(){
 
     currentFile = 0;
 
+    currentFilename = epub_toc_navpoint[0].contentpath;
 
-    if((files[0].getExtension()=="html")||(files[0].getExtension()=="opf")||(files[0].getExtension()=="xhtml")){
+    size_t nFPos = currentFilename.find(epub_path_text);
 
+          if((nFPos!=std::string::npos)){
+           currentFilename= currentFilename.substr(nFPos+epub_path_text.length(),currentFilename.length());
+          }
 
-        currentFileBuffer = ofBufferFromFile(files[0].getAbsolutePath());
+     nFPos = currentFilename.find("#");
 
-        Json::Value params2;
-        params2["value"] = currentFileBuffer.getText();
-        Json::Value json;
-        json = toJSONMethod("Server", "textarea", params2);
-        sendJSONMessage(json);
-        }
-        else{
+          if((nFPos!=std::string::npos)){
+           currentFilename= currentFilename.substr(0,nFPos);
+          }else{
 
-        Json::Value params2;
-        params2["value"] = "Es kann kein Text angezeigt werden";
-        Json::Value json;
-        json = toJSONMethod("Server", "textarea", params2);
-        sendJSONMessage(json);
+          }
 
-        }
+    setTextareaWeb(currentFilename);
 
     ofLogVerbose("List") << "Send Text to Editor";
 

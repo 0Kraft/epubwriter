@@ -1,6 +1,6 @@
 /**
- * @license wysihtml v0.5.0-beta8
- * https://github.com/Voog/wysihtml
+ * @license wysihtml5x v0.5.0-beta6
+ * https://github.com/Edicy/wysihtml5
  *
  * Author: Christopher Blum (https://github.com/tiff)
  * Secondary author of extended features: Oliver Pulges (https://github.com/pulges)
@@ -10,7 +10,7 @@
  *
  */
 var wysihtml5 = {
-  version: "0.5.0-beta8",
+  version: "0.5.0-beta6",
 
   // namespaces
   commands:   {},
@@ -4684,8 +4684,8 @@ wysihtml5.browser = (function() {
          // When inserting unordered or ordered lists in Firefox, Chrome or Safari, the current selection or line gets
          // converted into a list (<ul><li>...</li></ul>, <ol><li>...</li></ol>)
          // IE and Opera act a bit different here as they convert the entire content of the current block element into a list
-        "insertUnorderedList":  isIE(9, ">="),
-        "insertOrderedList":    isIE(9, ">=")
+        "insertUnorderedList":  isIE(),
+        "insertOrderedList":    isIE()
       };
 
       // Firefox throws errors for queryCommandSupported, so we have to build up our own object of supported commands
@@ -5081,17 +5081,9 @@ wysihtml5.browser = (function() {
      *    wysihtml5.lang.object({ foo: 1, bar: 1 }).merge({ bar: 2, baz: 3 }).get();
      *    // => { foo: 1, bar: 2, baz: 3 }
      */
-    merge: function(otherObj, deep) {
+    merge: function(otherObj) {
       for (var i in otherObj) {
-        if (deep && wysihtml5.lang.object(otherObj[i]).isPlainObject() && (typeof obj[i] === "undefined" || wysihtml5.lang.object(obj[i]).isPlainObject())) {
-          if (typeof obj[i] === "undefined") {
-            obj[i] = wysihtml5.lang.object(otherObj[i]).clone(true);
-          } else {
-            wysihtml5.lang.object(obj[i]).merge(wysihtml5.lang.object(otherObj[i]).clone(true));
-          }
-        } else {
-          obj[i] = wysihtml5.lang.object(otherObj[i]).isPlainObject() ? wysihtml5.lang.object(otherObj[i]).clone(true) : otherObj[i];
-        }
+        obj[i] = otherObj[i];
       }
       return this;
     },
@@ -5146,7 +5138,7 @@ wysihtml5.browser = (function() {
     },
 
     isPlainObject: function () {
-      return obj && Object.prototype.toString.call(obj) === '[object Object]' && !(("Node" in window) ? obj instanceof Node : obj instanceof Element || obj instanceof Text);
+      return Object.prototype.toString.call(obj) === '[object Object]';
     }
   };
 };
@@ -6315,6 +6307,7 @@ wysihtml5.dom.parse = function(elementOrHtml_current, config_current) {
    * which later replaces the entire body content
    */
    function parse(elementOrHtml, config) {
+   /*
     wysihtml5.lang.object(currentRules).merge(defaultRules).merge(config.rules).get();
 
     var context       = config.context || elementOrHtml.ownerDocument || document,
@@ -6365,6 +6358,8 @@ wysihtml5.dom.parse = function(elementOrHtml_current, config_current) {
     element.appendChild(fragment);
 
     return isString ? wysihtml5.quirks.getCorrectInnerHTML(element) : element;
+	*/
+	return elementOrHtml;
   }
 
   function _convert(oldNode, cleanUp, clearInternals, uneditableClass) {
@@ -6704,9 +6699,11 @@ wysihtml5.dom.parse = function(elementOrHtml_current, config_current) {
         newAttributeValue;
 
     if (method) {
-      newAttributeValue = method(attributeValue, nodeName);
-      if (typeof(newAttributeValue) === "string") {
-        return newAttributeValue;
+      if (attributeValue || (attributeName === "alt" && nodeName == "IMG")) {
+        newAttributeValue = method(attributeValue);
+        if (typeof(newAttributeValue) === "string") {
+          return newAttributeValue;
+        }
       }
     }
 
@@ -6941,13 +6938,9 @@ wysihtml5.dom.parse = function(elementOrHtml_current, config_current) {
 
     alt: (function() {
       var REG_EXP = /[^ a-z0-9_\-]/gi;
-      return function(attributeValue, nodeName) {
+      return function(attributeValue) {
         if (!attributeValue) {
-          if (nodeName === "IMG") {
-            return "";
-          } else {
-            return null;
-          }
+          return "";
         }
         return attributeValue.replace(REG_EXP, "");
       };
@@ -6973,9 +6966,6 @@ wysihtml5.dom.parse = function(elementOrHtml_current, config_current) {
 
     any: (function() {
       return function(attributeValue) {
-        if (!attributeValue) {
-          return null;
-        }
         return attributeValue;
       };
     })()
@@ -7227,15 +7217,12 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
     var doc             = list.ownerDocument,
         fragment        = doc.createDocumentFragment(),
         previousSibling = wysihtml5.dom.domNode(list).prev({ignoreBlankTexts: true}),
-        nextSibling = wysihtml5.dom.domNode(list).next({ignoreBlankTexts: true}),
         firstChild,
         lastChild,
         isLastChild,
         shouldAppendLineBreak,
         paragraph,
-        listItem,
-        lastListItem = list.lastElementChild || list.lastChild,
-        isLastItem;
+        listItem;
 
     if (useLineBreaks) {
       // Insert line break if list is after a non-block element
@@ -7245,11 +7232,10 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
 
       while (listItem = (list.firstElementChild || list.firstChild)) {
         lastChild = listItem.lastChild;
-        isLastItem = listItem === lastListItem;
         while (firstChild = listItem.firstChild) {
           isLastChild           = firstChild === lastChild;
           // This needs to be done before appending it to the fragment, as it otherwise will lose style information
-          shouldAppendLineBreak = (!isLastItem || (nextSibling && !_isBlockElement(nextSibling))) && isLastChild && !_isBlockElement(firstChild) && !_isLineBreak(firstChild);
+          shouldAppendLineBreak = isLastChild && !_isBlockElement(firstChild) && !_isLineBreak(firstChild);
           fragment.appendChild(firstChild);
           if (shouldAppendLineBreak) {
             _appendLineBreak(fragment);
@@ -7337,9 +7323,6 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
     constructor: function(readyCallback, config) {
       this.callback = readyCallback || wysihtml5.EMPTY_FUNCTION;
       this.config   = wysihtml5.lang.object({}).merge(config).get();
-      if (!this.config.className) {
-        this.config.className = "wysihtml5-sandbox";
-      }
       this.editableArea   = this._createIframe();
     },
 
@@ -7394,7 +7377,7 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
     _createIframe: function() {
       var that   = this,
           iframe = doc.createElement("iframe");
-      iframe.className = this.config.className;
+      iframe.className = "wysihtml5-sandbox";
       wysihtml5.dom.setAttributes({
         "security":           "restricted",
         "allowtransparency":  "true",
@@ -7557,9 +7540,6 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
       constructor: function(readyCallback, config, contentEditable) {
         this.callback = readyCallback || wysihtml5.EMPTY_FUNCTION;
         this.config   = wysihtml5.lang.object({}).merge(config).get();
-        if (!this.config.className) {
-          this.config.className = "wysihtml5-sandbox";
-        }
         if (contentEditable) {
             this.element = this._bindElement(contentEditable);
         } else {
@@ -7570,7 +7550,7 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
       // creates a new contenteditable and initiates it
       _createElement: function() {
         var element = doc.createElement("div");
-        element.className = this.config.className;
+        element.className = "wysihtml5-sandbox";
         this._loadElement(element);
         return element;
       },
@@ -7649,8 +7629,8 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
  *    wysihtml.dom.simulatePlaceholder(this, composer, "Foobar");
  */
 (function(dom) {
-  dom.simulatePlaceholder = function(editor, view, placeholderText, placeholderClassName) {
-    var CLASS_NAME = placeholderClassName || "wysihtml5-placeholder",
+  dom.simulatePlaceholder = function(editor, view, placeholderText) {
+    var CLASS_NAME = "placeholder",
         unset = function() {
           var composerIsVisible   = view.element.offsetWidth > 0 && view.element.offsetHeight > 0;
           if (view.hasPlaceholderSet()) {
@@ -8994,7 +8974,7 @@ wysihtml5.quirks.ensureProperClearing = (function() {
   }
 
   var handleMouseDown = function(event) {
-    var target = wysihtml5.dom.getParentElement(event.target, { query: "td, th" }, false, editable);
+    var target = wysihtml5.dom.getParentElement(event.target, { query: "td, th" });
     if (target) {
       handleSelectionMousedown(target);
     }
@@ -9004,7 +8984,7 @@ wysihtml5.quirks.ensureProperClearing = (function() {
     select.start = target;
     select.end = target;
     select.cells = [target];
-    select.table = dom.getParentElement(select.start, { query: "table" }, false, editable);
+    select.table = dom.getParentElement(select.start, { query: "table" });
 
     if (select.table) {
       removeCellSelections();
@@ -9035,11 +9015,11 @@ wysihtml5.quirks.ensureProperClearing = (function() {
 
   function handleMouseMove (event) {
     var curTable = null,
-      cell = dom.getParentElement(event.target, { query: "td, th" }, false, editable),
+      cell = dom.getParentElement(event.target, { query: "td, th" }),
       oldEnd;
 
     if (cell && select.table && select.start) {
-      curTable =  dom.getParentElement(cell, { query: "table" }, false, editable);
+      curTable =  dom.getParentElement(cell, { query: "table" });
       if (curTable && curTable === select.table) {
         removeCellSelections();
         oldEnd = select.end;
@@ -9067,7 +9047,7 @@ wysihtml5.quirks.ensureProperClearing = (function() {
 
   var sideClickHandler = function(event) {
     editable.ownerDocument.removeEventListener("click", sideClickHandler);
-    if (dom.getParentElement(event.target, { query: "table" }, false, editable) != select.table) {
+    if (dom.getParentElement(event.target, { query: "table" }) != select.table) {
       removeCellSelections();
       select.table = null;
       select.start = null;
@@ -9083,7 +9063,7 @@ wysihtml5.quirks.ensureProperClearing = (function() {
   function selectCells (start, end) {
     select.start = start;
     select.end = end;
-    select.table = dom.getParentElement(select.start, { query: "table" }, false, editable);
+    select.table = dom.getParentElement(select.start, { query: "table" });
     selectedCells = dom.table.getCellsBetween(select.start, select.end);
     addSelections(selectedCells);
     bindSideclick();
@@ -11378,7 +11358,7 @@ wysihtml5.Commands = Base.extend(
   function cleanup(composer) {
     var container = composer.element,
         allElements = container.querySelectorAll(BLOCK_ELEMENTS),
-        uneditables = container.querySelectorAll(composer.config.classNames.uneditableContainer),
+        uneditables = container.querySelectorAll(composer.config.uneditableContainerClassname),
         elements = wysihtml5.lang.array(allElements).without(uneditables);
 
     for (var i = elements.length; i--;) {
@@ -11650,7 +11630,7 @@ wysihtml5.Commands = Base.extend(
         state = this.state(composer, command, options);
         if (state) {
           bookmark = rangy.saveSelection(composer.win);
-          for (var j = 0, jmax = state.length; j < jmax; j++) {
+          for (var j in state) {
             removeOptionsFromElement(state[j], options, composer);
           }
         }
@@ -11673,7 +11653,7 @@ wysihtml5.Commands = Base.extend(
             composer.selection.selectLine();
           }
         }
-
+      
         // And get all selection ranges of current composer and iterat
         ranges = composer.selection.getOwnRanges();
         for (var i = ranges.length; i--;) {
@@ -12136,7 +12116,7 @@ wysihtml5.Commands = Base.extend(
         };
 
     if (node) {
-      var parentLi = wysihtml5.dom.getParentElement(node, { query: "li" }, false, composer.element),
+      var parentLi = wysihtml5.dom.getParentElement(node, { query: "li" }),
           otherNodeName = (nodeName === "UL") ? "OL" : "UL";
 
       if (isNode(node, nodeName)) {
@@ -12173,9 +12153,8 @@ wysihtml5.Commands = Base.extend(
     // <ul><li>foo</li><li>bar</li></ul>
     // becomes:
     // foo<br>bar<br>
-
-    composer.selection.executeAndRestoreRangy(function() {
-      otherLists = getListsInSelection(otherNodeName, composer);
+    composer.selection.executeAndRestore(function() {
+      var otherLists = getListsInSelection(otherNodeName, composer);
       if (otherLists.length) {
         for (var l = otherLists.length; l--;) {
           wysihtml5.dom.renameElement(otherLists[l], nodeName.toLowerCase());
@@ -12197,7 +12176,7 @@ wysihtml5.Commands = Base.extend(
     // becomes:
     // <ul><li>foo</li><li>bar</li></ul>
     // Also rename other lists in selection
-    composer.selection.executeAndRestoreRangy(function() {
+    composer.selection.executeAndRestore(function() {
       var renameLists = [el].concat(getListsInSelection(otherNodeName, composer));
 
       // All selection inner lists get renamed too
@@ -12236,7 +12215,7 @@ wysihtml5.Commands = Base.extend(
 
       if (tempElement) {
         isEmpty = wysihtml5.lang.array(["", "<br>", wysihtml5.INVISIBLE_SPACE]).contains(tempElement.innerHTML);
-        list = wysihtml5.dom.convertToList(tempElement, nodeName.toLowerCase(), composer.parent.config.classNames.uneditableContainer);
+        list = wysihtml5.dom.convertToList(tempElement, nodeName.toLowerCase(), composer.parent.config.uneditableContainerClassname);
         if (isEmpty) {
           composer.selection.selectNode(list.querySelector("li"), true);
         }
@@ -12250,7 +12229,6 @@ wysihtml5.Commands = Base.extend(
           cmd           = (nodeName === "OL") ? "insertOrderedList" : "insertUnorderedList",
           selectedNode  = composer.selection.getSelectedNode(),
           list          = findListEl(selectedNode, nodeName, composer);
-
 
       if (!list.el) {
         if (composer.commands.support(cmd)) {
@@ -12466,7 +12444,7 @@ wysihtml5.Commands = Base.extend(
         for (row = 0; row < value.rows; row ++) {
           html += '<tr>';
           for (col = 0; col < value.cols; col ++) {
-            html += "<td><br></td>";
+            html += "<td></td>";
           }
           html += '</tr>';
         }
@@ -13148,17 +13126,14 @@ wysihtml5.views.View = Base.extend(
 
     _initContentEditableArea: function() {
         var that = this;
+
         if (this.config.noTextarea) {
             this.sandbox = new dom.ContentEditableArea(function() {
                 that._create();
-            }, {
-              className: this.config.classNames.sandbox
-            }, this.editableArea);
+            }, {}, this.editableArea);
         } else {
             this.sandbox = new dom.ContentEditableArea(function() {
                 that._create();
-            }, {
-              className: this.config.classNames.sandbox
             });
             this.editableArea = this.sandbox.getContentEditable();
             dom.insert(this.editableArea).after(this.textarea.element);
@@ -13168,11 +13143,11 @@ wysihtml5.views.View = Base.extend(
 
     _initSandbox: function() {
       var that = this;
+
       this.sandbox = new dom.Sandbox(function() {
         that._create();
       }, {
-        stylesheets:  this.config.stylesheets,
-        className: this.config.classNames.sandbox
+        stylesheets:  this.config.stylesheets
       });
       this.editableArea  = this.sandbox.getIframe();
 
@@ -13206,7 +13181,7 @@ wysihtml5.views.View = Base.extend(
       }
 
       // Make sure our selection handler is ready
-      this.selection = new wysihtml5.Selection(this.parent, this.element, this.config.classNames.uneditableContainer);
+      this.selection = new wysihtml5.Selection(this.parent, this.element, this.config.uneditableContainerClassname);
 
       // Make sure commands dispatcher is ready
       this.commands  = new wysihtml5.Commands(this.parent);
@@ -13217,7 +13192,7 @@ wysihtml5.views.View = Base.extend(
           ]).from(this.textarea.element).to(this.element);
       }
 
-      dom.addClass(this.element, this.config.classNames.composer);
+      dom.addClass(this.element, this.config.composerClassName);
       //
       // Make the editor look like the original textarea, by syncing styles
       if (this.config.style && !this.config.contentEditableMode) {
@@ -13243,7 +13218,7 @@ wysihtml5.views.View = Base.extend(
         ? this.config.placeholder
         : ((this.config.noTextarea) ? this.editableArea.getAttribute("data-placeholder") : this.textarea.element.getAttribute("placeholder"));
       if (placeholderText) {
-        dom.simulatePlaceholder(this.parent, this, placeholderText, this.config.classNames.placeholder);
+        dom.simulatePlaceholder(this.parent, this, placeholderText);
       }
 
       // Make sure that the browser avoids using inline styles whenever possible
@@ -13295,7 +13270,7 @@ wysihtml5.views.View = Base.extend(
         this.parent.on("newword:composer", function() {
           if (dom.getTextContent(that.element).match(dom.autoLink.URL_REG_EXP)) {
             var nodeWithSelection = that.selection.getSelectedNode(),
-                uneditables = that.element.querySelectorAll("." + that.config.classNames.uneditableContainer),
+                uneditables = that.element.querySelectorAll("." + that.config.uneditableContainerClassname),
                 isInUneditable = false;
 
             for (var i = uneditables.length; i--;) {
@@ -13304,12 +13279,12 @@ wysihtml5.views.View = Base.extend(
               }
             }
 
-            if (!isInUneditable) dom.autoLink(nodeWithSelection, [that.config.classNames.uneditableContainer]);
+            if (!isInUneditable) dom.autoLink(nodeWithSelection, [that.config.uneditableContainerClassname]);
           }
         });
 
         dom.observe(this.element, "blur", function() {
-          dom.autoLink(that.element, [that.config.classNames.uneditableContainer]);
+          dom.autoLink(that.element, [that.config.uneditableContainerClassname]);
         });
       }
 
@@ -13744,7 +13719,7 @@ wysihtml5.views.View = Base.extend(
   // If found an uneditable before caret then notify it before deletion
   var handleUneditableDeletion = function(composer) {
     var before = composer.selection.getBeforeSelection(true);
-    if (before && (before.type === "element" || before.type === "leafnode") && before.node.nodeType === 1 && before.node.classList.contains(composer.config.classNames.uneditableContainer)) {
+    if (before && (before.type === "element" || before.type === "leafnode") && before.node.nodeType === 1 && before.node.classList.contains(composer.config.uneditableContainerClassname)) {
       if (fixLastBrDeletionInTable(composer, true)) {
         return true;
       }
@@ -13909,7 +13884,7 @@ wysihtml5.views.View = Base.extend(
       // Make sure that images are selected when clicking on them
       var target = event.target,
           allImages = this.element.querySelectorAll('img'),
-          notMyImages = this.element.querySelectorAll('.' + this.config.classNames.uneditableContainer + ' img'),
+          notMyImages = this.element.querySelectorAll('.' + this.config.uneditableContainerClassname + ' img'),
           myImages = wysihtml5.lang.array(allImages).without(notMyImages);
 
       if (target.nodeName === "IMG" && wysihtml5.lang.array(myImages).contains(target)) {
@@ -13939,10 +13914,10 @@ wysihtml5.views.View = Base.extend(
   };
 
   var handleClick = function(event) {
-    if (this.config.classNames.uneditableContainer) {
+    if (this.config.uneditableContainerClassname) {
       // If uneditables is configured, makes clicking on uneditable move caret after clicked element (so it can be deleted like text)
       // If uneditable needs text selection itself event.stopPropagation can be used to prevent this behaviour
-      var uneditable = wysihtml5.dom.getParentElement(event.target, { query: "." + this.config.classNames.uneditableContainer }, false, this.element);
+      var uneditable = wysihtml5.dom.getParentElement(event.target, { query: "." + this.config.uneditableContainerClassname }, false, this.element);
       if (uneditable) {
         this.selection.setAfter(uneditable);
       }
@@ -14366,6 +14341,10 @@ wysihtml5.views.View = Base.extend(
     pasteParserRulesets: null,
     // Parser method to use when the user inserts content
     parser:               wysihtml5.dom.parse,
+    // Class name which should be set on the contentEditable element in the created sandbox iframe, can be styled via the 'stylesheets' option
+    composerClassName:    "wysihtml5-editor",
+    // Class name to add to the body when the wysihtml5 editor is supported
+    bodyClassName:        "wysihtml5-supported",
     // By default wysihtml5 will insert a <br> for line breaks, set this to false to use <p>
     useLineBreaks:        true,
     // Array (or single string) of stylesheet urls to be loaded in the editor's iframe
@@ -14378,18 +14357,9 @@ wysihtml5.views.View = Base.extend(
     cleanUp:              true,
     // Whether to use div instead of secure iframe
     contentEditableMode: false,
-    classNames: {
-      // Class name which should be set on the contentEditable element in the created sandbox iframe, can be styled via the 'stylesheets' option
-      composer: "wysihtml5-editor",
-      // Class name to add to the body when the wysihtml5 editor is supported
-      body: "wysihtml5-supported",
-      // classname added to editable area element (iframe/div) on creation
-      sandbox: "wysihtml5-sandbox",
-      // class on editable area with placeholder
-      placeholder: "wysihtml5-placeholder",
-      // Classname of container that editor should not touch and pass through
-      uneditableContainer: "wysihtml5-uneditable-container"
-    },
+    // Classname of container that editor should not touch and pass through
+    // Pass false to disable
+    uneditableContainerClassname: "wysihtml5-uneditable-container",
     // Browsers that support copied source handling will get a marking of the origin of the copied source (for determinig code cleanup rules on paste)
     // Also copied source is based directly on selection - 
     // (very useful for webkit based browsers where copy will otherwise contain a lot of code and styles based on whatever and not actually in selection).
@@ -14403,11 +14373,6 @@ wysihtml5.views.View = Base.extend(
       this.editableElement  = typeof(editableElement) === "string" ? document.getElementById(editableElement) : editableElement;
       this.config           = wysihtml5.lang.object({}).merge(defaultConfig).merge(config).get();
       this._isCompatible    = wysihtml5.browser.supported();
-
-      // merge classNames
-      if (config && config.classNames) {
-        wysihtml5.lang.object(this.config.classNames).merge(config.classNames);
-      }
 
       if (this.editableElement.nodeName.toLowerCase() != "textarea") {
           this.config.contentEditableMode = true;
@@ -14426,7 +14391,7 @@ wysihtml5.views.View = Base.extend(
       }
 
       // Add class name to body, to indicate that the editor is supported
-      wysihtml5.dom.addClass(document.body, this.config.classNames.body);
+      wysihtml5.dom.addClass(document.body, this.config.bodyClassName);
 
       this.composer = new wysihtml5.views.Composer(this, this.editableElement, this.config);
       this.currentView = this.composer;
@@ -14512,7 +14477,7 @@ wysihtml5.views.View = Base.extend(
         "rules": this.config.parserRules,
         "cleanUp": this.config.cleanUp,
         "context": parseContext,
-        "uneditableClass": this.config.classNames.uneditableContainer,
+        "uneditableClass": this.config.uneditableContainerClassname,
         "clearInternals" : clearInternals
       });
       if (typeof(htmlOrElement) === "object") {
@@ -14525,7 +14490,7 @@ wysihtml5.views.View = Base.extend(
      * Prepare html parser logic
      *  - Observes for paste and drop
      */
-    _initParser: function() {
+    _initParser: function() {/*
       var oldHtml,
           cleanHtml;
 
@@ -14551,14 +14516,14 @@ wysihtml5.views.View = Base.extend(
           }.bind(this));
 
         }.bind(this));
-      }
+      }*/
     },
 
     _cleanAndPaste: function (oldHtml) {
       var cleanHtml = wysihtml5.quirks.cleanPastedHTML(oldHtml, {
         "referenceNode": this.composer.element,
         "rules": this.config.pasteParserRulesets || [{"set": this.config.parserRules}],
-        "uneditableClass": this.config.classNames.uneditableContainer
+        "uneditableClass": this.config.uneditableContainerClassname
       });
       this.composer.selection.deleteContents();
       this.composer.selection.insertHTML(cleanHtml);
