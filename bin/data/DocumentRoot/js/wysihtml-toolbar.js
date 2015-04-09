@@ -6904,15 +6904,25 @@ wysihtml5.dom.parse = function(elementOrHtml_current, config_current) {
   // ------------ attribute checks ------------ \\
   var attributeCheckMethods = {
     url: (function() {
-      var REG_EXP = /^https?:\/\//i;
-      return function(attributeValue) {
-        if (!attributeValue || !attributeValue.match(REG_EXP)) {
-          return null;
-        }
-        return attributeValue.replace(REG_EXP, function(match) {
-          return match.toLowerCase();
-        });
-      };
+      /*var REG_EXP = /^https?:\/\//i;*/
+    return function(attributeValue) {
+    /*if (!attributeValue || !attributeValue.match(REG_EXP)) {
+        return null;*/
+    if (!attributeValue) {
+        return "";
+    }
+    /*return attributeValue.replace(REG_EXP, function(match) {
+        return match.toLowerCase();
+    });*/
+
+    var parser = document.createElement('a');
+    parser.href = attributeValue;
+
+    if (   parser.protocol == 'http:'
+        || parser.protocol == 'https:'
+        || parser.protocol == 'ftp:'
+    ) return attributeValue;
+    };
     })(),
 
     src: (function() {

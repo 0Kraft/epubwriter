@@ -423,6 +423,8 @@ void ofApp::setTextareaWeb(string fn)
 
         }
 
+        t_file.close();
+
 
 
 }
@@ -589,6 +591,8 @@ void ofApp::getTextArea2(ofx::JSONRPC::MethodArgs& args)
    currentFileOF.open(tmppath,ofFile::Reference);
 
    ofLogVerbose("Write ") << " to File: " << currentFileOF.getFileName();
+
+
 
 }
 
@@ -1023,7 +1027,7 @@ void ofApp::ePubList(){
             files.assign(dir.size(), ofFile());
 
             for(int i = 0; i < (int)dir.size(); i++){
-                files[i].open(dir.getPath(i),ofFile::ReadWrite);
+                files[i].open(dir.getPath(i),ofFile::ReadOnly);
             }
     }
 
@@ -1359,7 +1363,7 @@ void ofApp::reset_all(){
                 files[i].close();
 
         }
-
+    currentFileOF.close();
 
       dir_del("DocumentRoot/images");
 
@@ -1370,6 +1374,8 @@ void ofApp::reset_all(){
       dir_del("DocumentRoot/tempzipflat");
 
       dir_del("DocumentRoot/OEBPS");
+
+
 
 
 }

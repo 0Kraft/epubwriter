@@ -64,18 +64,6 @@ font-size: 1.0em;
  
 }
 
-
-ul {
-    list-style-type: circle;
-}
-
-
-
-ol {
-    list-style-type: upper-roman;
-}
-
-
  #iupload{
 font-size: 1.0em;
  font-family: "Times New Roman", Georgia, Serif;
@@ -513,18 +501,14 @@ cursor: default;
  font-size: 1.0em;
  font-style: italic;
  font-family: "Times New Roman", Georgia, Serif;
-
+  -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
+	width:100%;
 	
 		
 
 }
-
-.bloc {
-
-display:inline-block; vertical-align:top; overflow:hidden; 
-}
-
-.bloc select { padding:10px; margin:-5px -20px -5px -5px; }
 
 .fontnorm{
 

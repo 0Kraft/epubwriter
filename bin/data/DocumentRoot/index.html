@@ -89,12 +89,9 @@
 						<br>
 						<label  id="dropdown-label2" >
 						chapters
-						<br>
-						<div class="bloc">
 						<select id="test-dropdown2" multiple="multiple" size="10">
 							<option></option>
 						</select>
-						</div>
 						<!-- select button -->
 			
 			</label>
@@ -220,11 +217,9 @@
 
 	var editor = new wysihtml5.Editor("textarea", {
    		toolbar: "wysihtml-toolbar",
-		useLineBreaks:        false,
-		cleanUp:			true,
-		parserRules:  wysihtml5ParserRules ,
-	//	stylesheets:  "css/style.css"
-	
+		parserRules: wysihtml5ParserRules,
+		useLineBreaks: false
+			
 	 });
 	 
 		 
