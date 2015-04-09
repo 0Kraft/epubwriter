@@ -36,10 +36,7 @@ $(document).ready(function() {
     });
                   
     initializeButtons();
-	
-	
-	
-	
+		
     // Dummy call to open the websocket
     JSONRPCClient.call('client',
                         'open-websocket',
@@ -89,13 +86,14 @@ function onWebSocketError() {
 function initializeButtons() {
 
 	
-	
 	$(document).on('keypress','#textarea', function() {
 	
 	var $this = $(this);
-	editor2.setValue($('#textarea').val(),true);
+
 	
 	});
+	
+	
 	
 	$(window).on('resize', function(){
       var win = $(this); 
@@ -104,9 +102,7 @@ function initializeButtons() {
 	  
 	});
 	
-	
-
- 		
+	 		
 	$(document).on('change','#uploadFile', function() {
 		var $this = $(this);
         JSONRPCClient.call('set-epubname',
@@ -115,9 +111,24 @@ function initializeButtons() {
             function(error) {
                 addError(error);
             });
+			
+		var mydiv2 = document.getElementById("wrapper");
+		mydiv2.style.display = 'block';
+		
+		document.getElementById("uploadFile").value = "";
 	
 	});
 	
+	$(document).on('click','#coverbutton', function() {
+		var $this = $(this);
+       JSONRPCClient.notify('add-cover');
+			
+	});
+	
+	
+	
+	
+		
 	$(document).on('change','#test-dropdown', function() {
 		var $this = $(this);
         JSONRPCClient.call('test-dropdown',
@@ -128,32 +139,24 @@ function initializeButtons() {
             });
 	
 	});
-
+	
+	$(document).on('change','#test-dropdown2', function() {
+		var $this = $(this);
 		
-	
-    // Checkbox
-    $('#test-checkbox').on('click', function() {
-        var $this = $(this);
-        JSONRPCClient.call('test-checkbox',
-            $('#test-checkbox').is(':checked'),
+	var e = document.getElementById("test-dropdown2");
+	var strUser = e.options[e.selectedIndex].text;
+		
+        JSONRPCClient.call('send-toc',
+            strUser,
             function(result) {},
             function(error) {
                 addError(error);
             });
-    });
+	
+	});
 
-    // Slider
-    $('#test-slider').on('input', function() {
-        var $this = $(this);
-        JSONRPCClient.call('test-slider',
-            $('#test-slider').val(),
-            function(result) {},
-            function(error) {
-                addError(error);
-            });
-    });
 	
-	 // Text-Area-Submit
+    // Text-Area-Submit
     $('#textarea-button').on('click', function() {
         var $this = $(this);
         JSONRPCClient.call('textarea',
@@ -166,29 +169,108 @@ function initializeButtons() {
 			
 	$('#zip-epub').on('click', function() {
 	
-	  var $this = $(this);
-        JSONRPCClient.call('textarea',
-            $('#textarea').val(),
+		JSONRPCClient.notify('zip-epub');
+			
+    });
+	
+	$('#reload-css').on('click', function() {
+	
+			
+		$('#css').replaceWith('<link id="css" rel="stylesheet" href="css/style.css?t=' + Math.random(0,10) + '"></link>');
+					
+    });
+	
+	$('#addchapter').on('click', function() {
+		
+		var mydiv = document.getElementById("addchapter-input");
+		mydiv.style.display = (mydiv.style.display=='inline'?'none':'inline'); 
+		
+		document.getElementById("addchaptertitle").focus();
+				
+    });
+	
+	$('#addchaptertitlesubmit').on('click', function() {
+	
+		var $this = $(this);
+        JSONRPCClient.call('add-chapter',
+            $('#addchaptertitle').val(),
             function(result) {},
             function(error) {
                 addError(error);
             });
-      
-	
-		JSONRPCClient.notify('zip-epub');
 		
+		var mydiv = document.getElementById("addchapter-input");
+		mydiv.style.display = (mydiv.style.display=='inline'?'none':'inline'); 
+				
+    });
+	
+	$('#a2').on('click', function() {
+		
+		var mydiv = document.getElementById("contentstatus");
+		var mya = document.getElementById("content3"); 
+		
+		mya.style.display = (mya.style.display=='inline'?'none':'inline'); 
+		
+		if(mya.style.display=='inline') {
+		mydiv.style.display = 'inline';
+		document.getElementById("a2").innerHTML = 'c_________reate new epub';
+		document.getElementById("content2").style.display = 'none';
+		document.getElementById("a1").innerHTML = 'load epub';
+		}else{
+		document.getElementById("a2").innerHTML = 'create new epub';
+		
+				
+		}
+		
+		document.getElementById("newepubtitle").focus();
+				
+    });
+	
+	$('#a1').on('click', function() {
+		
+		var mydiv = document.getElementById("contentstatus");
+		var mya = document.getElementById("content2"); 
+		
+				
+		mya.style.display = (mya.style.display=='inline'?'none':'inline'); 
+		
+		if(mya.style.display=='inline') {
+		mydiv.style.display = 'inline';
+		document.getElementById("a1").innerHTML = 'l__________oad epub';
+		document.getElementById("content3").style.display = 'none';
+		document.getElementById("a2").innerHTML = 'create new epub';
+		}else{
+		document.getElementById("a1").innerHTML = 'load epub';
+		}
+		
+		document.getElementById("newepubtitle").focus();
+		
+				
+		
+		
+		
+				
+    });
+	
+	$('#newepubtitlesubmit').on('click', function() {
+	
+		var $this = $(this);
+        JSONRPCClient.call('new-epub',
+            $('#newepubtitle').val(),
+            function(result) {},
+            function(error) {
+                addError(error);
+            });
+		
+		var mydiv = document.getElementById("content3");
+		mydiv.style.display = (mydiv.style.display=='inline'?'none':'inline'); 
+		
+		var mydiv2 = document.getElementById("wrapper");
+		mydiv2.style.display = 'block';
+				
     });
 
-    // Button
-    $('#test-button').on('click', function() {
-        var $this = $(this);
-        JSONRPCClient.notify('test-button');
-		
-	
-	
-	
-    });
-	
+   	
 	$('#aU').on('click', function() {
         var $this = $(this);
         JSONRPCClient.notify('Writer');
@@ -208,38 +290,15 @@ function initializeButtons() {
 			
 	});
 
-	// Button - start video
-    $('#start-video-button').on('click', function() {
-        var $this = $(this);
-        JSONRPCClient.notify('start-videoServer');
-    });
-
-	// Button - stop video
-    $('#stop-video-button').on('click', function() {
-        var $this = $(this);
-        JSONRPCClient.notify('stop-videoServer');
-    });
-
 }
 
 // Get the value from the JSON params and assign its value to correct UI element
 function handleServerEvent(evt) {
     // Slider
-    if (evt.method == "test-slider")
-    {
-        document.getElementById("test-slider").value = evt.params["value"];
-        document.getElementById("test-slider-text").innerHTML = evt.params["value"];
-    }
-	// Checkbox
-    else if (evt.method == "test-checkbox")
-    {
-		document.getElementById("test-checkbox").checked = evt.params["bool"];
-    }
-	// textarea
-	else if (evt.method == "textarea")
+    if (evt.method == "textarea")
     {
 		editor.setValue(evt.params["value"],true);
-		editor2.setValue(evt.params["value"],true);
+	
 		//$('#textarea').val(evt.params["value"]);
 	}
 	// Dropdown - populate it
@@ -252,27 +311,41 @@ function handleServerEvent(evt) {
             option.text = option.value = evt.params["item", i];
             document.getElementById("test-dropdown").add(option);
         }
+		
+		
+    } else if (evt.method == "set-toc")
+    {
+				
+		// Get the size of params and go through each to add its value to the dropdown
+        for(var i = 0; i < evt.params.length; i++) {
+            var option2 = document.createElement('option');
+		
+            option2.text = option2.value = evt.params["item", i];
+            document.getElementById("test-dropdown2").add(option2);
+        }
+		
     }
 	// Dropdown - remove all elements
 	else if (evt.method == "test-dropdown-removeAll")
    	{
 		removeOptions(document.getElementById("test-dropdown"));
+		removeOptions(document.getElementById("test-dropdown2"));
 	}
 	else if (evt.method == "reset")
    	{
-		show('content2','a1');
-		show('content' ,'aU');
-		
-		
-
-		document.getElementById("epubtitle").innerHTML = " &#9679; current epub: " + evt.params["value"];
-
-		editor2.setValue(document.getElementById("textarea").value,true); // not sure?
-		
+	
+		document.getElementById("contentstatus").style.display = 'inline';
+		document.getElementById("content").style.display = 'inline';
+				
 		document.getElementById("dropdown-label").style.display = 'inline';
 		document.getElementById("wrapper").style.display = 'block';
 		document.getElementById("wrapper").style.height = (window.innerHeight * 0.9) + "px";
-		
+
+		document.getElementById("epubtitle").innerHTML = evt.params["value"];
+		document.getElementById("epubtitlepre").innerHTML = " &#9679; current epub: ";
+
+	
+			
 	}
 	else if (evt.method == "set-dropdown")
    	{
@@ -280,8 +353,31 @@ function handleServerEvent(evt) {
 	var element = document.getElementById("test-dropdown");
     element.value = evt.params["value"];
 	
+	var element = document.getElementById("test-dropdown2");
+    element.value = evt.params["value"];
 		
-			
+	}
+	else if (evt.method == "zipready")
+   	{
+	
+	
+	sleep(1000);
+	
+    document.getElementById("downloader").setAttribute('href', document.getElementById("epubtitle").innerHTML + ".epub");
+	document.getElementById("downloader").click();
+
+	
+		
+	}else if(evt.method == "addimageready")
+	{
+	
+		var imgpath = evt.params["value"];
+		
+		
+		editor.focus();
+		editor.composer.commands.exec("insertHTML", imgpath);
+		document.getElementById("imguploadFile").value = "";
+	
 	}
 
     console.log(evt);

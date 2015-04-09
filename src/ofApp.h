@@ -39,6 +39,30 @@
 
 #include <stdio.h>
 
+struct nav_point {
+    string id;
+    string playOrder;
+    string label;
+    string contentpath;
+
+
+
+};
+
+struct item {
+    string id;
+    string mediatype;
+    string contentpath;
+    string fallbackpath;
+    int spine_pos;
+    string line;
+    string spineline;
+
+};
+
+
+
+
 
 class ofApp: public ofBaseApp
 {
@@ -48,34 +72,24 @@ public:
     void draw();
     void exit();
     void keyPressed(int key);
-    void mouseDragged(int x, int y, int button);
-
-    ofVideoGrabber cam;
-    ofFbo fbo;
-
-    ofImage img;
 
     void initServerJSONRPC(int port);
-    void initServerVideo(int port);
+
+    void updateGUI();
 
 
-    // Registered methods.
-    void getCheckBox(ofx::JSONRPC::MethodArgs& args);
-    void getSlider(ofx::JSONRPC::MethodArgs& args);
-    void getButton(void);
+
     void getTextArea2(ofx::JSONRPC::MethodArgs& args);
     void getDropdown(ofx::JSONRPC::MethodArgs& args);
+
+    void getSelection(ofx::JSONRPC::MethodArgs& args);
+
     void getEpubName(ofx::JSONRPC::MethodArgs& args);
-    void startVideoServer(void);
-    void stopVideoServer(void);
 
     /// \brief The server that handles the JSONRPC requests.
     ofx::HTTP::BasicJSONRPCServer::SharedPtr serverJSON;
 
-    /// \brief The server that handles the Video stream.
-    ofx::HTTP::BasicIPVideoServer::SharedPtr serverVideo;
-
-    /// \brief Get the user text in a thread-safe way.
+     /// \brief Get the user text in a thread-safe way.
     /// \returns The user text.
     std::string getUserText() const;
 
@@ -86,16 +100,7 @@ public:
     void setUserText(const std::string& text);
     void setTextArea(const std::string& text);
 
-    float getSliderValue() const;
-    void setSliderValue(const float& f);
-
-    bool getCheckboxValue() const;
-    void setCheckboxValue(const bool& b);
-
-
-    void setTextareaWeb(string fn);
-
-
+     void setTextareaWeb(string fn);
 
     void onHTTPPostEvent(ofx::HTTP::PostEventArgs& evt);
     void onHTTPFormEvent(ofx::HTTP::PostFormEventArgs& evt);
@@ -106,72 +111,131 @@ public:
     void sendJSONMessage(Json::Value json);
 
 
-
-    //
+   //
     string up_filename;
 
     void ePubList();
 
-    // ZIP SHIT
+
+
+    // ZIP
 
     void ePubUnzip(string i_file);
-		void onDecompressError(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const std::string>& info);
-        void onOk(const void* pSender, std::pair<const Poco::Zip::ZipLocalFileHeader, const Poco::Path>& info);
-		bool zipped;
+    void ePubUnzipFlat(string i_file);
+    void ePubZip();
+    void ePubAddCoverMode();
+    bool covermode;
 
-		string test;
-			string test2;
+    void ePubParseContent();
+    void ePubParseToc();
+    void ePubReadInToc();
+    void ePubReadInContent();
 
-			string filename3;
+    void ePubFindPaths();
+    void ePubFindMetaInf();
 
-			int ziptimer;
+    void ePubFinalizeContent();
+    void ePubFinalizeToc();
 
-        ofDirectory dir;
+    void ePubAddChapter(ofx::JSONRPC::MethodArgs& args);
+    void ePubAddChapter(string chaptername);
 
+    void ePubAddCover(string up_file,string original_filename, string file_Type);
 
-        vector<ofFile> files; // Current Files of Directory
-        int currentFile;   // Chosen File
-        string currentFilename;
-        string currentEpubname;
-        ofBuffer currentFileBuffer; //Content of ChosenFile
+    void ePubAddImage(string up_file,string original_filename, string file_Type);
 
-        void ePubZip();
+    void ePubNewEpub(ofx::JSONRPC::MethodArgs& args);
 
+    void sendDatatoWeb();
 
-        float           nextLetterTime;
-        int             lineCount;
-        int             letterCount;
-        vector <string> seussLines;
+	bool zipped;
+	int ziptimer;
+	// Structuring Epub
 
-        ofBuffer buffer;
+	void reset_all();
+	void cleanup_structure();
+	void dir_del(string fdir);
 
-        string filecontent;
-         string filecontent_file;
-
-
-    ///ZIPSHIT
-
-
-
+	void file_del(string fdir);
 
 
+    ofDirectory dir;
+    vector<ofFile> files; // Current Files of Directory
+    int currentFile;   // Chosen Filenumber
+
+    string currentFilename;
+    string currentChapterUid ;
+    string          currentChapterLabel;
 
 
-private:
+    string currentEpubname; // richtiger Name
+
+    string currentEpubTitle;
+
+    ofFile currentFileOF;
+
+    ofBuffer currentFileBuffer; //Content of ChosenFile
+    string textarea;
+
+    ///toc headers
+
+    string epub_uid;
+    int epub_toc_depth;
+
+    std::vector<std::string>    epub_toc_head;
+    std::vector<nav_point>    epub_toc_navpoint;
+
+
+    string epub_path_root;
+    string epub_path_rootfile;
+
+    string epub_path_guide;
+    string epub_path_guide_line;
+
+    string epub_path_image;
+    string epub_path_text;
+    string epub_path_style;
+
+
+    ///
+
+    ///content.opf headers
+
+    string epub_creator;
+    string epub_title;
+    string epub_language;
+
+
+    std::vector<item>    epub_opf_item;
+    std::vector<std::string>    epub_opf_head;
+    string epub_opf_reference;
+
+
+
+    string epub_opf_guide;
+
+
+    std::vector<std::string>    target_opf;
+
+    ///
+
+    /// Display Buffer in OF
+
+    float           nextLetterTime;
+    int             lineCount;
+    int             letterCount;
+    vector <string> seussLines;
+
+    /// Display Buffer in OF
+
+    private:
     // A custom logging channel to mirror all log messages to the web clients.
     WebSocketLoggerChannel::SharedPtr loggerChannel;
-
-    // This piece of text might be modified by multiple client threads.
-    // Thus we must use a mutex to protect it during multi-threaded access.
-    std::string userText;
-    float sliderValue;
-    bool checkboxValue;
-
-    std::string textarea;
 
     // We use a mutex to protect any variables that can be
     // modified by multiple clients.  In our case, userText must be protected.
     // We mark the mutex as mutable so that it can be used in const functions.
+
     mutable ofMutex mutex;
 
     //UploadRouter uploadRouter;

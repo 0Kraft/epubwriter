@@ -9,59 +9,184 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="shortcut icon" href="img/favicon.ico">
 <!-- Bootstrap styles -->
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" id="css" href="css/style.css">
+
+		
+		
 </head>
 <body>
 	
-       <a id="aU" href="" onclick="javascript:show('content','aU'); return false">epub writer</a>
+       <a id="aU" href="" onclick="javascript:show('content','aU'); return false">enchiridion</a>
 	   <div id="content" style="display:none">
                
         <!-- Controls -->
 		<span style="font-weight: bold;" >&#8201;/&#8201;</span>
 			
 		<!-- Upload -->
-		<a id="a1" href="" onclick="javascript:show('content2','a1'); return false">upload</a>
+		<a id="a1" href="" onclick="return false">load epub</a>
 	    <div id="content2" style="display:none">
 		
 			<span style="font-weight: bold;" >&#8201;/&#8201;</span>
 			<!-- Upload -->
 			<label class="custom-file-upload">
-			choose epub
-			<span id="epubtitle" ></span>
-			<form id="iupload" action="/post" method="post" enctype="multipart/form-data">
-			<input type="file" onchange="this.form.submit()" size= " " name="uploadFile" id="uploadFile" />
+			select epub
+			<form id="iupload" action="/post" target="shadow" method="post" enctype="multipart/form-data">
+			<input type="file" onchange="this.form.submit()" size= " " name="uploadFile" id="uploadFile"/>
 			</form>
 			</label>
-				
-			<label id="dropdown-label">
-			&#9679; current file: 
+			
+		</div>
+		
+		<span style="font-weight: bold;" >&#8201;/&#8201;</span>
+		
+		<a id="a2" onclick="return false" href="">create new epub</a>
+	    <div id="content3" style="display:none">
+		
+			
+			<form style="display:inline" action="" ><input name="newepubtitle" class="fontnorm" id="newepubtitle" onkeydown="setTimeout('addLetter(document.getElementById(\'newepubtitle\'))')" value="" size="1" type="Text" autofocus>&#8201;<label class="fontnorm" id="newepubtitlesubmit" name="" value="">✚</label></form>
+			
+						
+		</div>
+			
+
+			<div id="contentstatus" style="display:none">
+			<span id="epubtitlepre" ></span>
+			<span id="epubtitle" ></span>
+			<label id="dropdown-label" style="display:none">
+			&#9679; current chapter: 
 						<select id="test-dropdown">
-							<option>1-One item</option>
-							<option>2-Another item</option>
-							<option>3-Another one again!</option>
+							<option>-</option>
+							<option>-</option>
+							<option>-</option>
 						</select>
 						<!-- select button -->
 			
 			</label>
+			</div>
 				
 			<!-- Upload -->
 				
-			<div id="wrapper">
+			<div id="wrapper" style="display:none">
 					
 										
 			<!-- EDITOR-->
+			
+			<div id="container-editor2">
+			
+						 										
+						<label class="tbutton" id="addchapter">add chapter</label><div class="tbutton" id="addchapter-input" style="display:none" >
+						<form style="display:inline" action="" ><input name="chaptertitle" class="fontnorm" id="addchaptertitle" onkeydown="setTimeout('addLetter(document.getElementById(\'addchaptertitle\'))')" value="" size="1" type="Text" autofocus>&#8201;<label class="fontnorm" id="addchaptertitlesubmit" name="" value="">✚</label></form></div>
+						/ 
+						<label class="tbutton" id="textarea-button">save chapter</label> / 
+						<label class="tbutton" id="zip-epub">get epub</label> 
+						<label class="tbutton" style="display:none" id="reload-css">reload css</label>
+						<label class="custom-file-upload">
+						<span class="tbutton" style="font-style:normal;" id="coverbutton" > / cover</span>
+						<form id="coverupload" action="/post" target="shadow" method="post" enctype="multipart/form-data">
+						<input type="file" onchange="this.form.submit()" size= " " name="coveruploadFile" id="coveruploadFile" />
+						</form>
+						</label>		
+						<br>
+						<label  id="dropdown-label2" >
+						chapters
+						<select id="test-dropdown2" multiple="multiple" size="10">
+							<option></option>
+						</select>
+						<!-- select button -->
+			
+			</label>
+						<br>
+						<a style="display:none" id="downloader" href="Tester.epub">get epub</a>
+					</div>
+			
 			<div id="container-editor">
 				
 						<textarea id="textarea" placeholder="Enter text ..."></textarea>
 						
-					</div>
+			</div>
+								
+					  <div id="toolbar" >
+						<div id="wysihtml-toolbar" style="display: none;">
+						<div class="tbutton"><a class="tbutton" id="htmlchange" data-wysihtml5-action="change_view">html-view</a></div>
+						
+						<span> / </span>
+						
+						<div class="tbutton"><button type="submit" value="" class="tbutton" data-wysihtml5-command="bold" title="CTRL+B">bold</button></div>
+						
+						<span> / </span>
+						
+						<div class="tbutton"><button type="submit" value="" class="tbutton" data-wysihtml5-command="italic" title="CTRL+I">italic</button></div>
+						
+						<span> / </span>
+						
+						<div class="tbutton"><button type="submit" value="" class="tbutton" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3">heading</button></div>
+						
+						<span> / </span>
+						
+						<div class="tbutton"><button type="submit" value="" class="tbutton" data-wysihtml5-command="insertOrderedList" >ordered list</button></div>
+						
+						<span> / </span>
+						
+						<div class="tbutton"><button type="submit" class="tbutton" value=""  data-wysihtml5-command="insertUnorderedList" >unordered list</button></div>
+											
+						<span> / </span>
+						
+						<div class="tbutton"><button type="submit" value=""  class="tbutton" data-wysihtml5-command="undo" >undo</button></div>
+						
+						<span> / </span>
+						
+						<div class="tbutton"><button type="submit" value=""  class="tbutton"  data-wysihtml5-command="redo" >redo</button></div>
+						
+						
+						
+						<!--
+						<div class="tbutton"><button type="submit" value="" data-wysihtml5-command="bold" title="CTRL+B"><img src="./img/toolbar_bold.gif" alt="bold"></img></button></div>
+						<div class="tbutton"><button type="submit" value=""  data-wysihtml5-command="italic" title="CTRL+I"><img src="./img/toolbar_12.gif" alt="italic"></img></button></div>
+						<div class="tbutton"><button type="submit" value="" data-wysihtml5-command="formatBlock" data-wysihtml5-command-value="h3"><img src="./img/toolbar_07a.png" alt="heading"></img></button></div>
+						
+						<div class="tbutton"><button type="submit" value=""  data-wysihtml5-command="insertOrderedList" ><img src="./img/toolbar_14.gif" alt="1. List"></img></button></div>
+						<div class="tbutton"><button type="submit" value=""  data-wysihtml5-command="insertUnorderedList" ><img src="./img/toolbar_19.gif" alt="- List"></img></button></div>
+						
+						-->
+						
+						<!-- User can define the image's src: 
+						
+						<div class="tbutton">
+						<button type="submit" value="" data-wysihtml5-command="insertImage"><img src="./img/toolbar_bold.gif" alt="test"></img></button>
+						
+						<div data-wysihtml5-dialog="insertImage">
+						<label>
+							Image:
+						<input data-wysihtml5-dialog-field="src" value="http://">
+						</label>
+						<a data-wysihtml5-dialog-action="save">OK</a>
+						<a data-wysihtml5-dialog-action="cancel">Cancel</a>
+						</div>
+						</div>
+						
+						
+						
+						<br>
+						<div class="tbutton"><button type="submit" value=""  class="tbutton" data-wysihtml5-command="undo" ><img src="./img/toolbar_16.gif" alt="undo"></img></button></div>
+						<div class="tbutton"><button type="submit" value=""  class="tbutton"  data-wysihtml5-command="redo" ><img src="./img/toolbar_03.gif" alt="redo"></img></button></div>
+						
+						-->
+						
+						
+										
+						</div>
+						
+						
+						<label style="padding-left:12px;font-style:normal;" class="custom-file-upload">
+						<span class="tbutton" > / image</span>
+						<form id="imgupload" action="/post" target="shadow" method="post" enctype="multipart/form-data">
+						<input type="file" onchange="this.form.submit()" size= " " name="imguploadFile" id="imguploadFile" />
+						</form>
+						</label>							
 					
+					  </div>
 										
-					<div id="container-editor2">
-										
-						<textarea id="textarea2" placeholder="Waiting for text ..."></textarea>
-						<label class="buttons" id="textarea-button">save file</label> / <label class="buttons" id="zip-epub">get epub</label>
-					</div>
+					
 					
 					
 			
@@ -69,93 +194,15 @@
 				
 			
 				
-			</div><!-- Content2 -->
+			<!-- Content2 -->
 			
 		</div><!-- Content1 -->
-		<br><br>
-		<div style="display:none" class="container">
-			
-				<div class="panel panel-default">
-			
-					<div style="border: 3px solid black; width:100%;" ></div>
-			
-					<br>
-					<br>
-			
 		
-           		
-					<div class="panel-footer">
-						<!-- checkbox -->
-						<label for="test-checkbox">Check me!</label>
-						<input id="test-checkbox" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" value="autoGain"/><br>
-						
-						<!-- slider-->
-						<label for="test-slider">Slide me!</label>
-						<input id="test-slider" type="range" min="0" max="1" value="0.5" step="0.01" oninput="updateTestSliderValue(this.value)"/>
-						<span id="test-slider-text">0.5</span><br>
-						
-						<!-- select button -->
-						<label for="test-button">Push </label>
-						<button id="test-button" type="button" class="btn btn-default">me!</button><br>
-								 
-					</div>
-				</div>
-		
-				<br>
-				
-				<!-- Upload -->
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class="pull-left">
-							<strong>Upload File</strong>
-						</div>
-					</div>
-				</div>
-		
-				<br>
-
-        <!-- Live View -->
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class="pull-left">
-							<strong>Live View</strong>
-						</div>
-					</div>
-					<div class="panel-footer">
-						<!-- start/stop video buttons -->
-						<button id="start-video-button" class="btn btn-default" onClick="load_liveView()">Start</button>
-						<button id="stop-video-button" class="btn btn-default" onClick="stop_liveView()">Stop</button>
-						
-						<!-- the html page for the live view -->
-						<div id ="contentLiveView"> </div>
-					</div>
-					  <div id="toolbar" style="display: none;">
-						<a data-wysihtml5-command="bold" title="CTRL+B">bold</a> |
-						<a data-wysihtml5-command="italic" title="CTRL+I">italic</a>
-						<a id="htmlchange" data-wysihtml5-action="change_view">switch to html view</a>
-					  </div>
-				</div>
-    </div>
+		<div style="display:none">
+		<iframe id="shadow" name="shadow" src=""></iframe>
+		</div>		
 	</body> 
     
-    <script>
-        function updateTestSliderValue(newValue) {
-            document.getElementById("test-slider-text").innerHTML=newValue;
-        }
-		
-		
-		// Load the html page that displays the Live view from OF.
-		// Size of the page is bigger than video to display the full video stream
-		function load_liveView(){
-            // Here do not use localhost as IP address: need to use the computer IP on the LAN. i.e 192.168.xxx.xxx
-            document.getElementById("contentLiveView").innerHTML='<object type="text/html" width="661" height="540" data="http://127.0.0.1:7890" ></object>';
-            //document.getElementById("contentLiveView").innerHTML='<object type="text/html" width="661" height="540" data="http://192.168.10.101:7890" ></object>';
-		}
-		function stop_liveView(){
-            document.getElementById("contentLiveView").innerHTML="";
-		}
-    </script>
-
     <script src="./js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery.jsonrpcclient.js"></script>
@@ -163,30 +210,27 @@
     <script src="./js/prism.js"></script>
     <script src="./js/ofxUtils.js"></script>
     <script src="./js/main.js"></script>
-	<script src="./js/simple.js"></script>
-	<script src="./js/wysihtml5x-toolbar.min.js"></script>
-<script>
+	<script src="./js/advanced.js"></script>
+	<script src="./js/wysihtml-toolbar.js"></script>
+	
+	<script>
 
 	var editor = new wysihtml5.Editor("textarea", {
-   		toolbar: "toolbar",
-		parser: function(html) {
-        return html;
-    }
-	
+   		toolbar: "wysihtml-toolbar",
+		parserRules: wysihtml5ParserRules,
+		useLineBreaks: false
+			
 	 });
 	 
-	var editor2 = new wysihtml5.Editor("textarea2", {
-   
-	parserRules:  wysihtml5ParserRules   
-		
-	 });
-	 
+		 
+		 
 	 
 var log = document.getElementById("log");
   
   editor
     .on("load", function() {
-     editor.fire("change_view", "textarea");
+    	
+		
     })
     .on("focus", function() {
     
@@ -213,7 +257,31 @@ var log = document.getElementById("log");
 
 </script>
 
+ 
 <script>
+
+function addLetter(eingabe) {
+				
+								
+				size = eingabe.value.length;
+				
+						
+				//eingabe.style.width = (size/1.8)+"em";
+				
+				eingabe.size = size+1;
+				
+			
+				}
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
 
 			function show(id,aid) 
 			{ 
@@ -225,16 +293,16 @@ var log = document.getElementById("log");
 					var mya = document.getElementById(aid); 
 					if(mydiv.style.display=='inline') 
 					{
-						if(aid=='aU') { mya.innerHTML = 'epub w__________riter';  }
-						if(aid=='a1') { mya.innerHTML = 'u__________pload';  }
+						if(aid=='aU') { mya.innerHTML = 'e_________nchiridion';  }
+						if(aid=='a1') { mya.innerHTML = 'l__________oad epub';  }
 						
 						
 					}
 					
 					if(mydiv.style.display=='none') 
 					{
-						if(aid=='aU') { mya.innerHTML = 'epub writer';  }
-						if(aid=="a1")  {  mya.innerHTML = 'upload'; }
+						if(aid=='aU') { mya.innerHTML = 'enchiridion';  }
+						if(aid=="a1")  {  mya.innerHTML = 'load epub'; }
 					
 					}
 				} 

@@ -18,14 +18,6 @@ border-color: black;
 
 }
 
-p{
-
-}
-
-.paragraph2 {
-border: 4px solid black;
-}
-
 body {
   
   cursor:default;
@@ -301,8 +293,8 @@ font-weight: normal;
 }
 
 #toolbar {
-	width:20%;
-	height: 98%;
+	width:30%;
+	height: 100%;
 	float:left;
 	
 	
@@ -331,7 +323,7 @@ font-weight: normal;
   }
   
   textarea {
-    height: 98%;
+    height: 90%;
 	color: black;
      
    
@@ -348,7 +340,7 @@ font-weight: normal;
   
   #wysihtml-div{
    width: 100%;
-   height: 98%;
+   height: 90%;
 	color: black;
      
     font-family: Verdana;
@@ -391,8 +383,8 @@ font-weight: normal;
  
 
  float:left;
- height:98%;
- width: 60%;
+ height:100%;
+ width: 40%;
 
  
   
@@ -404,8 +396,8 @@ font-weight: normal;
  
 
  float:left;
- height:98%;
- width: 20%;
+ height:100%;
+ width: 30%;
 
 
  
@@ -420,7 +412,7 @@ font-weight: normal;
  }
  
 #wrapper{
-height:90%;
+height:500px;
 width:100%;
 display: none;
 margin-top: 5px;
@@ -491,21 +483,6 @@ cursor: default;
   -moz-appearance: none;
     text-indent: 0.01px;
     text-overflow: '';
-		
-
-}
-
-#test-dropdown2 {
-
- cursor:grab;
- font-size: 1.0em;
- font-style: italic;
- font-family: "Times New Roman", Georgia, Serif;
-  -moz-appearance: none;
-    text-indent: 0.01px;
-    text-overflow: '';
-	width:100%;
-	
 		
 
 }
