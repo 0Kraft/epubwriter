@@ -50,7 +50,7 @@ void ofApp::setup()
     zipped = false;
     ziptimer=0;
 
-    ///ZIP kkkk
+    ///ZIP
 
     reset_all();
 
