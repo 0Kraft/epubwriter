@@ -159,20 +159,21 @@ public:
 	void file_del(string fdir);
 
 
-    ofDirectory dir;
+    ofDirectory dir;        // directory text
     vector<ofFile> files; // Current Files of Directory
     int currentFile;   // Chosen Filenumber
+    ofFile currentFileOF;
 
     string currentFilename;
     string currentChapterUid ;
-    string          currentChapterLabel;
+    string currentChapterLabel;
 
 
     string currentEpubname; // richtiger Name
 
     string currentEpubTitle;
 
-    ofFile currentFileOF;
+
 
     ofBuffer currentFileBuffer; //Content of ChosenFile
     string textarea;

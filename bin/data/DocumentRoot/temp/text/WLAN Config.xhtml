@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
+     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="de">
+      
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../styles/stylesheet.css"/>
+	<title>WLAN Config</title>
+
+</head>
+  
+  
+<body>
+<!--StartFragment--><h3>Wlan Verbindung einrichten</h3><p>edimax wlan dongle<br></p><p></p><ol><li><i></i>Energiesparoption ausschalten<i><br>sudo nano /etc/modprobe.d/8192cu.conf</i><br>Folgenden Inhalt eintragen:<br><i>options 8192cu rtw_power_mgnt=0 rtw_enusbss=0</i><br></li><li><i></i>Adaptereinstellungen<br><i>sudo nano /etc/network/interfaces<br></i>Hier schreibt man folgende Konfiguration fest:<br><i>auto lo</i><br><i>iface lo inet loopback</i><br><i>iface eth0 inet dhcp</i><br><br><i>auto wlan0</i><br><i>allow-hotplug wlan0</i><br><i>iface wlan0 inet dhcp</i><br><i>wpa-ap-scan 1</i><br><i>wpa-scan-ssid 1</i><br><i>wpa-ssid "DEIN-WLAN-NAME"</i><br><i>wpa-psk "DEIN-WLAN-SCHLÜSSEL"</i><br><i></i></li><li><i></i>Neustart des Netzwerkdienstes<i><br>sudo service networking restart</i></li></ol><p></p><!--EndFragment-->
+</body>
+</html>

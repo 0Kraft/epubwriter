@@ -1036,7 +1036,6 @@ void ofApp::ePubList(){
 
 
     currentFile = 0;
-
     currentFilename = epub_toc_navpoint[0].contentpath;
 
     size_t nFPos = currentFilename.find(epub_path_text);
@@ -2546,6 +2545,7 @@ void ofApp::ePubAddChapter(ofx::JSONRPC::MethodArgs& args)
 
    string correctpath;
    correctpath = epub_path_text + chaptername + ".xhtml";
+   currentFilename = correctpath;
 
    ofBufferToFile("DocumentRoot/temp/" + correctpath,tempbuffer);
 
@@ -2583,7 +2583,6 @@ void ofApp::ePubAddChapter(ofx::JSONRPC::MethodArgs& args)
    }
 
  updateGUI();
-
 
 
 }
@@ -2647,6 +2646,7 @@ void ofApp::ePubAddChapter(string chaptername)
 
    string correctpath;
    correctpath = epub_path_text + chaptername + ".xhtml";
+   currentFilename = correctpath;
 
    ofBufferToFile("DocumentRoot/temp/" + correctpath,tempbuffer);
 
@@ -2693,67 +2693,36 @@ void ofApp::ePubAddChapter(string chaptername)
 void ofApp::updateGUI(){
 
  dir.listDir("DocumentRoot/temp/" + epub_path_text); //works Hier muss der Ordner hin, der die html enthält°
-
  ofLogVerbose("UpdateGui") << "List new Text Dir.";
-
  files.clear();
 
  ofLogVerbose("UpdateGui") << "Files cleared";
 
-    if( dir.size() > 0 ){
+ if( dir.size() > 0 ){
             files.assign(dir.size(), ofFile());
 
             for(int i = 0; i < (int)dir.size(); i++){
-                files[i].open(dir.getPath(i),ofFile::ReadWrite);
+                files[i].open(dir.getPath(i),ofFile::ReadOnly);
             }
     }
 
  ofLogVerbose("UpdateGui") << "Files loaded";
 
- currentFile = 0;
+
+ ofLogVerbose("List") << "Send Text to Editor";
+
+
+    Json::Value json = toJSONMethod("Server", "test-dropdown-removeAll", 0);
+    sendJSONMessage(json);
+
+    ofLogVerbose("List") << "Remove Dropdown Chapters";
+
 
   if( files.size() > 0 ){
 
 
-    if((files[0].getExtension()=="html")||(files[0].getExtension()=="opf")||(files[0].getExtension()=="xhtml")){
-
-
-            setTextareaWeb(files[0].getFileName());
-
-        }
-        else{
-
-            Json::Value params2;
-            params2["value"] = "Es kann kein Text angezeigt werden";
-            Json::Value json;
-            json = toJSONMethod("Server", "textarea", params2);
-            sendJSONMessage(json);
-
-        }
-
-                     Json::Value json = toJSONMethod("Server", "test-dropdown-removeAll", 0);
-                sendJSONMessage(json);
-
-
-                vector<string> vec;
-                for(int i = 0; i < int(dir.size()); i++) {
-                       if((files[0].getExtension()=="html")||(files[0].getExtension()=="opf")||(files[0].getExtension()=="xhtml"))
-                        {
-                            vec.push_back(files[i].getFileName());
-                        }
-                }
-
-
-                // Create vector
-                Json::Value params;
-                for(int i = 0; i < vec.size(); i++) {
-                    params.append(vec[i]);
-                }
-
-                    // Send vector
-                Json::Value json2 = toJSONMethod("Server", "test-dropdown", params);
-                sendJSONMessage(json2);
-
+     setTextareaWeb(currentFilename);
+     sendDatatoWeb();
 
 
     }else{
@@ -2764,8 +2733,8 @@ void ofApp::updateGUI(){
         json = toJSONMethod("Server", "textarea", params2);
         sendJSONMessage(json);
 
-    json = toJSONMethod("Server", "test-dropdown-removeAll", 0);
-                sendJSONMessage(json);
+        json = toJSONMethod("Server", "test-dropdown-removeAll", 0);
+        sendJSONMessage(json);
 
     }
 
@@ -3036,6 +3005,7 @@ void ofApp::ePubAddCover(string up_file,string original_filename, string file_Ty
 
    string correctpath;
    correctpath = epub_path_text + "titlepage.xhtml";
+   currentFilename=correctpath;
 
    ofBufferToFile("DocumentRoot/temp/" + correctpath,tempbuffer);
 
@@ -3080,10 +3050,13 @@ covermode=false;
 
 void ofApp::sendDatatoWeb(){
 
+    Json::Value json;
+    json = toJSONMethod("Server", "test-dropdown-removeAll", 0);
+    sendJSONMessage(json);
 
     /// Inhaltsverzeichnis
 
-      vector<string> vec2;
+    vector<string> vec2;
     for(int i = 0; i < int(epub_toc_navpoint.size()); i++) {
 
                 vec2.push_back(epub_toc_navpoint[i].label);
@@ -3101,7 +3074,7 @@ void ofApp::sendDatatoWeb(){
     Json::Value jsontoc = toJSONMethod("Server", "set-toc", params2);
     sendJSONMessage(jsontoc);
 
-     ofLogVerbose("List") << "Send Dropdowns";
+    ofLogVerbose("List") << "Send Dropdowns";
 
     /// Inhaltsverzeichnis
 

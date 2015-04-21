@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
+     "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xml:lang="de">
+      
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="../styles/stylesheet.css"/>
+	<title>openFrameworks Make Fix</title>
+
+</head>
+  
+  
+<body>
+<h3>OF Make Fix</h3><ol><li><i>libs/openFrameworksCompiled/projects/linuxarmv6l/config.linux.armv6l.default.mk&nbsp;</i><br></li><li><i></i>Folgenden Code hinzufügen<br><i>PLATFORM_LDFLAGS += -pthread </i><br><i>&nbsp; &nbsp; </i><br><i>PLATFORM_LIBRARIES += pcre</i><br><i>PLATFORM_LIBRARIES += rt </i><br><i>PLATFORM_LIBRARIES += X11 </i><br><i>PLATFORM_LIBRARIES += dl</i><br><i></i></li><li><i></i>Bei weiteren Fehlern, im Terminal:<br><i>unset CXX</i><br><i></i></li></ol><p><i></i></p><p><i></i></p><h3>OF Truetype FIX</h3><ol><li>Folgende Änderungen in Dieser Datei vornehmen<br><br>libs/openFrameworks/graphics/ofTrueTypeFont.cpp<br><br>-#include "freetype2/freetype/freetype.h"<br>-#include "freetype2/freetype/ftglyph.h"<br>-#include "freetype2/freetype/ftoutln.h"<br>-#include "freetype2/freetype/fttrigon.h"<br>+#include "freetype.h"<br>+#include "ftglyph.h"<br>+#include "ftoutln.h"<br>+#include "fttrigon.h"</li></ol><h3>GSTREAMER FIX</h3><p><ol><li>install dependencies<br><br>${GSTREAMER_VERSION}-omx<br><br>with<br><br>gstreamer${GSTREAMER_VERSION}-omx<br></li></ol><p>﻿<br></p></p><p>﻿<br></p><br><br><p><i><br></i></p>
+</body>
+</html>
+
+
